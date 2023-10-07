@@ -1,4 +1,4 @@
-package com.greenatom.dto;
+package com.greenatom.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

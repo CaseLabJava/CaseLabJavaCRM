@@ -1,4 +1,4 @@
-package com.greenatom.dto;
+package com.greenatom.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,22 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * A DTO for the Estimate.
+ * A DTO for the Successful Work.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EstimateDTO {
+public class SuccessfulWorkDTO {
 
     private Long id;
 
-    private String productName;
+    private Long requestId;
 
-    private String unit;
+    private String scopeOfWork;
 
-    private Long count;
+    private String typeOfWork;
 
-    private Long price;
+    private Long costPerUnit;
 }

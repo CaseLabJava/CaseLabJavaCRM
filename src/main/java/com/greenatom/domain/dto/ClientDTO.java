@@ -1,33 +1,37 @@
-package com.greenatom.dto;
+package com.greenatom.domain.dto;
 
-import com.greenatom.domain.enums.JobPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * A DTO for the Employee.
+ * A DTO for the Client.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDTO {
+public class ClientDTO {
+
     private Long id;
 
     private String name;
 
-    private String surname;
+    private String director;
 
-    private String patronymic;
+    private String bank;
 
-    private JobPosition jobPosition;
+    private String inn;
 
-    private String salary;
+    private String ogrn;
+
+    private String correspondentAccount;
+
+    private String bik;
 
     private String address;
 
-    private String phoneNumber;
+    private Long phoneNumber;
 }

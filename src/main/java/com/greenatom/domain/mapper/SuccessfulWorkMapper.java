@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
  */
 
 @Mapper(componentModel = "spring")
-public interface SuccesfulWorkMapper extends EntityMapper<SuccessfulWorkDTO,
+public interface SuccessfulWorkMapper extends EntityMapper<SuccessfulWorkDTO,
         SuccessfulWork> {
     SuccessfulWorkDTO toDto(SuccessfulWork s);
 

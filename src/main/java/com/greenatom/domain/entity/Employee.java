@@ -19,7 +19,7 @@ public class Employee {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "client_id")
+    @Column(name = "employee_id")
     private Long id;
 
 
@@ -37,7 +37,7 @@ public class Employee {
     private String patronymic;
 
 
-    @Column(name = "inn_kpp")
+    @Column(name = "job_position")
     @NonNull
     private JobPosition jobPosition;
 

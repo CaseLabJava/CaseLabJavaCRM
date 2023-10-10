@@ -32,10 +32,6 @@ public class Request {
     @NonNull
     private Long estimateId;
 
-    @Column(name = "provider_id")
-    @NonNull
-    private Long providerId;
-
     @Column(name = "supply_id")
     @NonNull
     private Long supplyId;

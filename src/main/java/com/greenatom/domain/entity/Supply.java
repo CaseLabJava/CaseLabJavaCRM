@@ -32,20 +32,17 @@ public class Supply {
     @NonNull
     private String materialName;
 
-    @Column(name = "provider_id")
-    @NonNull
-    private Long providerId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Supply supply = (Supply) o;
-        return getId().equals(supply.getId()) && getDeliveryPrice().equals(supply.getDeliveryPrice()) && getMaterialName().equals(supply.getMaterialName()) && getProviderId().equals(supply.getProviderId());
+        return getId().equals(supply.getId()) && getDeliveryPrice().equals(supply.getDeliveryPrice()) && getMaterialName().equals(supply.getMaterialName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDeliveryPrice(), getMaterialName(), getProviderId());
+        return Objects.hash(getId(), getDeliveryPrice(), getMaterialName());
     }
 }

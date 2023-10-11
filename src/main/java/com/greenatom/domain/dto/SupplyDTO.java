@@ -21,5 +21,4 @@ public class SupplyDTO {
 
     private String materialName;
 
-    private Long providerId;
 }

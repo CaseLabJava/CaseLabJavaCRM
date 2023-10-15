@@ -4,13 +4,14 @@ import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.mapper.EmployeeMapper;
 import com.greenatom.repository.EmployeeRepository;
+import com.greenatom.repository.RoleRepository;
 import com.greenatom.service.EmployeeService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -19,6 +20,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final PasswordEncoder encoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public List<EmployeeDTO> findAll() {
@@ -34,11 +37,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO save(EmployeeDTO employeeDTO) {
+    public Employee save(EmployeeDTO employeeDTO) {
         log.debug("Request to save employee : {}", employeeDTO);
         Employee employee = employeeMapper.toEntity(employeeDTO);
+        employee.setPassword(encoder.encode(employeeDTO.getPassword()));
+        employee.setUsername(generateUsername(employeeDTO));
+        employee.setRole(roleRepository.findByName(employeeDTO.getRole().getName()).orElse(null));
         employeeRepository.save(employee);
-        return employeeMapper.toDto(employee);
+        return employee;
     }
 
     @Override
@@ -64,5 +70,20 @@ public class EmployeeServiceImpl implements EmployeeService {
                     employeeRepository.delete(employee);
                     log.debug("Deleted Employee: {}", employee);
                 });
+    }
+
+    @Override
+    public Optional<Employee> findOne(String username) {
+        return employeeRepository.findByUsername(username);
+    }
+
+    private String generateUsername(EmployeeDTO employeeDTO){
+        StringBuilder username = new StringBuilder();
+         return username.append(employeeDTO.getName()).append("_")
+                 .append(employeeDTO.getSurname().charAt(0)).append("_")
+                 .append(employeeDTO.getPatronymic().charAt(0))
+                 .append("_")
+                 .append(employeeRepository.count() + 1)
+                 .toString();
     }
 }

@@ -39,11 +39,11 @@ public class Employee {
 
     @Column(name = "job_position")
     @NonNull
+    @Enumerated(EnumType.STRING)
     private JobPosition jobPosition;
 
     @Column(name = "salary")
-        private String salary;
-
+    private Integer salary;
 
     @Column(name = "address")
     private String address;
@@ -51,4 +51,15 @@ public class Employee {
     @Column(name = "phone_number")
     @NonNull
     private String phoneNumber;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id",
+                referencedColumnName = "role_id")
+    private Role role;
 }

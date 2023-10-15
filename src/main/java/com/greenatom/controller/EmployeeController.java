@@ -19,15 +19,9 @@ public class EmployeeController {
         return employeeService.findOne(id).orElseThrow(EntityNotFoundException::new);
     }
 
-
     @PutMapping(value = "/update", produces = {"application/json"})
     public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employee) {
         return employeeService.updateEmployee(employee);
-    }
-
-    @PostMapping(value = "/add", produces = {"application/json"})
-    public EmployeeDTO addEmployee(@RequestBody EmployeeDTO employee) {
-        return employeeService.save(employee);
     }
 
     @DeleteMapping(value = "/delete/{id}",

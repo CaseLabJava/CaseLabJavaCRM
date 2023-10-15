@@ -23,8 +23,6 @@ public class RequestDTO {
 
     private Long estimateId;
 
-    private Long providerId;
-
     private Long supplyId;
 
     private Long employeeId;

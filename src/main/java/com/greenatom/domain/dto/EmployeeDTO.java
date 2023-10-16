@@ -30,4 +30,10 @@ public class EmployeeDTO {
     private String address;
 
     private String phoneNumber;
+
+    private String password;
+
+    private String username;
+
+    private RoleDto role;
 }

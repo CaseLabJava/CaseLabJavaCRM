@@ -26,6 +26,8 @@ public class SwaggerConfig {
     private SecurityScheme createAPIKeyScheme() {
         return new SecurityScheme().type(SecurityScheme.Type.HTTP)
                 .bearerFormat("JWT")
-                .scheme("bearer");
+                .scheme("bearer")
+                .description("Выполните signIn или signUp, чтобы получить accessToken." +
+                        " После получения accessToken, введите его в поле \"Value\".");
     }
 }

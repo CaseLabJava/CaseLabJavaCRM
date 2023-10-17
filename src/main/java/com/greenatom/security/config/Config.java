@@ -41,8 +41,10 @@ public class Config {
                         sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/api/auth/signIn",
-                                "/api/auth/accessToken").permitAll().requestMatchers("/api/auth/signUp").hasRole("ADMIN")
+                        auth -> auth
+                                .requestMatchers("/api/auth/signIn", "/api/auth/accessToken").permitAll()
+                                .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                                .requestMatchers("/api/auth/signUp").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(

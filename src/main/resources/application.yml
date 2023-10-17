@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://89.223.124.249:5432/caselab
+    url: jdbc:postgresql:
     driver-class-name: org.postgresql.Driver
-    username: case_lab_admin
-    password: 8b,4fA]]’o
+    username: 
+    password: 
   jpa:
     properties:
       hibernate:
@@ -14,5 +14,5 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     path: /api-docs
-access_token: 95Pol70Mvwlqp44evymFD6hACz1Prsko+0y4+cqN4obK2/jnWTJD/pmgUl99mINHWfvSGrJqZBZbT+DEd0vmaA==
-refresh_token: W3H2tdRbjlBy2FsdJF28bxjgJyiSmVM+jcM7+CByFIszEqcYLemnMVoUJTNDFI2lFMt9ROoCUL8eVFPMqvfZuQ==
+access_token:
+refresh_token:

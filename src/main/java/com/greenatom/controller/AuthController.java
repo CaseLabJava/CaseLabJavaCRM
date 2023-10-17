@@ -1,5 +1,6 @@
 package com.greenatom.controller;
 
+import com.greenatom.controller.api.AuthApi;
 import com.greenatom.domain.dto.AuthDto;
 import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.JwtResponse;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/auth")
-public class AuthController {
+public class AuthController implements AuthApi {
 
     private final AuthService authService;
 
@@ -20,17 +21,17 @@ public class AuthController {
         return authService.registration(employeeDTO);
     }
 
-    @GetMapping("/signIn")
+    @PostMapping("/signIn")
     public JwtResponse login(@RequestBody AuthDto authDto){
         return authService.login(authDto);
     }
 
-    @GetMapping("/accessToken")
+    @PostMapping("/accessToken")
     public JwtResponse getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest){
         return authService.getAccessToken(refreshJwtRequest.getRefreshToken());
     }
 
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     public JwtResponse refresh(@RequestBody RefreshJwtRequest refreshJwtRequest){
         return authService.refresh(refreshJwtRequest.getRefreshToken());
     }

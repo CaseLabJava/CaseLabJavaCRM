@@ -56,7 +56,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             employeeToSave.setRole(roleAdmin);
             employeeToSave.setName("Admin");
             employeeToSave.setSurname("Admin");
-            employeeToSave.setAddress("-");
+            employeeToSave.setEmail("-");
             employeeToSave.setSalary(0);
             employeeToSave.setPatronymic("Admin");
             employeeToSave.setJobPosition(JobPosition.ADMIN);

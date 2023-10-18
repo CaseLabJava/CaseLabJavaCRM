@@ -2,9 +2,6 @@ package com.greenatom.domain.dto;
 
 import com.greenatom.domain.enums.JobPosition;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,8 +36,8 @@ public class EmployeeDTO {
     @Schema(description = "Зарплата сотрудника", example = "100000")
     private String salary;
 
-    @Schema(description = "Адресс сотрудника", example = "г. Москва")
-    private String address;
+    @Schema(description = "Почта сотрудника", example = "tupichok@mail.ru")
+    private String email;
 
     @Schema(description = "Номер телефона сотрудника", example = "895436848")
     private String phoneNumber;

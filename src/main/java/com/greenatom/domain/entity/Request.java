@@ -28,23 +28,19 @@ public class Request {
     @NonNull
     private Long clientId;
 
-    @Column(name = "estimate_id")
-    @NonNull
-    private Long estimateId;
-
-    @Column(name = "supply_id")
-    @NonNull
-    private Long supplyId;
-
     @Column(name = "employee_id")
     @NonNull
     private Long employeeId;
 
-    @Column(name = "request_name")
+    @Column(name = "link_to_folder")
     @NonNull
-    private String requestName;
+    private String linkToFolder;
 
-    @Column(name = "request_date")
+    @Column(name = "date_time")
     @NonNull
     private Date requestDate;
+
+    @Column(name = "status")
+    @NonNull
+    private String requestStatus;
 }

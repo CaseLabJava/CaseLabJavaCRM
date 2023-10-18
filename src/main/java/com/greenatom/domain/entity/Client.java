@@ -21,20 +21,29 @@ public class Client {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "client_ID")
+    @Column(name = "client_id")
     private Long id;
 
 
-    @Column(name = "company_name")
+    @Column(name = "company")
+    @NonNull
+    private String company;
+
+    @Column(name = "firstname", length = 50)
     @NonNull
     private String name;
 
-    @Column(name = "name_of_director")
+
+    @Column(name = "lastname", length = 50)
     @NonNull
-    private String director;
+    private String surname;
 
 
-    @Column(name = "bank")
+    @Column(name = "patronymic", length = 50)
+    private String patronymic;
+
+
+    @Column(name = "bank_details")
     @NonNull
     private String bank;
 

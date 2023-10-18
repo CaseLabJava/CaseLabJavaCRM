@@ -19,16 +19,16 @@ public class Employee {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "employee_ID")
+    @Column(name = "employee_id")
     private Long id;
 
 
-    @Column(name = "name", length = 50)
+    @Column(name = "firstname", length = 50)
     @NonNull
     private String name;
 
 
-    @Column(name = "surname", length = 50)
+    @Column(name = "lastname", length = 50)
     @NonNull
     private String surname;
 
@@ -45,8 +45,8 @@ public class Employee {
     @Column(name = "salary")
     private Integer salary;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "phone_number")
     @NonNull

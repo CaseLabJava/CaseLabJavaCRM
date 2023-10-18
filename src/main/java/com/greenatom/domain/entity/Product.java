@@ -13,17 +13,17 @@ import org.hibernate.annotations.GenericGenerator;
 @RequiredArgsConstructor
 @Entity
 @NoArgsConstructor
-@Table(name = "estimate")
-public class Estimate {
+@Table(name = "product")
+public class Product {
 
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "estimate_id")
+    @Column(name = "product_id")
     private Long id;
 
 
-    @Column(name = "name_product")
+    @Column(name = "name")
     @NonNull
     private String productName;
 
@@ -32,10 +32,9 @@ public class Estimate {
     @NonNull
     private String unit;
 
+    @Column(name = "storage_amount")
+    private Long storageAmount;
 
-    @Column(name = "count")
-    private Long count;
-
-    @Column(name = "price")
-    private Long price;
+    @Column(name = "cost")
+    private Long cost;
 }

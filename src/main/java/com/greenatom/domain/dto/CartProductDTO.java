@@ -6,22 +6,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * A DTO for the Estimate.
+     * A DTO for the Cart Product.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EstimateDTO {
+public class CartProductDTO {
 
     private Long id;
 
-    private String productName;
+    private Long requestId;
+
+    private Long productId;
+
+    private String name;
 
     private String unit;
 
-    private Long count;
+    private Long cost;
 
-    private Long price;
+    private Long requestAmount;
+
 }

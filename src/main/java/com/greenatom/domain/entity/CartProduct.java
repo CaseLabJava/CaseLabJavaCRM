@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Date;
-
 /**
- * A Successful Work.
+ * A CartProduct.
  */
 @Getter
 @Setter
@@ -15,28 +13,37 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Entity
 @NoArgsConstructor
-@Table(name = "successful_work")
-public class SuccessfulWork {
-
+@Table(name = "cart_product")
+public class CartProduct {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "work_id")
+    @Column(name = "cart_product_id")
     private Long id;
+
 
     @Column(name = "request_id")
     @NonNull
     private Long requestId;
 
-    @Column(name = "scope_of_work")
+    @Column(name = "product_id")
     @NonNull
-    private String scopeOfWork;
+    private Long productId;
 
-    @Column(name = "type_of_work")
+    @Column(name = "name")
     @NonNull
-    private String typeOfWork;
+    private String name;
 
-    @Column(name = "cost_per_unit")
+    @Column(name = "unit")
     @NonNull
-    private Long costPerUnit;
+    private String unit;
+
+    @Column(name = "cost")
+    @NonNull
+    private Long cost;
+
+    @Column(name = "request_amount")
+    @NonNull
+    private Long requestAmount;
+
 }

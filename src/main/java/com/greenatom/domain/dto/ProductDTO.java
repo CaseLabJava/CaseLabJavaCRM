@@ -6,22 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * A DTO for the Successful Work.
+ * A DTO for the Product.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SuccessfulWorkDTO {
+public class ProductDTO {
 
     private Long id;
 
-    private Long requestId;
+    private String productName;
 
-    private String scopeOfWork;
+    private String unit;
 
-    private String typeOfWork;
+    private Long storageAmount;
 
-    private Long costPerUnit;
+    private Long cost;
 }

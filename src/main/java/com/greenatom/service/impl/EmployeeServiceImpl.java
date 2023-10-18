@@ -6,13 +6,17 @@ import com.greenatom.domain.mapper.EmployeeMapper;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RoleRepository;
 import com.greenatom.service.EmployeeService;
+import com.greenatom.service.exceptions.EmailAlreadyUsedException;
+import com.greenatom.service.exceptions.UsernameAlreadyUsedException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 @Service
 @RequiredArgsConstructor
@@ -38,12 +42,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee save(EmployeeDTO employeeDTO) {
+        List<Employee> existingUsers = employeeRepository.findAll();
         log.debug("Request to save employee : {}", employeeDTO);
         Employee employee = employeeMapper.toEntity(employeeDTO);
         employee.setPassword(encoder.encode(employeeDTO.getPassword()));
         employee.setUsername(generateUsername(employeeDTO));
         employee.setRole(roleRepository.findByName(employeeDTO.getRole().getName()).orElse(null));
         employeeRepository.save(employee);
+        for (Employee e :
+                existingUsers) {
+            if (Objects.equals(e.getEmail(), employee.getEmail())) {
+                throw new EmailAlreadyUsedException();
+            }
+            if (Objects.equals(e.getUsername(), employee.getUsername())) {
+                throw new UsernameAlreadyUsedException();
+            }
+        }
         return employee;
     }
 

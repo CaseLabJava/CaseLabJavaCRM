@@ -51,7 +51,7 @@ public class EmployeeDTO {
     @Schema(description = "Имя пользователя сотрудника", example = "Puchkov_D_Y_1")
     private String username;
 
-    @Schema(description = "Роль сотрудника", example = "Менеджер")
+    @Schema(description = "Роль сотрудника", example = "ROLE_MANAGER")
     private RoleDto role;
 }
 

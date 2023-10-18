@@ -6,19 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
-     * A DTO for the Supply.
+ * A DTO for the Response.
  */
+
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SupplyDTO {
-
-    private Long id;
-
-    private String deliveryPrice;
-
-    private String materialName;
-
+public class ResponseDTO {
+    private String message;
 }

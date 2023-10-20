@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Client.
@@ -14,8 +15,8 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Entity
 @NoArgsConstructor
+@Entity
 @Table(name = "client")
 public class Client {
     @Id
@@ -24,30 +25,25 @@ public class Client {
     @Column(name = "client_id")
     private Long id;
 
-
     @Column(name = "company")
-    @NonNull
     private String company;
 
     @Column(name = "firstname", length = 50)
     @NonNull
     private String name;
 
-
     @Column(name = "lastname", length = 50)
     @NonNull
     private String surname;
 
-
     @Column(name = "patronymic", length = 50)
+    @NonNull
     private String patronymic;
 
-
     @Column(name = "bank_details")
-    @NonNull
     private String bank;
 
-    @Column(name = "inn_kpp")
+    @Column(name = "inn_and_kpp")
     private String inn;
 
     @Column(name = "ogrn")
@@ -56,15 +52,14 @@ public class Client {
     @Column(name = "correspondent_account")
     private String correspondentAccount;
 
-    @Column(name = "bik")
-    private String bik;
-
     @Column(name = "address")
     private String address;
 
     @Column(name = "phone_number")
-    @NonNull
     private Long phoneNumber;
+
+    @OneToMany(mappedBy = "client")
+    private Set<Request> requests;
 
     @Override
     public boolean equals(Object o) {

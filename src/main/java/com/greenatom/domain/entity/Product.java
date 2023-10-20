@@ -4,15 +4,18 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
+
 /**
  * A Client.
  */
+
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Entity
 @NoArgsConstructor
+@Entity
 @Table(name = "product")
 public class Product {
 
@@ -22,14 +25,11 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
 
-
     @Column(name = "name")
     @NonNull
     private String productName;
 
-
     @Column(name = "unit")
-    @NonNull
     private String unit;
 
     @Column(name = "storage_amount")
@@ -37,4 +37,7 @@ public class Product {
 
     @Column(name = "cost")
     private Long cost;
+
+    @OneToMany(mappedBy = "product")
+    private List<CartProduct> cartProducts;
 }

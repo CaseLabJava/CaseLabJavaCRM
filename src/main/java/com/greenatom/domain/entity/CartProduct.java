@@ -11,8 +11,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Entity
 @NoArgsConstructor
+@Entity
 @Table(name = "cart_product")
 public class CartProduct {
     @Id
@@ -21,29 +21,24 @@ public class CartProduct {
     @Column(name = "cart_product_id")
     private Long id;
 
-
-    @Column(name = "request_id")
-    @NonNull
-    private Long requestId;
-
-    @Column(name = "product_id")
-    @NonNull
-    private Long productId;
-
     @Column(name = "name")
     @NonNull
     private String name;
 
     @Column(name = "unit")
-    @NonNull
     private String unit;
 
     @Column(name = "cost")
-    @NonNull
     private Long cost;
 
     @Column(name = "request_amount")
-    @NonNull
     private Long requestAmount;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "request_id", referencedColumnName = "request_id")
+    private Request request;
 }

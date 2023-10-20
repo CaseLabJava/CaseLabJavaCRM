@@ -9,6 +9,6 @@ import lombok.Setter;
 @Schema(description = "Описание модели \"Роль\"")
 public class RoleDto {
 
-    @Schema(description = "Название роли")
+    @Schema(description = "Название роли", example = "ROLE_MANAGER")
     private String name;
 }

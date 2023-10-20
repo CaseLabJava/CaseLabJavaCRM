@@ -4,6 +4,8 @@ import com.greenatom.domain.dto.CartProductDTO;
 import com.greenatom.domain.entity.CartProduct;
 import com.greenatom.domain.mapper.CartProductMapper;
 import com.greenatom.repository.CartProductRepository;
+import com.greenatom.repository.ProductRepository;
+import com.greenatom.repository.RequestRepository;
 import com.greenatom.service.CartProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,9 @@ import java.util.Optional;
 public class CartProductServiceImpl implements CartProductService {
     private final Logger log = LoggerFactory.getLogger(CartProductService.class);
     private final CartProductRepository cartProductRepository;
+    private final ProductRepository productRepository;
     private final CartProductMapper cartProductMapper;
+    private final RequestRepository requestRepository;
 
     @Override
     public List<CartProductDTO> findAll() {
@@ -38,6 +42,8 @@ public class CartProductServiceImpl implements CartProductService {
     public CartProductDTO save(CartProductDTO cartProductDTO) {
         log.debug("Request to save cartProduct : {}", cartProductDTO);
         CartProduct cartProduct = cartProductMapper.toEntity(cartProductDTO);
+        cartProduct.setProduct(productRepository.findById(cartProductDTO.getProductId()).orElseThrow());
+        cartProduct.setRequest(requestRepository.findById(cartProductDTO.getRequestId()).orElseThrow());
         cartProductRepository.save(cartProduct);
         return cartProductMapper.toDto(cartProduct);
     }

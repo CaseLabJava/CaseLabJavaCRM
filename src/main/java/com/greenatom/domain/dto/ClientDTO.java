@@ -33,7 +33,6 @@ public class ClientDTO {
 
     private String correspondentAccount;
 
-
     private String address;
 
     private Long phoneNumber;

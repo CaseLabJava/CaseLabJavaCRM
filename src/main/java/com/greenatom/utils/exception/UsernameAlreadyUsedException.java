@@ -1,4 +1,4 @@
-package com.greenatom.service.exceptions;
+package com.greenatom.utils.exception;
 
 public class UsernameAlreadyUsedException extends RuntimeException {
 

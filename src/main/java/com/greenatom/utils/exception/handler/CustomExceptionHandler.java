@@ -1,14 +1,14 @@
-package com.greenatom.service.exceptions;
+package com.greenatom.utils.exception.handler;
 
 import com.greenatom.domain.dto.ResponseDTO;
+import com.greenatom.utils.exception.EmailAlreadyUsedException;
+import com.greenatom.utils.exception.UsernameAlreadyUsedException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-
 
 @RestControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {

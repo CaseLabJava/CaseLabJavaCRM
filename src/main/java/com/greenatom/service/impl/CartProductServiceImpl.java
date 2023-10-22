@@ -15,7 +15,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * CartProductServiceImpl является сервисом для работы со списком покупок. Он использует различные репозитории для
+ * доступа к данным и преобразует их с помощью mapper в формат DTO (Data Transfer Object).
+ * findAll() - метод для получения всех покупок из заказа. Он регистрирует сообщение в логе и передает список
+ * продуктов в mapper для преобразования в формат DTO.
+ *
+ * <p>findOne() - метод для получения конкретного товара из заказа по его ID. Он также регистрирует сообщение
+ * в логе и преобразует найденный товар в формат DTO с помощью mapper. В случае, если товар не найден,
+ * выбрасывается исключение.
+ * @autor Максим Быков, Даниил Змаев
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class CartProductServiceImpl implements CartProductService {

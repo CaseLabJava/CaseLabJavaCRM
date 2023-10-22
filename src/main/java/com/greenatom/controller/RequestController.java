@@ -5,6 +5,19 @@ import com.greenatom.service.RequestService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Этот код представляет собой контроллер API для управления заявками. Он предоставляет набор методов
+ * для выполнения различных операций с заявками:
+ *
+ * <p>– GET /get/{id}: Получение информации о запросе с указанным ID.
+ * <p>– PUT /update: Обновление информации о запросе, используя данные из тела запроса.
+ * <p>– POST /add: Создание нового запроса, используя данные из тела запроса.
+ *
+ * <p>Все эти операции выполняются с использованием сервиса RequestService, который реализует бизнес-логику
+ * управления заявками.
+ * @autor Максим Быков
+ * @version 1.0
+ */
 @RestController
 @RequestMapping(value = "/api/request")
 public class RequestController {

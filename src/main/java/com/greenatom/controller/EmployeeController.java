@@ -5,6 +5,21 @@ import com.greenatom.service.EmployeeService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Этот код является контроллером API для управления сотрудниками. Он содержит GET и PUT методы, которые
+ * позволяют выполнять следующие операции:
+ *
+ * <p>– GET /get/{id} получает информацию о сотруднике с заданным идентификатором;
+ * <p>– PUT /update обновляет информацию о сотруднике, используя данные из тела запроса;
+ * <p>– POST /add добавляет нового сотрудника, используя данные из тела запроса.
+ *
+ * <p>Эти методы используют сервис EmployeeService для выполнения операций с базой данных.
+ * Метод DELETE /delete/{id} удаляет сотрудника с заданным идентификатором.
+ *
+ * <p>Эти операции выполняются при помощи сервиса ClientService, реализующего бизнес-логику.
+ * @autor Максим Быков
+ * @version 1.0
+ */
 @RestController
 @RequestMapping(value = "/api/employee")
 public class EmployeeController {

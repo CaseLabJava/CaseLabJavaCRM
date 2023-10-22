@@ -16,6 +16,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * RequestServiceImpl является сервисом для работы с запросами. Он использует базы данных для доступа к информации
+ * о запросах, клиентах и сотрудниках, преобразует эту информацию в формат DTO и возвращает списки запросов
+ * или конкретные запросы по их ID.
+ * @autor Максим Быков, Даниил Змаев
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {

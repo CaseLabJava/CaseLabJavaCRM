@@ -18,6 +18,17 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * Этот код является ядром системы JWT (JSON Web Token) и отвечает за генерацию токенов доступа и обновления.
+ * Он работает с секретными ключами и содержит компоненты для логирования.
+ *
+ * <p>Метод generateAccessToken принимает объект Employee и создает новый токен доступа, устанавливая его срок
+ * действия, имя пользователя и роль.
+ *
+ * <p>Аналогично, метод generateRefreshToken создает токен обновления с теми же параметрами.
+ * @autor Андрей Начевный
+ * @version 1.0
+ */
 @Component
 public class JwtCore {
 

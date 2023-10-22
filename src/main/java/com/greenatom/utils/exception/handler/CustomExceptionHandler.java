@@ -10,6 +10,27 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * Этот код представляет собой обработчик исключений в рамках REST-контроллера. Он содержит три метода для обработки
+ * различных исключений, которые могут возникнуть при выполнении операций авторизации и поиска сущностей.
+ *
+ * <p>Метод handleEntityNotFoundException используется для обработки исключения EntityNotFoundException и возвращает
+ * HTTP-ответ с кодом 404 и сообщением "Entity Not Found" в случае, если сообщение об ошибке в исключении не определено.
+ *
+ * <p>Метод handleEmailAlreadyUsedException используется для обработки исключения EmailAlreadyUsedException и возвращает
+ * HTTP-ответ с кодом 401 и сообщением "Authorization error: Email is already in use!" в случае, если сообщение об
+ * ошибке в исключении не определено.
+ *
+ * <p>Метод handleUsernameAlreadyUsedException используется для обработки исключения UsernameAlreadyUsedException и
+ * возвращает HTTP-ответ с кодом 401 и сообщением "Authorization error: Login name already used!" в случае, если
+ * сообщение об ошибке в исключении не определено.
+ *
+ * <p>Этот код предназначен для обработки исключений, которые могут возникнуть при выполнении операций авторизации и
+ * поиска сущностей в REST-сервисе.
+ * @autor Максим Быков
+ * @version 1.0
+ */
+
 @RestControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 

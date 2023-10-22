@@ -18,6 +18,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+/**
+ * EmployeeServiceImpl является сервисом для работы с сотрудниками. Он использует базу данных для доступа к информации
+ * о сотрудниках и ролях, преобразует их в формат DTO и возвращает список сотрудников или конкретного сотрудника
+ * по его ID.
+ * @autor Максим Быков, Андрей Начевный
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {

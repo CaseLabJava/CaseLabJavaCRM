@@ -14,6 +14,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ClientServiceImpl является сервисом для работы с клиентами. Он использует репозиторий ClientRepository
+ * для доступа к данным, преобразует их в формат DTO с помощью ClientMapper и возвращает список клиентов или
+ * конкретный клиент по его ID.
+ * @autor Максим Быков
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {

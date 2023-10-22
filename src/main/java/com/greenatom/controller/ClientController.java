@@ -5,6 +5,18 @@ import com.greenatom.service.ClientService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Этот код - контроллер, обрабатывающий запросы API для управления клиентами. Он предоставляет GET и PUT методы
+ * для выполнения следующих операций:
+ *
+ * <p>– GET /get/{id} - возвращает информацию о клиенте с указанным идентификатором
+ * <p>– PUT /update - обновляет информацию о клиенте, переданную в запросе тела
+ * <p>– POST /add - добавляет нового клиента, используя данные из запроса тела
+ *
+ * <p>Эти операции выполняются при помощи сервиса ClientService, реализующего бизнес-логику.
+ * @autor Максим Быков
+ * @version 1.0
+ */
 @RestController
 @RequestMapping(value = "/api/client")
 public class ClientController {

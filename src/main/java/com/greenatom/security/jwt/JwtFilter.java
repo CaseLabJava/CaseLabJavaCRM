@@ -18,6 +18,19 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Класс JwtFilter является фильтром для обработки JWT-токенов. Он расширяет интерфейс OncePerRequestFilter и
+ * использует компоненты JwtCore и UserDetailsServiceImpl для обработки входящих запросов.
+ *
+ * <p>В методе doFilterInternal фильтр обрабатывает входящий запрос, извлекает JWT-токен и проверяет его валидность.
+ * Если токен валиден, фильтр устанавливает соответствующий аутентификационный объект в контексте безопасности
+ * SecurityContextHolder для обеспечения доступа к защищенным ресурсам.
+ *
+ * <p>Метод extractJwt извлекает JWT из заголовка Authorization, проверяет его наличие и корректность, и возвращает
+ * токен в случае успеха.
+ * @autor Андрей Начевный
+ * @version 1.0
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {

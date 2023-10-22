@@ -14,6 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ProductServiceImpl является сервисом для работы со складом. Он использует ProductRepository для доступа к базе
+ * данных, преобразует продукты в формат DTO и возвращает список товаров или конкретный товар по его ID.
+ * @autor Максим Быков
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {

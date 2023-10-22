@@ -1,9 +1,9 @@
 package com.greenatom.repository;
 
-import com.greenatom.domain.entity.Estimate;
+import com.greenatom.domain.entity.CartProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EstimateRepository extends JpaRepository<Estimate, Long> {
+public interface CartProductRepository extends JpaRepository<CartProduct, Long> {
 }

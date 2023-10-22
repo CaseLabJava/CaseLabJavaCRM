@@ -21,13 +21,11 @@ public class RequestDTO {
 
     private Long clientId;
 
-    private Long estimateId;
-
-    private Long supplyId;
-
     private Long employeeId;
 
-    private String requestName;
+    private String linkToFolder;
 
     private Date requestDate;
+
+    private String status;
 }

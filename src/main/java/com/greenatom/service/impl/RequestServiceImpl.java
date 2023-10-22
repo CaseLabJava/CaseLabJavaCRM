@@ -3,6 +3,8 @@ package com.greenatom.service.impl;
 import com.greenatom.domain.dto.RequestDTO;
 import com.greenatom.domain.entity.Request;
 import com.greenatom.domain.mapper.RequestMapper;
+import com.greenatom.repository.ClientRepository;
+import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RequestRepository;
 import com.greenatom.service.RequestService;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,6 +22,8 @@ public class RequestServiceImpl implements RequestService {
 
     private final Logger log = LoggerFactory.getLogger(RequestService.class);
     private final RequestRepository requestRepository;
+    private final ClientRepository clientRepository;
+    private final EmployeeRepository employeeRepository;
     private final RequestMapper requestMapper;
 
     @Override
@@ -39,6 +43,8 @@ public class RequestServiceImpl implements RequestService {
     public RequestDTO save(RequestDTO requestDTO) {
         log.debug("Request to save request : {}", requestDTO);
         Request request = requestMapper.toEntity(requestDTO);
+        request.setClient(clientRepository.findById(requestDTO.getClientId()).orElseThrow());
+        request.setEmployee(employeeRepository.findById(requestDTO.getEmployeeId()).orElseThrow());
         requestRepository.save(request);
         return requestMapper.toDto(request);
     }

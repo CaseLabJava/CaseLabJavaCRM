@@ -1,9 +1,9 @@
 package com.greenatom.repository;
 
-import com.greenatom.domain.entity.SuccessfulWork;
+import com.greenatom.domain.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SuccessfulWorkRepository extends JpaRepository<SuccessfulWork, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 }

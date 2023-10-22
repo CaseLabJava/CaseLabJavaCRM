@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * A Request.
@@ -14,7 +15,6 @@ import java.util.Date;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@NoArgsConstructor
 @Table(name = "request")
 public class Request {
     @Id
@@ -23,28 +23,23 @@ public class Request {
     @Column(name = "request_id")
     private Long id;
 
+    @Column(name = "link_to_folder")
+    private String linkToFolder;
 
-    @Column(name = "client_id")
-    @NonNull
-    private Long clientId;
-
-    @Column(name = "estimate_id")
-    @NonNull
-    private Long estimateId;
-
-    @Column(name = "supply_id")
-    @NonNull
-    private Long supplyId;
-
-    @Column(name = "employee_id")
-    @NonNull
-    private Long employeeId;
-
-    @Column(name = "request_name")
-    @NonNull
-    private String requestName;
-
-    @Column(name = "request_date")
-    @NonNull
+    @Column(name = "date_time")
     private Date requestDate;
+
+    @Column(name = "status")
+    private String requestStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @OneToMany(mappedBy = "request")
+    private List<CartProduct> cartProducts;
 }

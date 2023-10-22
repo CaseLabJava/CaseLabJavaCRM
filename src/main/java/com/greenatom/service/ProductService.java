@@ -1,25 +1,25 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.SupplyDTO;
+import com.greenatom.domain.dto.ProductDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface SupplyService {
+public interface ProductService {
 
     @Transactional(readOnly = true)
-    List<SupplyDTO> findAll();
+    List<ProductDTO> findAll();
 
     @Transactional(readOnly = true)
-    Optional<SupplyDTO> findOne(Long id);
+    Optional<ProductDTO> findOne(Long id);
 
     @Transactional
-    SupplyDTO save(SupplyDTO supply);
+    ProductDTO save(ProductDTO Product);
 
     @Transactional
-    SupplyDTO updateSupply(SupplyDTO supply);
+    ProductDTO updateProduct(ProductDTO Product);
 
     @Transactional
-    void deleteSupply(Long id);
+    void deleteProduct(Long id);
 }

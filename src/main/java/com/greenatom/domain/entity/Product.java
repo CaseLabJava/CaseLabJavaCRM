@@ -4,38 +4,40 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
+
 /**
  * A Client.
  */
+
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Entity
 @NoArgsConstructor
-@Table(name = "estimate")
-public class Estimate {
+@Entity
+@Table(name = "product")
+public class Product {
 
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "estimate_id")
+    @Column(name = "product_id")
     private Long id;
 
-
-    @Column(name = "name_product")
+    @Column(name = "name")
     @NonNull
     private String productName;
 
-
     @Column(name = "unit")
-    @NonNull
     private String unit;
 
+    @Column(name = "storage_amount")
+    private Long storageAmount;
 
-    @Column(name = "count")
-    private Long count;
+    @Column(name = "cost")
+    private Long cost;
 
-    @Column(name = "price")
-    private Long price;
+    @OneToMany(mappedBy = "product")
+    private List<CartProduct> cartProducts;
 }

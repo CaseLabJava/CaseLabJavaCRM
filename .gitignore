@@ -32,3 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
+## Generated res files ##
+/src/main/generated_resources
+

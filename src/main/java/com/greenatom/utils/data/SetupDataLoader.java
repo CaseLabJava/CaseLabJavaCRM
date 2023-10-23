@@ -75,7 +75,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             employeeToSave.setName("Admin");
             employeeToSave.setSurname("Admin");
             employeeToSave.setEmail("-");
-            employeeToSave.setSalary(0);
+            employeeToSave.setSalary(0L);
             employeeToSave.setPatronymic("Admin");
             employeeToSave.setJobPosition(JobPosition.ADMIN);
             employeeToSave.setPhoneNumber("0");

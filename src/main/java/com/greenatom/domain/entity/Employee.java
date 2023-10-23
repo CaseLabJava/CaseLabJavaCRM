@@ -41,7 +41,7 @@ public class Employee {
     private JobPosition jobPosition;
 
     @Column(name = "salary")
-    private Integer salary;
+    private Long salary;
 
     @Column(name = "email")
     private String email;

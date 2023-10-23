@@ -56,7 +56,7 @@ public class Client {
     private String address;
 
     @Column(name = "phone_number")
-    private Long phoneNumber;
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "client")
     private Set<Request> requests;

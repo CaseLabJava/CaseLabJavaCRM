@@ -35,5 +35,5 @@ public class ClientDTO {
 
     private String address;
 
-    private Long phoneNumber;
+    private String phoneNumber;
 }

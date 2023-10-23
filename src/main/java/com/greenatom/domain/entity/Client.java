@@ -61,6 +61,10 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private Set<Request> requests;
 
+    public String getFullName() {
+        return String.format("%s %s %s", surname, name, patronymic);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

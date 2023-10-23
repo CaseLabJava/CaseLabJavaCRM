@@ -62,4 +62,8 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
+
+    public String getFullName() {
+        return String.format("%s %s %s", surname, name, patronymic);
+    }
 }

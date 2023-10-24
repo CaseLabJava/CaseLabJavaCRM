@@ -52,7 +52,7 @@ public class LoggingAspect {
     @Before("execution(* com.greenatom.service..*(..)))")
     public void logMethodEnter(JoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        LOGGER.debug("Request execution of method"
+        LOGGER.debug("Order execution of method"
                 + methodSignature.getDeclaringType().getSimpleName()
                 + "." + methodSignature.getName() + " "
                 +" with args: "+ Arrays.toString(joinPoint.getArgs())

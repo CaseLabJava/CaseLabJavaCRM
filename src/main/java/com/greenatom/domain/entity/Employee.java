@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,7 +27,7 @@ public class Employee {
 
     @Column(name = "firstname", length = 50)
     @NonNull
-    private String name;
+    private String firstname;
 
     @Column(name = "lastname", length = 50)
     @NonNull
@@ -35,6 +36,9 @@ public class Employee {
     @Column(name = "patronymic", length = 50)
     @NonNull
     private String patronymic;
+
+    @Column(name = "address", length = 200)
+    private String address;
 
     @Column(name = "job_position")
     @Enumerated(EnumType.STRING)
@@ -57,13 +61,13 @@ public class Employee {
     private String password;
 
     @OneToMany(mappedBy = "employee")
-    private Set<Request> requests;
+    private Set<Order> orders;
 
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
 
     public String getFullName() {
-        return String.format("%s %s %s", surname, name, patronymic);
+        return String.format("%s %s %s", surname, firstname, patronymic);
     }
 }

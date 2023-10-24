@@ -29,20 +29,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAll() {
-        log.debug("Request to get all Products");
+        log.debug("Order to get all Products");
         return productMapper.toDto(productRepository.findAll());
     }
 
     @Override
     public Optional<ProductDTO> findOne(Long id) {
-        log.debug("Request to get Product : {}", id);
+        log.debug("Order to get Product : {}", id);
         return Optional.ofNullable(productMapper.toDto(productRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Request not found with id: " + id))));
+                new EntityNotFoundException("Order not found with id: " + id))));
     }
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        log.debug("Request to save product : {}", productDTO);
+        log.debug("Order to save product : {}", productDTO);
         Product product = productMapper.toEntity(productDTO);
         productRepository.save(product);
         return productMapper.toDto(product);
@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(ProductDTO product) {
-        log.debug("Request to partially update Product : {}", product);
+        log.debug("Order to partially update Product : {}", product);
         return productRepository
                 .findById(product.getId())
                 .map(existingEvent -> {

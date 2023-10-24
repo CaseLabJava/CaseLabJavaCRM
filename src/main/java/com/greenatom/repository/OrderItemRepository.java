@@ -1,9 +1,9 @@
 package com.greenatom.repository;
 
-import com.greenatom.domain.entity.CartProduct;
+import com.greenatom.domain.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CartProductRepository extends JpaRepository<CartProduct, Long> {
+public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 }

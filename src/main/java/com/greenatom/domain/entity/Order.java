@@ -8,29 +8,29 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * A Request.
+ * A Order.
  */
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "request")
-public class Request {
+@Table(name = "client_order")
+public class Order {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "request_id")
+    @Column(name = "order_id")
     private Long id;
 
     @Column(name = "link_to_folder")
     private String linkToFolder;
 
     @Column(name = "date_time")
-    private Date requestDate;
+    private Date orderDate;
 
     @Column(name = "status")
-    private String requestStatus;
+    private String orderStatus;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
@@ -40,6 +40,6 @@ public class Request {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "request")
-    private List<CartProduct> cartProducts;
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems;
 }

@@ -1,6 +1,6 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.RequestDTO;
+import com.greenatom.domain.dto.OrderDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,13 +10,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
- * Request API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
+ * Order API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
  * для сохранения новых заявок, получения уже существующих заявок и их обновление.
  * @autor Даниил Змаев
  * @version 1.0
  */
-@Tag(name = "Request API", description = "API для работы с заявками")
-public interface RequestApi {
+@Tag(name = "Order API", description = "API для работы с заявками")
+public interface OrderApi {
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -25,7 +25,7 @@ public interface RequestApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = RequestDTO.class)
+                                    schema = @Schema(implementation = OrderDTO.class)
                             )
                     }
             ),
@@ -35,14 +35,14 @@ public interface RequestApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = RequestDTO.class)
+                                    schema = @Schema(implementation = OrderDTO.class)
                             )
                     }
             )
     })
-    @Operation(summary = "Возращает RequestDTO")
-    RequestDTO addRequest(
-            @Parameter(description = "RequestDTO")
-            RequestDTO requestDTO
+    @Operation(summary = "Возращает OrderDTO")
+    OrderDTO addOrder(
+            @Parameter(description = "OrderDTO")
+            OrderDTO orderDTO
     );
 }

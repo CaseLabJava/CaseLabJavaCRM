@@ -13,11 +13,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartProductDTO {
+public class OrderItemDTO {
 
     private Long id;
 
-    private Long requestId;
+    private Long orderId;
 
     private Long productId;
 
@@ -27,6 +27,6 @@ public class CartProductDTO {
 
     private Long cost;
 
-    private Long requestAmount;
+    private Long orderAmount;
 
 }

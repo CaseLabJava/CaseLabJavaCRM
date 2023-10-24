@@ -1,25 +1,25 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.RequestDTO;
+import com.greenatom.domain.dto.OrderDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface RequestService {
+public interface OrderService {
 
     @Transactional(readOnly = true)
-    List<RequestDTO> findAll();
+    List<OrderDTO> findAll();
 
     @Transactional(readOnly = true)
-    Optional<RequestDTO> findOne(Long id);
+    Optional<OrderDTO> findOne(Long id);
 
     @Transactional
-    RequestDTO save(RequestDTO request);
+    OrderDTO save(OrderDTO orderDTO);
 
     @Transactional
-    RequestDTO updateRequest(RequestDTO request);
+    OrderDTO updateOrder(OrderDTO orderDTO);
 
     @Transactional
-    void deleteRequest(Long id);
+    void deleteOrder(Long id);
 }

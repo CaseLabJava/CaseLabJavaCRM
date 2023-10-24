@@ -72,7 +72,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if(admins.isEmpty()){
             Employee employeeToSave = new Employee();
             employeeToSave.setRole(roleAdmin);
-            employeeToSave.setName("Admin");
+            employeeToSave.setFirstname("Admin");
             employeeToSave.setSurname("Admin");
             employeeToSave.setEmail("-");
             employeeToSave.setSalary(0L);

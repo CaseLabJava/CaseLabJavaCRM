@@ -39,5 +39,5 @@ public class Product {
     private Long cost;
 
     @OneToMany(mappedBy = "product")
-    private List<CartProduct> cartProducts;
+    private List<OrderItem> orderItems;
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -59,7 +60,7 @@ public class Client {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "client")
-    private Set<Request> requests;
+    private Set<Order> orders;
 
     public String getFullName() {
         return String.format("%s %s %s", surname, name, patronymic);

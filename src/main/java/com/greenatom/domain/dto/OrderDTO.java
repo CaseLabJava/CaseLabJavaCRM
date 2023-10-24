@@ -1,5 +1,7 @@
 package com.greenatom.domain.dto;
 
+import com.greenatom.domain.entity.Client;
+import com.greenatom.domain.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,24 +10,24 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * A DTO for the Request.
+ * A DTO for the Order.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestDTO {
+public class OrderDTO {
 
     private Long id;
 
-    private Long clientId;
+    private ClientDTO client;
 
-    private Long employeeId;
+    private EmployeeDTO employee;
 
     private String linkToFolder;
 
-    private Date requestDate;
+    private Date orderDate;
 
-    private String status;
+    private String orderStatus;
 }

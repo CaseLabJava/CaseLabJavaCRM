@@ -8,14 +8,14 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * A DTO for the Request.
+ * A DTO for the Order.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestDTO {
+public class OrderDTO {
 
     private Long id;
 

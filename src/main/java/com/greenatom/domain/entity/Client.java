@@ -59,7 +59,7 @@ public class Client {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "client")
-    private Set<Request> requests;
+    private Set<Order> orders;
 
     public String getFullName() {
         return String.format("%s %s %s", surname, name, patronymic);

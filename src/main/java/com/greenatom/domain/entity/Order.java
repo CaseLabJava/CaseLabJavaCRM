@@ -8,15 +8,15 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * A Request.
+ * A Order.
  */
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "request")
-public class Request {
+@Table(name = "order")
+public class Order {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
@@ -40,6 +40,6 @@ public class Request {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "request")
+    @OneToMany(mappedBy = "order")
     private List<CartProduct> cartProducts;
 }

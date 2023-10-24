@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Employee employee = employeeRepository.findByUsername(username).orElseThrow(() ->
-                new EntityNotFoundException("Request not found with username: " + username));
+                new EntityNotFoundException("Order not found with username: " + username));
 
         return new User(
                 employee.getUsername(),

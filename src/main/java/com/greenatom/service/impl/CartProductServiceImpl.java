@@ -5,7 +5,7 @@ import com.greenatom.domain.entity.CartProduct;
 import com.greenatom.domain.mapper.CartProductMapper;
 import com.greenatom.repository.CartProductRepository;
 import com.greenatom.repository.ProductRepository;
-import com.greenatom.repository.RequestRepository;
+import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.CartProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -34,34 +34,34 @@ public class CartProductServiceImpl implements CartProductService {
     private final CartProductRepository cartProductRepository;
     private final ProductRepository productRepository;
     private final CartProductMapper cartProductMapper;
-    private final RequestRepository requestRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public List<CartProductDTO> findAll() {
-        log.debug("Request to get all CartProducts");
+        log.debug("Order to get all CartProducts");
         return cartProductMapper.toDto(cartProductRepository.findAll());
     }
 
     @Override
     public Optional<CartProductDTO> findOne(Long id) {
-        log.debug("Request to get CartProduct : {}", id);
+        log.debug("Order to get CartProduct : {}", id);
         return Optional.ofNullable(cartProductMapper.toDto(cartProductRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Request not found with id: " + id))));
+                new EntityNotFoundException("Order not found with id: " + id))));
     }
 
     @Override
     public CartProductDTO save(CartProductDTO cartProductDTO) {
-        log.debug("Request to save cartProduct : {}", cartProductDTO);
+        log.debug("Order to save cartProduct : {}", cartProductDTO);
         CartProduct cartProduct = cartProductMapper.toEntity(cartProductDTO);
         cartProduct.setProduct(productRepository.findById(cartProductDTO.getProductId()).orElseThrow());
-        cartProduct.setRequest(requestRepository.findById(cartProductDTO.getRequestId()).orElseThrow());
+        cartProduct.setOrder(orderRepository.findById(cartProductDTO.getRequestId()).orElseThrow());
         cartProductRepository.save(cartProduct);
         return cartProductMapper.toDto(cartProduct);
     }
 
     @Override
     public CartProductDTO updateCartProduct(CartProductDTO cartProduct) {
-        log.debug("Request to partially update CartProduct : {}", cartProduct);
+        log.debug("Order to partially update CartProduct : {}", cartProduct);
         return cartProductRepository
                 .findById(cartProduct.getId())
                 .map(existingEvent -> {

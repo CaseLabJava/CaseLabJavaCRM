@@ -40,7 +40,7 @@ public class CartProduct {
 
     @ManyToOne
     @JoinColumn(name = "request_id", referencedColumnName = "request_id")
-    private Request request;
+    private Order order;
 
     public long getTotalCost() {
         return cost * requestAmount;

@@ -30,20 +30,20 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientDTO> findAll() {
-        log.debug("Request to get all Clients");
+        log.debug("Order to get all Clients");
         return clientMapper.toDto(clientRepository.findAll());
     }
 
     @Override
     public Optional<ClientDTO> findOne(Long id) {
-        log.debug("Request to get Client : {}", id);
+        log.debug("Order to get Client : {}", id);
         return Optional.ofNullable(clientMapper.toDto(clientRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Request not found with id: " + id))));
+                new EntityNotFoundException("Order not found with id: " + id))));
     }
 
     @Override
     public ClientDTO save(ClientDTO clientDTO) {
-        log.debug("Request to save client : {}", clientDTO);
+        log.debug("Order to save client : {}", clientDTO);
         Client client = clientMapper.toEntity(clientDTO);
         clientRepository.save(client);
         return clientMapper.toDto(client);
@@ -51,7 +51,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDTO updateClient(ClientDTO client) {
-        log.debug("Request to partially update Client : {}", client);
+        log.debug("Order to partially update Client : {}", client);
         return clientRepository
                 .findById(client.getId())
                 .map(existingEvent -> {

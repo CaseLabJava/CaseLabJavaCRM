@@ -7,7 +7,7 @@ import com.greenatom.repository.ClientRepository;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RequestRepository;
 import com.greenatom.service.RequestService;
-import com.greenatom.utils.generator.request.RequestGenerator;
+import com.greenatom.utils.generator.request.OrderGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -58,7 +58,7 @@ public class RequestServiceImpl implements RequestService {
         request.setClient(clientRepository.findById(requestDTO.getClientId()).orElseThrow());
         request.setEmployee(employeeRepository.findById(requestDTO.getEmployeeId()).orElseThrow());
         requestRepository.save(request);
-        RequestGenerator requestGenerator = new RequestGenerator();
+        OrderGenerator requestGenerator = new OrderGenerator();
         // Пока что путь захардкожен
         requestGenerator.processGeneration(
                 request.getCartProducts(),

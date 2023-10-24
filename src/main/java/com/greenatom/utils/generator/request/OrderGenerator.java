@@ -3,16 +3,17 @@ package com.greenatom.utils.generator.request;
 import com.greenatom.domain.entity.CartProduct;
 import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.entity.Employee;
-import com.greenatom.service.CartProductService;
 import org.apache.poi.xwpf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class RequestGenerator {
+public class OrderGenerator {
 
     private static final int FONT_SIZE = 16;
     private static final int DEFAULT_WIDTH = 10000;
@@ -27,10 +28,10 @@ public class RequestGenerator {
     private static final int COST_COL_POS = 3;
     private static final int TOTAL_COL_POS = 4;
 
-    private final Logger log = LoggerFactory.getLogger(CartProductService.class);
+    private final Logger log = LoggerFactory.getLogger(OrderGenerator.class);
     private final XWPFDocument document;
 
-    public RequestGenerator() {
+    public OrderGenerator() {
         this.document = new XWPFDocument();
     }
 
@@ -117,13 +118,21 @@ public class RequestGenerator {
         paragraph.createRun().setText(String.format(Constants.TOTAL_COST_TEXT_LABEL, TextUtils.intToText((int) cost)));
     }
 
-    private void createSignatureFields(XWPFDocument document) {
+    private void createSignatureFields(XWPFDocument document, Employee employee) {
         log.debug("Creating seller/buyer signature fields");
         XWPFParagraph signatureFields = document.createParagraph();
         signatureFields.setAlignment(ParagraphAlignment.LEFT);
-        signatureFields.createRun().setText(Constants.SELLER_SIGNATIRE_PLACE);
+        assignByManager(signatureFields, employee);
         signatureFields.createRun().addBreak();
         signatureFields.createRun().setText(Constants.BUYER_SIGNATIRE_PLACE);
+    }
+
+    private void assignByManager(XWPFParagraph paragraph, Employee employee) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        paragraph.createRun().setText(String.format(
+                Constants.SELLER_SIGNATIRE,
+                employee.getFullName(),
+                LocalDateTime.now().format(formatter)));
     }
 
     // Вот тут надо подумать как будет документ сохраняться

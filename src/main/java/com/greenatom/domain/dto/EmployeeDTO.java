@@ -34,7 +34,7 @@ public class EmployeeDTO {
     private JobPosition jobPosition;
 
     @Schema(description = "Зарплата сотрудника", example = "100000")
-    private String salary;
+    private Long salary;
 
     @Schema(description = "Почта сотрудника", example = "tupichok@mail.ru")
     private String email;

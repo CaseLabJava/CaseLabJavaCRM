@@ -7,6 +7,7 @@ import com.greenatom.repository.ClientRepository;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RequestRepository;
 import com.greenatom.service.RequestService;
+import com.greenatom.utils.generator.request.OrderGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,6 +21,10 @@ import java.util.Optional;
  * RequestServiceImpl является сервисом для работы с запросами. Он использует базы данных для доступа к информации
  * о запросах, клиентах и сотрудниках, преобразует эту информацию в формат DTO и возвращает списки запросов
  * или конкретные запросы по их ID.
+ *
+ * <p>Сохранение заявки: Метод save принимает объект RequestDTO, содержащий id клитента, id сотрудника,
+ * ссылку на дерикторию с документами заявки, дату создания, и статус. В методе происходит сохранение записи
+ * в базу данных, а также сохранение docx документа в папку в документами заявки.
  * @autor Максим Быков, Даниил Змаев
  * @version 1.0
  */
@@ -53,6 +58,13 @@ public class RequestServiceImpl implements RequestService {
         request.setClient(clientRepository.findById(requestDTO.getClientId()).orElseThrow());
         request.setEmployee(employeeRepository.findById(requestDTO.getEmployeeId()).orElseThrow());
         requestRepository.save(request);
+        OrderGenerator requestGenerator = new OrderGenerator();
+        // Пока что путь захардкожен
+        requestGenerator.processGeneration(
+                request.getCartProducts(),
+                request.getClient(),
+                request.getEmployee(),
+                "generated_resources/test.docx");
         return requestMapper.toDto(request);
     }
 

@@ -5,10 +5,15 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
+    hibernate:
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: true
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -16,3 +21,4 @@ springdoc:
     path: /api-docs
 access_token: ${ACCESS_TOKEN}
 refresh_token: ${REFRESH_TOKEN}
+

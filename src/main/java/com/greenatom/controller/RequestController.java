@@ -1,5 +1,6 @@
 package com.greenatom.controller;
 
+import com.greenatom.controller.api.RequestApi;
 import com.greenatom.domain.dto.RequestDTO;
 import com.greenatom.service.RequestService;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/api/request")
-public class RequestController {
+public class RequestController implements RequestApi {
     private final RequestService requestService;
 
     public RequestController(RequestService requestService) {

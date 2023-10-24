@@ -41,7 +41,7 @@ public class Employee {
     private JobPosition jobPosition;
 
     @Column(name = "salary")
-    private Integer salary;
+    private Long salary;
 
     @Column(name = "email")
     private String email;
@@ -62,4 +62,8 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;
+
+    public String getFullName() {
+        return String.format("%s %s %s", surname, name, patronymic);
+    }
 }

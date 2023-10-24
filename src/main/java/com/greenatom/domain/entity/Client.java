@@ -56,10 +56,14 @@ public class Client {
     private String address;
 
     @Column(name = "phone_number")
-    private Long phoneNumber;
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "client")
     private Set<Request> requests;
+
+    public String getFullName() {
+        return String.format("%s %s %s", surname, name, patronymic);
+    }
 
     @Override
     public boolean equals(Object o) {

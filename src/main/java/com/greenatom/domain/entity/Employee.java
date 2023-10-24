@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,7 +37,7 @@ public class Employee {
     @NonNull
     private String patronymic;
 
-    @Column(name = "patronymic", length = 200)
+    @Column(name = "address", length = 200)
     private String address;
 
     @Column(name = "job_position")

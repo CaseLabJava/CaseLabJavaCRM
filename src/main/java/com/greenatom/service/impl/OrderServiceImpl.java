@@ -1,6 +1,7 @@
 package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.OrderDTO;
+import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.repository.ClientRepository;
@@ -10,6 +11,7 @@ import com.greenatom.service.OrderService;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -56,16 +58,16 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO save(OrderDTO orderDTO) {
         log.debug("Order to save order : {}", orderDTO);
         Order order = orderMapper.toEntity(orderDTO);
-        order.setClient(clientRepository.findById(orderDTO.getClientId()).orElseThrow());
-        order.setEmployee(employeeRepository.findById(orderDTO.getEmployeeId()).orElseThrow());
+        order.setClient(clientRepository.findById(orderDTO.getClient().getId()).orElseThrow());
+        order.setEmployee(employeeRepository.findById(orderDTO.getEmployee().getId()).orElseThrow());
         orderRepository.save(order);
-        OrderGenerator orderGenerator = new OrderGenerator();
+//        OrderGenerator orderGenerator = new OrderGenerator();
         // Пока что путь захардкожен
-        orderGenerator.processGeneration(
-                order.getCartProducts(),
-                order.getClient(),
-                order.getEmployee(),
-                "generated_resources/test.docx");
+//        orderGenerator.processGeneration(
+//                order.getOrderItems(),
+//                order.getClient(),
+//                order.getEmployee(),
+//                "generated_resources/test.docx");
         return orderMapper.toDto(order);
     }
 

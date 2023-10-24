@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "/api/request")
+@RequestMapping(value = "/api/order")
 public class OrderController implements OrderApi {
     private final OrderService orderService;
 
@@ -32,7 +32,6 @@ public class OrderController implements OrderApi {
     public OrderDTO getOrder(@PathVariable Long id) {
         return orderService.findOne(id).orElseThrow(EntityNotFoundException::new);
     }
-
 
     @PutMapping(value = "/update", produces = {"application/json"})
     public OrderDTO updateOrder(@RequestBody OrderDTO request) {

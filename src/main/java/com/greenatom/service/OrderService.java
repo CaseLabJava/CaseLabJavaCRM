@@ -15,10 +15,10 @@ public interface OrderService {
     Optional<OrderDTO> findOne(Long id);
 
     @Transactional
-    OrderDTO save(OrderDTO request);
+    OrderDTO save(OrderDTO orderDTO);
 
     @Transactional
-    OrderDTO updateOrder(OrderDTO request);
+    OrderDTO updateOrder(OrderDTO orderDTO);
 
     @Transactional
     void deleteOrder(Long id);

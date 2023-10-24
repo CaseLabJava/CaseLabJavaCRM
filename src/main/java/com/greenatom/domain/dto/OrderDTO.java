@@ -1,5 +1,7 @@
 package com.greenatom.domain.dto;
 
+import com.greenatom.domain.entity.Client;
+import com.greenatom.domain.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,13 +21,13 @@ public class OrderDTO {
 
     private Long id;
 
-    private Long clientId;
+    private ClientDTO client;
 
-    private Long employeeId;
+    private EmployeeDTO employee;
 
     private String linkToFolder;
 
-    private Date requestDate;
+    private Date orderDate;
 
-    private String status;
+    private String orderStatus;
 }

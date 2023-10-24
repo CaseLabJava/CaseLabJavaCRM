@@ -1,6 +1,6 @@
 package com.greenatom.utils.generator.request;
 
-import com.greenatom.domain.entity.CartProduct;
+import com.greenatom.domain.entity.OrderItem;
 import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.entity.Employee;
 import org.apache.poi.xwpf.usermodel.*;
@@ -36,13 +36,13 @@ public class OrderGenerator {
     }
 
     // Когда появится облако - изменить
-    public void processGeneration(List<CartProduct> products, Client client, Employee employee, String path) {
+    public void processGeneration(List<OrderItem> products, Client client, Employee employee, String path) {
         log.debug("Process request generation");
         createTitle();
         createInfo(Constants.SELLER_LABEL, employee.getFullName(),  Constants.ADDRESS);
         createInfo(Constants.BUYER_LABEL, client.getFullName(),  client.getAddress());
         createTable(document, products);
-        createTotalCostText(products.stream().mapToLong(CartProduct::getTotalCost).sum());
+        createTotalCostText(products.stream().mapToLong(OrderItem::getTotalCost).sum());
         createSignatureFields(document, employee);
         writeToFile(path);
     }
@@ -69,7 +69,7 @@ public class OrderGenerator {
         run.setText(address);
     }
 
-    private void createTable(XWPFDocument document, List<CartProduct> products) {
+    private void createTable(XWPFDocument document, List<OrderItem> products) {
         log.debug("Creating product table");
         int rowNum = 1;
         int colNum = 5;
@@ -91,15 +91,15 @@ public class OrderGenerator {
         fillTableWithData(table, products);
     }
 
-    private void fillTableWithData(XWPFTable table, List<CartProduct> products) {
+    private void fillTableWithData(XWPFTable table, List<OrderItem> products) {
         log.debug("Filling product table with data");
         XWPFTableRow dataRow;
         for (int i = 0; i < products.size(); i++) {
-            CartProduct product = products.get(i);
+            OrderItem product = products.get(i);
             dataRow = table.createRow();
             dataRow.getCell(NUMBER_COL_POS).setText(String.valueOf(i + 1));
             dataRow.getCell(NAME_COL_POS).setText(product.getName());
-            dataRow.getCell(AMOUNT_COL_POS).setText(String.valueOf(product.getRequestAmount()));
+            dataRow.getCell(AMOUNT_COL_POS).setText(String.valueOf(product.getOrderAmount()));
             dataRow.getCell(COST_COL_POS).setText(String.valueOf(product.getCost()));
             dataRow.getCell(TOTAL_COL_POS).setText(String.valueOf(product.getTotalCost()));
         }
@@ -107,9 +107,9 @@ public class OrderGenerator {
         dataRow.getCell(NUMBER_COL_POS)
                 .setText(Constants.TOTAL_COST_COL_LABEL);
         dataRow.getCell(AMOUNT_COL_POS)
-                .setText(String.valueOf(products.stream().mapToLong(CartProduct::getRequestAmount).sum()));
+                .setText(String.valueOf(products.stream().mapToLong(OrderItem::getOrderAmount).sum()));
         dataRow.getCell(TOTAL_COL_POS)
-                .setText(String.valueOf(products.stream().mapToLong(CartProduct::getTotalCost).sum()));
+                .setText(String.valueOf(products.stream().mapToLong(OrderItem::getTotalCost).sum()));
     }
 
     private void createTotalCostText(long cost) {

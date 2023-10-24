@@ -13,12 +13,12 @@ import org.hibernate.annotations.GenericGenerator;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "cart_product")
-public class CartProduct {
+@Table(name = "order_item")
+public class OrderItem {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "cart_product_id")
+    @Column(name = "order_item_id")
     private Long id;
 
     @Column(name = "name")
@@ -31,19 +31,19 @@ public class CartProduct {
     @Column(name = "cost")
     private Long cost;
 
-    @Column(name = "request_amount")
-    private Long requestAmount;
+    @Column(name = "amount")
+    private Long orderAmount;
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "request_id", referencedColumnName = "request_id")
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     private Order order;
 
     public long getTotalCost() {
-        return cost * requestAmount;
+        return cost * orderAmount;
     }
 
 }

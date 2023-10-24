@@ -15,22 +15,22 @@ import java.util.List;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "order")
+@Table(name = "client_order")
 public class Order {
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
-    @Column(name = "request_id")
+    @Column(name = "order_id")
     private Long id;
 
     @Column(name = "link_to_folder")
     private String linkToFolder;
 
     @Column(name = "date_time")
-    private Date requestDate;
+    private Date orderDate;
 
     @Column(name = "status")
-    private String requestStatus;
+    private String orderStatus;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
@@ -41,5 +41,5 @@ public class Order {
     private Client client;
 
     @OneToMany(mappedBy = "order")
-    private List<CartProduct> cartProducts;
+    private List<OrderItem> orderItems;
 }

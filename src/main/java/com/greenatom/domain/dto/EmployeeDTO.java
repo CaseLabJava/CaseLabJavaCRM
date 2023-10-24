@@ -22,7 +22,7 @@ public class EmployeeDTO {
     private Long id;
 
     @Schema(description = "Имя сотрудника", example = "Дмитрий")
-    private String name;
+    private String firstname;
 
     @Schema(description = "Фамилия сотрудника", example = "Пучков")
     private String surname;

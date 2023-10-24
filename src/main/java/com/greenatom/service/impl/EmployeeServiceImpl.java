@@ -55,16 +55,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(encoder.encode(employeeDTO.getPassword()));
         employee.setUsername(generateUsername(employeeDTO));
         employee.setRole(roleRepository.findByName(employeeDTO.getRole().getName()).orElse(null));
-        employeeRepository.save(employee);
-        for (Employee e :
-                existingUsers) {
-            if (Objects.equals(e.getEmail(), employee.getEmail())) {
+        for (Employee e : existingUsers) {
+            if ((e.getEmail().equals(employee.getEmail()))) {
                 throw new EmailAlreadyUsedException();
             }
-            if (Objects.equals(e.getUsername(), employee.getUsername())) {
-                throw new UsernameAlreadyUsedException();
-            }
         }
+        employeeRepository.save(employee);
         return employee;
     }
 
@@ -98,13 +94,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findByUsername(username);
     }
 
-    private String generateUsername(EmployeeDTO employeeDTO){
+    private String generateUsername(EmployeeDTO employeeDTO) {
         StringBuilder username = new StringBuilder();
-         return username.append(employeeDTO.getName()).append("_")
-                 .append(employeeDTO.getSurname().charAt(0)).append("_")
-                 .append(employeeDTO.getPatronymic().charAt(0))
-                 .append("_")
-                 .append(employeeRepository.count() + 1)
-                 .toString();
+        username.append(employeeDTO.getFirstname()).append("_")
+                .append(employeeDTO.getSurname().charAt(0)).append("_")
+                .append(employeeDTO.getPatronymic().charAt(0));
+        Integer countOfUsernameInDb = employeeRepository.countByUsername(username.toString());
+        if(countOfUsernameInDb > 0){
+            username.append("_").append((countOfUsernameInDb + 1));
+        }
+        return username.toString();
     }
 }

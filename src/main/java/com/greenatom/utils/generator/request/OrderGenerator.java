@@ -43,7 +43,7 @@ public class OrderGenerator {
         createInfo(Constants.BUYER_LABEL, client.getFullName(),  client.getAddress());
         createTable(document, products);
         createTotalCostText(products.stream().mapToLong(CartProduct::getTotalCost).sum());
-        createSignatureFields(document);
+        createSignatureFields(document, employee);
         writeToFile(path);
     }
 

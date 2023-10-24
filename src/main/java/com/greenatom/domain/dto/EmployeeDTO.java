@@ -50,5 +50,8 @@ public class EmployeeDTO {
 
     @Schema(description = "Роль сотрудника")
     private RoleDto role;
+
+    @Schema(description = "Адрес сотрудника")
+    private String address;
 }
 

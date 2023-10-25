@@ -37,9 +37,9 @@ public class OrderController implements OrderApi {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findOne(id));
     }
 
-    @PostMapping(value = "/add", produces = {"application/json"})
-    public ResponseEntity<OrderDTO> addOrder(@RequestBody OrderRequest orderRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.createEmptyOrder(orderRequest));
+    @PostMapping(value = "/add/orderDraft")
+    public ResponseEntity<OrderDTO> addDraftOrder(@RequestBody OrderRequest orderRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.createDraft(orderRequest));
     }
 
     @PostMapping(value = "/generateOrder", produces = {"application/json"})

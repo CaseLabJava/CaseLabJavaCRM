@@ -27,5 +27,5 @@ public interface OrderService {
     @Transactional
     void deleteOrder(Long id);
 
-    OrderDTO createEmptyOrder(OrderRequest orderRequest);
+    OrderDTO createDraft(OrderRequest orderRequest);
 }

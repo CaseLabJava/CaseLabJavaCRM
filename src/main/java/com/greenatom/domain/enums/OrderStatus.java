@@ -1,7 +1,7 @@
 package com.greenatom.domain.enums;
 
 public enum OrderStatus {
-    EMPTY,
+    DRAFT,
     WAITING_FOR_ASSIGN,
     ASSIGNED
 }

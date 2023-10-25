@@ -1,15 +1,13 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.item.OrderItemRequest;
 import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
 import com.greenatom.domain.dto.order.OrderRequest;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
-import com.greenatom.repository.ClientRepository;
-import com.greenatom.repository.EmployeeRepository;
-import com.greenatom.repository.OrderItemRepository;
-import com.greenatom.repository.OrderRepository;
+import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
 import com.greenatom.utils.date.DateTimeUtils;
 import com.greenatom.utils.exception.OrderException;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * OrderServiceImpl является сервисом для работы с запросами. Он использует базы данных для доступа к информации
@@ -47,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
+    private final ProductRepository productRepository;
 
     private final OrderMapper orderMapper;
 
@@ -64,7 +62,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO createEmptyOrder(OrderRequest orderRequest) {
+    public OrderDTO createDraft(OrderRequest orderRequest) {
+        List<OrderItemRequest> orderItemList = orderRequest.getOrderItemList();
+        Order order = createDraftOrder(orderRequest);
+        for (OrderItemRequest orderItem: orderItemList) {
+            Product currProduct = productRepository
+                    .findById(orderItem.getProductId())
+                    .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
+            orderItemRepository.save(OrderItem.builder()
+                    .product(currProduct)
+                    .orderAmount(orderItem.getOrderAmount())
+                    .cost(currProduct.getCost())
+                    .unit(currProduct.getUnit())
+                    .name(currProduct.getProductName())
+                    .order(order)
+                    .build());
+        }
+        return orderMapper.toDto(order);
+    }
+
+    private Order createDraftOrder(OrderRequest orderRequest) {
         Order order = new Order();
         Client client = clientRepository
                 .findById(orderRequest.getClientId())
@@ -75,22 +92,21 @@ public class OrderServiceImpl implements OrderService {
         order.setClient(client);
         order.setEmployee(employee);
         order.setOrderDate(DateTimeUtils.getTodayDate());
-        order.setOrderStatus(OrderStatus.EMPTY.name());
+        order.setOrderStatus(OrderStatus.DRAFT.name());
         // TODO: Поменять, когда будет понятно на что
         order.setLinkToFolder("LINK_TO_FOLDER_SAMPLE");
         order = orderRepository.save(order);
-        return orderMapper.toDto(order);
+        return order;
     }
 
     @Override
     public void generateOrder(GenerateOrderRequest request) {
-        List<OrderItem> products = orderItemRepository.findAllByOrderId(request.getId());
         OrderGenerator orderGenerator = new OrderGenerator();
         Order order = orderRepository
                 .findById(request.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         orderGenerator.processGeneration(
-                products,
+                order.getOrderItems(),
                 order.getClient(),
                 order.getEmployee(),
                 "test.docx");
@@ -125,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (Objects.equals(order.getOrderStatus(), OrderStatus.EMPTY.name())) {
+        if (Objects.equals(order.getOrderStatus(), OrderStatus.DRAFT.name())) {
             orderRepository.delete(order);
         } else {
             throw OrderException.CODE.CANNOT_DELETE_ORDER.get();

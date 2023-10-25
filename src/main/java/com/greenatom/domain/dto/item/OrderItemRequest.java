@@ -13,9 +13,6 @@ import lombok.Setter;
 @Schema(description = "Класс для создания OrderItem")
 public class OrderItemRequest {
 
-    @Schema(description = "Id заказа")
-    Long orderId;
-
     @Schema(description = "Id продукта")
     Long productId;
 

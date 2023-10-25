@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Order API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
@@ -37,7 +38,7 @@ public interface OrderApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Заказ по переданному id не был найден",
+                    description = "Продукт, клиент или сотрудник по переданному id не был найден",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -46,9 +47,9 @@ public interface OrderApi {
                     }
             )
     })
-    @Operation(summary = "Возращает OrderDTO")
-    ResponseEntity<OrderDTO> addOrder(
-            @Parameter(description = "OrderDTO")
+    @Operation(summary = "Создает Order и возвращает OrderDTO")
+    ResponseEntity<OrderDTO> addDraftOrder(
+            @Parameter(description = "Order Request")
             OrderRequest orderRequest
     );
 

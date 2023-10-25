@@ -1,13 +1,8 @@
 package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.item.OrderItemDTO;
-import com.greenatom.domain.dto.item.OrderItemRequest;
-import com.greenatom.domain.entity.OrderItem;
-import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.mapper.OrderItemMapper;
 import com.greenatom.repository.OrderItemRepository;
-import com.greenatom.repository.ProductRepository;
-import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.OrderItemService;
 import com.greenatom.utils.exception.OrderItemException;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,9 +29,7 @@ import java.util.List;
 public class OrderItemServiceImpl implements OrderItemService {
     private final Logger log = LoggerFactory.getLogger(OrderItemService.class);
     private final OrderItemRepository orderItemRepository;
-    private final ProductRepository productRepository;
     private final OrderItemMapper orderItemMapper;
-    private final OrderRepository orderRepository;
 
     @Override
     public List<OrderItemDTO> findAll() {
@@ -50,25 +43,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemMapper.toDto(orderItemRepository
                 .findById(id)
                 .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
-    }
-
-    @Override
-    public OrderItemDTO save(OrderItemRequest orderItemRequest) {
-        log.debug("Order to save cartProduct : {}", orderItemRequest);
-        OrderItem orderItem = orderItemMapper.toEntity(orderItemRequest);
-        Product product = productRepository
-                .findById(orderItemRequest.getProductId())
-                .orElseThrow(OrderItemException.CODE.NO_SUCH_PRODUCT::get);
-        orderItem.setProduct(product);
-        orderItem.setName(product.getProductName());
-        orderItem.setUnit(product.getUnit());
-        orderItem.setCost(product.getCost());
-        orderItem.setOrder(orderRepository
-                .findById(orderItemRequest.getOrderId())
-                .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
-        orderItem.setOrderAmount(orderItemRequest.getOrderAmount());
-        orderItemRepository.save(orderItem);
-        return orderItemMapper.toDto(orderItem);
     }
 
     @Override

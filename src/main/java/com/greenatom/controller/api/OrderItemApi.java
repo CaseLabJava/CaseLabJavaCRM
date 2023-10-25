@@ -1,7 +1,6 @@
 package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.item.OrderItemDTO;
-import com.greenatom.domain.dto.item.OrderItemRequest;
 import com.greenatom.utils.exception.message.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,38 +10,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "OrderItem API", description = "API для работы с продуктами в заказе")
 public interface OrderItemApi {
-
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Успешное сохранение заявки",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderItemDTO.class)
-                            )
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "501",
-                    description = "Ошибка сохранения заявки",
-                    content = {
-                            @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderItemDTO.class)
-                            )
-                    }
-            )
-    })
-    @Operation(summary = "Возращает OrderDTO")
-    ResponseEntity<OrderItemDTO> addOrderItem(
-            @Parameter(description = "OrderDTO")
-            OrderItemRequest orderItemRequest
-    );
 
     @ApiResponses(value = {
             @ApiResponse(

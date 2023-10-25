@@ -10,6 +10,7 @@ public class OrderException extends RuntimeException {
         NO_SUCH_CLIENT("No person with such id"),
         NO_SUCH_EMPLOYEE("No employee with such id"),
         NO_SUCH_ORDER("No order with such id"),
+        NO_SUCH_PRODUCT("No product with such id"),
         CANNOT_DELETE_ORDER("Assigned order can not be deleted");
 
         final String codeDescription;

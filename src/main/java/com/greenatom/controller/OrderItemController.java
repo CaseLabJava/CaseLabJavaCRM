@@ -2,9 +2,8 @@ package com.greenatom.controller;
 
 import com.greenatom.controller.api.OrderItemApi;
 import com.greenatom.domain.dto.item.OrderItemDTO;
-import com.greenatom.domain.dto.item.OrderItemRequest;
 import com.greenatom.service.OrderItemService;
- import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -33,11 +32,6 @@ public class OrderItemController implements OrderItemApi {
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
     public ResponseEntity<OrderItemDTO> getOrderItem(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(orderItemService.findOne(id));
-    }
-
-    @PostMapping(value = "/add", produces = {"application/json"})
-    public ResponseEntity<OrderItemDTO> addOrderItem(@RequestBody OrderItemRequest orderItem) {
-        return ResponseEntity.status(HttpStatus.OK).body(orderItemService.save(orderItem));
     }
 
     @DeleteMapping(value = "/delete/{id}", produces = {"application/json"})

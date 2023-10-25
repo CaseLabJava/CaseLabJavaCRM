@@ -1,9 +1,12 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.OrderApi;
-import com.greenatom.domain.dto.OrderDTO;
+import com.greenatom.domain.dto.order.OrderDTO;
+import com.greenatom.domain.dto.order.OrderRequest;
 import com.greenatom.service.OrderService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -39,8 +42,14 @@ public class OrderController implements OrderApi {
     }
 
     @PostMapping(value = "/add", produces = {"application/json"})
-    public OrderDTO addOrder(@RequestBody OrderDTO request) {
-        return orderService.save(request);
+    public ResponseEntity<OrderDTO> addOrder(@RequestBody OrderRequest orderRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.createEmptyOrder(orderRequest));
+    }
+
+    @PostMapping(value = "/generateOrder", produces = {"application/json"})
+    public ResponseEntity<Void> generateOrder(@RequestBody OrderDTO orderDTO) {
+        orderService.generateOrder(orderDTO);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping(value = "/delete/{id}",

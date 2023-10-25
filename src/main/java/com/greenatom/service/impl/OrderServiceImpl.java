@@ -1,17 +1,21 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.OrderDTO;
-import com.greenatom.domain.entity.Client;
-import com.greenatom.domain.entity.Order;
+import com.greenatom.domain.dto.item.OrderItemDTO;
+import com.greenatom.domain.dto.order.OrderDTO;
+import com.greenatom.domain.dto.order.OrderRequest;
+import com.greenatom.domain.entity.*;
+import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.repository.ClientRepository;
 import com.greenatom.repository.EmployeeRepository;
+import com.greenatom.repository.OrderItemRepository;
 import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.OrderService;
+import com.greenatom.utils.date.DateTimeUtils;
+import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -36,9 +40,12 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     private final Logger log = LoggerFactory.getLogger(OrderService.class);
+
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
+
     private final OrderMapper orderMapper;
 
     @Override
@@ -55,19 +62,44 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderDTO createEmptyOrder(OrderRequest orderRequest) {
+        Order order = new Order();
+        Client client = clientRepository
+                .findById(orderRequest.getClientId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_CLIENT::get);
+        Employee employee = employeeRepository
+                .findById(orderRequest.getEmployeeId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get);
+        order.setClient(client);
+        order.setEmployee(employee);
+        order.setOrderDate(DateTimeUtils.getTodayDate());
+        order.setOrderStatus(OrderStatus.EMPTY.name());
+        // TODO: Поменять, когда будет понятно на что
+        order.setLinkToFolder("LINK_TO_FOLDER_SAMPLE");
+        order = orderRepository.save(order);
+        return orderMapper.toDto(order);
+    }
+
+    @Override
+    public void generateOrder(OrderDTO orderDTO) {
+        Order order = orderMapper.toEntity(orderDTO);
+        List<OrderItem> products = orderItemRepository.findAllByOrderId(order.getId());
+        OrderGenerator orderGenerator = new OrderGenerator();
+        orderGenerator.processGeneration(
+                products,
+                order.getClient(),
+                order.getEmployee(),
+                "test.docx");
+        System.out.println();
+    }
+
+    @Override
     public OrderDTO save(OrderDTO orderDTO) {
         log.debug("Order to save order : {}", orderDTO);
         Order order = orderMapper.toEntity(orderDTO);
         order.setClient(clientRepository.findById(orderDTO.getClient().getId()).orElseThrow());
         order.setEmployee(employeeRepository.findById(orderDTO.getEmployee().getId()).orElseThrow());
         orderRepository.save(order);
-//        OrderGenerator orderGenerator = new OrderGenerator();
-        // Пока что путь захардкожен
-//        orderGenerator.processGeneration(
-//                order.getOrderItems(),
-//                order.getClient(),
-//                order.getEmployee(),
-//                "generated_resources/test.docx");
         return orderMapper.toDto(order);
     }
 

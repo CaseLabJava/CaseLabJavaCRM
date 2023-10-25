@@ -1,6 +1,7 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.OrderDTO;
+import com.greenatom.domain.dto.order.OrderDTO;
+import com.greenatom.domain.dto.order.OrderRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Order API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
@@ -41,8 +43,8 @@ public interface OrderApi {
             )
     })
     @Operation(summary = "Возращает OrderDTO")
-    OrderDTO addOrder(
+    ResponseEntity<OrderDTO> addOrder(
             @Parameter(description = "OrderDTO")
-            OrderDTO orderDTO
+            OrderRequest orderRequest
     );
 }

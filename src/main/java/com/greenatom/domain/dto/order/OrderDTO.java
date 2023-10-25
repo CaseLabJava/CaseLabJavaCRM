@@ -1,5 +1,7 @@
-package com.greenatom.domain.dto;
+package com.greenatom.domain.dto.order;
 
+import com.greenatom.domain.dto.ClientDTO;
+import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.entity.Employee;
 import lombok.AllArgsConstructor;

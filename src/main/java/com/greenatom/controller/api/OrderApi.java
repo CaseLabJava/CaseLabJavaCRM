@@ -129,7 +129,7 @@ public interface OrderApi {
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Заказ по переданному id является подписаным",
+                    description = "Заказ по переданному id является подписанным",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -139,7 +139,7 @@ public interface OrderApi {
             )
     })
     @Operation(
-            summary = "Удаление заказа по id, имеющего стататус EMPTY"
+            summary = "Удаление заказа по id, имеющего статус EMPTY"
     )
     void deleteOrder(
             @Parameter(description = "Id заказа", example = "1")

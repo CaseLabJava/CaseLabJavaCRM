@@ -10,11 +10,11 @@ import java.io.IOException;
 @RequestMapping("/api/files")
 public class FileUploadController {
 
-    @PostMapping(value ="/upload",produces = {"application/json"})
+    @PostMapping(value ="/upload",consumes = "multipart/form-data")
     public String uploadFile(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
-                String uploadDir = "/Users/fortex/Documents/www/download";
+                String uploadDir = "/Documents/UploadDoc";
                 String fileName = file.getOriginalFilename();
                 File uploadPath = new File(uploadDir);
                 if (!uploadPath.exists()) {

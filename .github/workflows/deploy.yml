@@ -63,7 +63,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [ push_compose, delete_recent_container, build_image, export_env ]
+    needs: [ push_compose, build_image, export_env ]
     runs-on: ubuntu-latest
     steps:
       - name: Connect with SSH and Deploy

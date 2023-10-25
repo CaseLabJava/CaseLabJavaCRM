@@ -105,12 +105,16 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository
                 .findById(request.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        orderGenerator.processGeneration(
-                order.getOrderItems(),
-                order.getClient(),
-                order.getEmployee(),
-                "test.docx");
-        order.setOrderStatus(OrderStatus.ASSIGNED.name());
+        if (order.getOrderStatus().equals(OrderStatus.DRAFT.name())) {
+            orderGenerator.processGeneration(
+                    order.getOrderItems(),
+                    order.getClient(),
+                    order.getEmployee(),
+                    "test.docx");
+            order.setOrderStatus(OrderStatus.ASSIGNED.name());
+        } else {
+            throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
+        }
     }
 
     @Override

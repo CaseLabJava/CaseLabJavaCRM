@@ -17,7 +17,7 @@ public class OrderExceptionHandler {
         OrderException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_CLIENT, NO_SUCH_EMPLOYEE, NO_SUCH_ORDER, NO_SUCH_PRODUCT -> HttpStatus.NOT_FOUND;
-            case CANNOT_DELETE_ORDER -> HttpStatus.CONFLICT;
+            case CANNOT_DELETE_ORDER, CANNOT_ASSIGN_ORDER -> HttpStatus.CONFLICT;
         };
         String codeStr = code.toString();
         log.error(codeStr, e);

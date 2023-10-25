@@ -1,6 +1,7 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.OrderApi;
+import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
 import com.greenatom.domain.dto.order.OrderRequest;
 import com.greenatom.service.OrderService;
@@ -32,13 +33,8 @@ public class OrderController implements OrderApi {
     }
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
-    public OrderDTO getOrder(@PathVariable Long id) {
-        return orderService.findOne(id).orElseThrow(EntityNotFoundException::new);
-    }
-
-    @PutMapping(value = "/update", produces = {"application/json"})
-    public OrderDTO updateOrder(@RequestBody OrderDTO request) {
-        return orderService.updateOrder(request);
+    public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.findOne(id));
     }
 
     @PostMapping(value = "/add", produces = {"application/json"})
@@ -47,8 +43,8 @@ public class OrderController implements OrderApi {
     }
 
     @PostMapping(value = "/generateOrder", produces = {"application/json"})
-    public ResponseEntity<Void> generateOrder(@RequestBody OrderDTO orderDTO) {
-        orderService.generateOrder(orderDTO);
+    public ResponseEntity<Void> generateOrder(@RequestBody GenerateOrderRequest request) {
+        orderService.generateOrder(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

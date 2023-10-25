@@ -1,7 +1,9 @@
 package com.greenatom.controller.api;
 
+import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
 import com.greenatom.domain.dto.order.OrderRequest;
+import com.greenatom.utils.exception.message.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,13 +19,15 @@ import org.springframework.http.ResponseEntity;
  * @autor Даниил Змаев
  * @version 1.0
  */
-@Tag(name = "Order API", description = "API для работы с заявками")
+//@AccessDeniedResponse
+//@SecurityRequirement(name = "bearer-key")
+@Tag(name = "Order API", description = "API для работы с заказами")
 public interface OrderApi {
 
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Успешное сохранение заявки",
+                    description = "Успешное сохранение заказа",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -32,8 +36,8 @@ public interface OrderApi {
                     }
             ),
             @ApiResponse(
-                    responseCode = "501",
-                    description = "Ошибка сохранения заявки",
+                    responseCode = "404",
+                    description = "Заказ по переданному id не был найден",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -47,4 +51,98 @@ public interface OrderApi {
             @Parameter(description = "OrderDTO")
             OrderRequest orderRequest
     );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешная генерация документа"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Заказ по переданному id не был найден"
+            ),
+            @ApiResponse(
+                    responseCode = "501",
+                    description = "Ошибка генерации"
+            )
+    })
+    @Operation(
+            summary = "Генерация докумена заказа"
+    )
+    ResponseEntity<Void> generateOrder(
+            @Parameter(description = "GenerationOrderRequest")
+            GenerateOrderRequest orderRequest
+    );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешный возврат заказа",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = OrderDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Заказ по переданному id не был найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Получение заказа по id"
+    )
+
+    ResponseEntity<OrderDTO> getOrder(
+            @Parameter(description = "Id заказа", example = "1")
+            Long id
+    );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешный удаление заказа",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = OrderDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Заказ по переданному id не был найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Заказ по переданному id является подписаным",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Удаление заказа по id, имеющего стататус EMPTY"
+    )
+    void deleteOrder(
+            @Parameter(description = "Id заказа", example = "1")
+            Long id
+    );
+
 }

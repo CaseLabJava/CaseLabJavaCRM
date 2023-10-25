@@ -14,7 +14,8 @@ public class OrderExceptionHandler {
     public ResponseEntity<ErrorMessage> handleOrderException(OrderException e) {
         OrderException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
-            case NO_SUCH_CLIENT, NO_SUCH_EMPLOYEE -> HttpStatus.NOT_FOUND;
+            case NO_SUCH_CLIENT, NO_SUCH_EMPLOYEE, NO_SUCH_ORDER -> HttpStatus.NOT_FOUND;
+            case CANNOT_DELETE_ORDER -> HttpStatus.CONFLICT;
         };
         String codeStr = code.toString();
         // TODO: logging

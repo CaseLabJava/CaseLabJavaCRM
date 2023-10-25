@@ -1,6 +1,6 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.item.OrderItemDTO;
+import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
 import com.greenatom.domain.dto.order.OrderRequest;
 import com.greenatom.domain.entity.*;
@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -35,6 +36,7 @@ import java.util.Optional;
  * @autor Максим Быков, Даниил Змаев
  * @version 1.0
  */
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -55,10 +57,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<OrderDTO> findOne(Long id) {
+    public OrderDTO findOne(Long id) {
         log.debug("Order to get Order : {}", id);
-        return Optional.ofNullable(orderMapper.toDto(orderRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id))));
+        Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        return orderMapper.toDto(order);
     }
 
     @Override
@@ -81,16 +83,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void generateOrder(OrderDTO orderDTO) {
-        Order order = orderMapper.toEntity(orderDTO);
-        List<OrderItem> products = orderItemRepository.findAllByOrderId(order.getId());
+    public void generateOrder(GenerateOrderRequest request) {
+        List<OrderItem> products = orderItemRepository.findAllByOrderId(request.getId());
         OrderGenerator orderGenerator = new OrderGenerator();
+        Order order = orderRepository
+                .findById(request.getId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         orderGenerator.processGeneration(
                 products,
                 order.getClient(),
                 order.getEmployee(),
                 "test.docx");
-        System.out.println();
+        order.setOrderStatus(OrderStatus.ASSIGNED.name());
     }
 
     @Override
@@ -120,11 +124,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Long id) {
-        orderRepository
-                .findById(id)
-                .ifPresent(order -> {
-                    orderRepository.delete(order);
-                    log.debug("Deleted Order: {}", order);
-                });
+        Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        if (Objects.equals(order.getOrderStatus(), OrderStatus.EMPTY.name())) {
+            orderRepository.delete(order);
+        } else {
+            throw OrderException.CODE.CANNOT_DELETE_ORDER.get();
+        }
     }
 }

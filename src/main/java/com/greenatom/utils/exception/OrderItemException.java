@@ -7,7 +7,8 @@ public class OrderItemException extends RuntimeException {
     @Getter
     public enum CODE {
         NO_SUCH_PRODUCT("No product with such id"),
-        NO_SUCH_ORDER("No order with such id");
+        NO_SUCH_ORDER("No order with such id"),
+        NO_SUCH_ORDER_ITEM("No order item with such id");
 
         final String codeDescription;
 

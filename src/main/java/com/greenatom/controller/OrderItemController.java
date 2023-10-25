@@ -4,8 +4,7 @@ import com.greenatom.controller.api.OrderItemApi;
 import com.greenatom.domain.dto.item.OrderItemDTO;
 import com.greenatom.domain.dto.item.OrderItemRequest;
 import com.greenatom.service.OrderItemService;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.HttpStatus;
+ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/orderItem")
 public class OrderItemController implements OrderItemApi {
+
     private final OrderItemService orderItemService;
 
     public OrderItemController(OrderItemService orderItemService) {
@@ -31,25 +31,18 @@ public class OrderItemController implements OrderItemApi {
     }
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
-    public OrderItemDTO getOrderItem(@PathVariable Long id) {
-        return orderItemService.findOne(id).orElseThrow(EntityNotFoundException::new);
-    }
-
-
-    @PutMapping(value = "/update", produces = {"application/json"})
-    public OrderItemDTO updateOrderItem(@RequestBody OrderItemDTO cartProduct) {
-        return orderItemService.updateCartProduct(cartProduct);
+    public ResponseEntity<OrderItemDTO> getOrderItem(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderItemService.findOne(id));
     }
 
     @PostMapping(value = "/add", produces = {"application/json"})
-    public ResponseEntity<Void> addOrderItem(@RequestBody OrderItemRequest orderItem) {
+    public ResponseEntity<OrderItemDTO> addOrderItem(@RequestBody OrderItemRequest orderItem) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderItemService.save(orderItem));
+    }
+
+    @DeleteMapping(value = "/delete/{id}", produces = {"application/json"})
+    public ResponseEntity<Void> deleteOrderItem(@PathVariable Long id) {
+        orderItemService.deleteCartProduct(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-    @DeleteMapping(value = "/delete/{id}",
-            produces = {"application/json"})
-    public void deleteOrderItem(@PathVariable Long id) {
-        orderItemService.deleteCartProduct(id);
-    }
-
 }

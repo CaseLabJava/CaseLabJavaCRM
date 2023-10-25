@@ -14,7 +14,7 @@ public class OrderItemExceptionHandler {
     public ResponseEntity<ErrorMessage> handleOrderItemException(OrderItemException e) {
         OrderItemException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
-            case NO_SUCH_PRODUCT, NO_SUCH_ORDER -> HttpStatus.NOT_FOUND;
+            case NO_SUCH_PRODUCT, NO_SUCH_ORDER, NO_SUCH_ORDER_ITEM -> HttpStatus.NOT_FOUND;
         };
         String codeStr = code.toString();
         // TODO: logging

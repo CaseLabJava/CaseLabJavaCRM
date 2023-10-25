@@ -15,5 +15,4 @@ public interface OrderItemMapper extends EntityMapper<OrderItemDTO, OrderItem> {
     OrderItem toEntity(OrderItemDTO s);
 
     OrderItem toEntity(OrderItemRequest s);
-
 }

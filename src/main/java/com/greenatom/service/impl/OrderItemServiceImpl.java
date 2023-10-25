@@ -2,7 +2,6 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.item.OrderItemDTO;
 import com.greenatom.domain.dto.item.OrderItemRequest;
-import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.entity.OrderItem;
 import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.mapper.OrderItemMapper;
@@ -18,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 /**
  * CartProductServiceImpl является сервисом для работы со списком покупок. Он использует различные репозитории для
  * доступа к данным и преобразует их с помощью mapper в формат DTO (Data Transfer Object).
@@ -47,24 +45,30 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public Optional<OrderItemDTO> findOne(Long id) {
+    public OrderItemDTO findOne(Long id) {
         log.debug("Order to get CartProduct : {}", id);
-        return Optional.ofNullable(orderItemMapper.toDto(orderItemRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id))));
+        return orderItemMapper.toDto(orderItemRepository
+                .findById(id)
+                .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
     }
 
     @Override
-    public void save(OrderItemRequest orderItemRequest) {
+    public OrderItemDTO save(OrderItemRequest orderItemRequest) {
         log.debug("Order to save cartProduct : {}", orderItemRequest);
         OrderItem orderItem = orderItemMapper.toEntity(orderItemRequest);
-        orderItem.setProduct(productRepository
+        Product product = productRepository
                 .findById(orderItemRequest.getProductId())
-                .orElseThrow(OrderItemException.CODE.NO_SUCH_PRODUCT::get));
+                .orElseThrow(OrderItemException.CODE.NO_SUCH_PRODUCT::get);
+        orderItem.setProduct(product);
+        orderItem.setName(product.getProductName());
+        orderItem.setUnit(product.getUnit());
+        orderItem.setCost(product.getCost());
         orderItem.setOrder(orderRepository
                 .findById(orderItemRequest.getOrderId())
                 .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
         orderItem.setOrderAmount(orderItemRequest.getOrderAmount());
         orderItemRepository.save(orderItem);
+        return orderItemMapper.toDto(orderItem);
     }
 
     @Override
@@ -84,10 +88,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public void deleteCartProduct(Long id) {
-        orderItemRepository
+        orderItemRepository.delete(orderItemRepository
                 .findById(id)
-                .ifPresent(cartProduct -> {
-                    orderItemRepository.delete(cartProduct);
-                    log.debug("Deleted CartProduct: {}", cartProduct);
-                });
-    }}
+                .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER_ITEM::get));
+    }
+}

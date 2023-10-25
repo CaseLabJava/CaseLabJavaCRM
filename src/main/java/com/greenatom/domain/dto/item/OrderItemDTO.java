@@ -1,7 +1,8 @@
 package com.greenatom.domain.dto.item;
 
-import com.greenatom.domain.entity.Order;
-import com.greenatom.domain.entity.Product;
+import com.greenatom.domain.dto.ProductDTO;
+import com.greenatom.domain.dto.order.OrderDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,20 +16,28 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Описание продукта в заказе")
 public class OrderItemDTO {
 
+    @Schema(description = "id продукта в заказе", example = "1")
     private Long id;
 
-    private Order order;
+    @Schema(description = "Связь с заказом")
+    private OrderDTO order;
 
-    private Product product;
+    @Schema(description = "Связь с продуктом")
+    private ProductDTO product;
 
+    @Schema(description = "Название продукта в заказе")
     private String name;
 
+    @Schema(description = "Количесвто продукта в заказе")
     private String unit;
 
+    @Schema(description = "Цена продукта в заказе")
     private Long cost;
 
+    @Schema(description = "Запрошеное количество продукта в заказе")
     private Long orderAmount;
 
 }

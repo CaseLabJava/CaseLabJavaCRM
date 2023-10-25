@@ -5,7 +5,6 @@ import com.greenatom.domain.dto.item.OrderItemRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface OrderItemService {
 
@@ -13,10 +12,10 @@ public interface OrderItemService {
     List<OrderItemDTO> findAll();
 
     @Transactional(readOnly = true)
-    Optional<OrderItemDTO> findOne(Long id);
+    OrderItemDTO findOne(Long id);
 
     @Transactional
-    void save(OrderItemRequest orderItem);
+    OrderItemDTO save(OrderItemRequest orderItem);
 
     @Transactional
     OrderItemDTO updateCartProduct(OrderItemDTO cartProduct);

@@ -1,8 +1,12 @@
 package com.greenatom.controller;
 
-import com.greenatom.domain.dto.OrderItemDTO;
+import com.greenatom.controller.api.OrderItemApi;
+import com.greenatom.domain.dto.item.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemRequest;
 import com.greenatom.service.OrderItemService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 /**
  * Этот код является контроллером, который обрабатывает запросы к API, связанному с управлением продуктами в корзине.
@@ -19,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/api/orderItem")
-public class OrderItemController {
+public class OrderItemController implements OrderItemApi {
     private final OrderItemService orderItemService;
 
     public OrderItemController(OrderItemService orderItemService) {
@@ -38,8 +42,8 @@ public class OrderItemController {
     }
 
     @PostMapping(value = "/add", produces = {"application/json"})
-    public OrderItemDTO addOrderItem(@RequestBody OrderItemDTO cartProduct) {
-        return orderItemService.save(cartProduct);
+    public ResponseEntity<Void> addOrderItem(@RequestBody OrderItemRequest orderItem) {
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping(value = "/delete/{id}",

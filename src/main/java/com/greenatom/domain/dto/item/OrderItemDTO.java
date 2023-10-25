@@ -1,5 +1,7 @@
-package com.greenatom.domain.dto;
+package com.greenatom.domain.dto.item;
 
+import com.greenatom.domain.entity.Order;
+import com.greenatom.domain.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +19,9 @@ public class OrderItemDTO {
 
     private Long id;
 
-    private Long orderId;
+    private Order order;
 
-    private Long productId;
+    private Product product;
 
     private String name;
 

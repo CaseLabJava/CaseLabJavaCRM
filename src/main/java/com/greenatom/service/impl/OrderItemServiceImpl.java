@@ -1,13 +1,16 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemRequest;
 import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.entity.OrderItem;
+import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.mapper.OrderItemMapper;
 import com.greenatom.repository.OrderItemRepository;
 import com.greenatom.repository.ProductRepository;
 import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.OrderItemService;
+import com.greenatom.utils.exception.OrderItemException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -34,31 +37,34 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final Logger log = LoggerFactory.getLogger(OrderItemService.class);
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
-    private final OrderItemMapper cartProductMapper;
+    private final OrderItemMapper orderItemMapper;
     private final OrderRepository orderRepository;
 
     @Override
     public List<OrderItemDTO> findAll() {
         log.debug("Order to get all CartProducts");
-        return cartProductMapper.toDto(orderItemRepository.findAll());
+        return orderItemMapper.toDto(orderItemRepository.findAll());
     }
 
     @Override
     public Optional<OrderItemDTO> findOne(Long id) {
         log.debug("Order to get CartProduct : {}", id);
-        return Optional.ofNullable(cartProductMapper.toDto(orderItemRepository.findById(id).orElseThrow(() ->
+        return Optional.ofNullable(orderItemMapper.toDto(orderItemRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Order not found with id: " + id))));
     }
 
     @Override
-    public OrderItemDTO save(OrderItemDTO orderItemDTO) {
-        log.debug("Order to save cartProduct : {}", orderItemDTO);
-        OrderItem orderItem = cartProductMapper.toEntity(orderItemDTO);
-        orderItem.setProduct(productRepository.findById(orderItemDTO.getProductId()).orElseThrow());
-        Order order = orderRepository.findById(orderItemDTO.getOrderId()).get();
-        orderItem.setOrder(orderRepository.findById(orderItemDTO.getOrderId()).orElseThrow());
+    public void save(OrderItemRequest orderItemRequest) {
+        log.debug("Order to save cartProduct : {}", orderItemRequest);
+        OrderItem orderItem = orderItemMapper.toEntity(orderItemRequest);
+        orderItem.setProduct(productRepository
+                .findById(orderItemRequest.getProductId())
+                .orElseThrow(OrderItemException.CODE.NO_SUCH_PRODUCT::get));
+        orderItem.setOrder(orderRepository
+                .findById(orderItemRequest.getOrderId())
+                .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
+        orderItem.setOrderAmount(orderItemRequest.getOrderAmount());
         orderItemRepository.save(orderItem);
-        return cartProductMapper.toDto(orderItem);
     }
 
     @Override
@@ -67,12 +73,12 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemRepository
                 .findById(cartProduct.getId())
                 .map(existingEvent -> {
-                    cartProductMapper.partialUpdate(existingEvent, cartProduct);
+                    orderItemMapper.partialUpdate(existingEvent, cartProduct);
 
                     return existingEvent;
                 })
                 .map(orderItemRepository::save)
-                .map(cartProductMapper::toDto).orElseThrow(
+                .map(orderItemMapper::toDto).orElseThrow(
                         EntityNotFoundException::new);
     }
 

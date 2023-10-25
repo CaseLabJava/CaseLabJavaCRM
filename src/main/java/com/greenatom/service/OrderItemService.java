@@ -1,6 +1,7 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface OrderItemService {
     Optional<OrderItemDTO> findOne(Long id);
 
     @Transactional
-    OrderItemDTO save(OrderItemDTO cartProduct);
+    void save(OrderItemRequest orderItem);
 
     @Transactional
     OrderItemDTO updateCartProduct(OrderItemDTO cartProduct);

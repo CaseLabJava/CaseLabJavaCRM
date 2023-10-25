@@ -18,7 +18,7 @@
         <java.version>17</java.version>
         <openapi.verison>2.2.0</openapi.verison>
         <poi.verison>5.2.4</poi.verison>
-        <sonar.organization>sladkkkov</sonar.organization>
+        <sonar.organization>caselabjava</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
     <dependencies>

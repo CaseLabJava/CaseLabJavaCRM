@@ -61,21 +61,6 @@ jobs:
           push: true
           tags: sladkkov/case-lab-java-crm:latest
 
-  delete_recent_container:
-    name: Delete recent container
-    runs-on: ubuntu-latest
-    steps:
-      - name: Connect with SSH and Deploy
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: 178.21.8.3
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            docker container stop $(docker container ls -q) 
-            docker rm $(docker ps -a -q) 
-            docker rmi $(docker images -q)
-
   deploy:
     name: Deploy
     needs: [ push_compose, delete_recent_container, build_image, export_env ]
@@ -88,5 +73,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            docker container stop $(docker container ls -q) 
+            docker rm $(docker ps -a -q) 
+            docker rmi $(docker images -q)
             docker compose up -d
           

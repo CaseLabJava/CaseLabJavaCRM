@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface EmployeeService {
 
     @Transactional(readOnly = true)
-    List<EmployeeCleanDTO> findAll();
+    List<EmployeeCleanDTO> findAll(Integer pagePosition, Integer pageLength);
 
     @Transactional(readOnly = true)
     Optional<EmployeeCleanDTO> findOne(Long id);

@@ -5,9 +5,12 @@ import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
 import com.greenatom.domain.dto.order.OrderRequest;
 import com.greenatom.service.OrderService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Этот код представляет собой контроллер API для управления заявками. Он предоставляет набор методов
@@ -36,6 +39,12 @@ public class OrderController implements OrderApi {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findOne(id));
     }
 
+    @GetMapping("/get_all")
+    public List<OrderDTO> getAllOrders(@Param("position") Integer pagePosition,
+                                                  @Param("length") Integer pageLength,
+                                                  @Param("employee") Long id) {
+        return orderService.findAll(pagePosition, pageLength, id);
+    }
     @PostMapping(value = "/add/orderDraft")
     public ResponseEntity<OrderDTO> addDraftOrder(@RequestBody OrderRequest orderRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.createDraft(orderRequest));

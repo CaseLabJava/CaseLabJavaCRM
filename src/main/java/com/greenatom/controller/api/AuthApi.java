@@ -4,6 +4,7 @@ import com.greenatom.domain.dto.AuthDto;
 import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.JwtResponse;
 import com.greenatom.domain.dto.RefreshJwtRequest;
+import com.greenatom.utils.exception.message.EmployeeErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springdoc.api.ErrorMessage;
 import org.springframework.web.bind.annotation.RequestBody;
 /**
  * Auth API - это интерфейс, который описывает набор методов для аутентификации пользователей. Он включает методы
@@ -49,7 +49,7 @@ public interface AuthApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
                             )
                     }
             ),
@@ -59,7 +59,7 @@ public interface AuthApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
                             )
                     }
             )
@@ -119,7 +119,7 @@ public interface AuthApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
                             )
                     }
             )

@@ -1,23 +1,25 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.OrderDTO;
-import com.greenatom.domain.entity.Client;
-import com.greenatom.domain.entity.Order;
+import com.greenatom.domain.dto.item.OrderItemRequest;
+import com.greenatom.domain.dto.order.GenerateOrderRequest;
+import com.greenatom.domain.dto.order.OrderDTO;
+import com.greenatom.domain.dto.order.OrderRequest;
+import com.greenatom.domain.entity.*;
+import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
-import com.greenatom.repository.ClientRepository;
-import com.greenatom.repository.EmployeeRepository;
-import com.greenatom.repository.OrderRepository;
+import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
+import com.greenatom.utils.date.DateTimeUtils;
+import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 /**
  * OrderServiceImpl является сервисом для работы с запросами. Он использует базы данных для доступа к информации
@@ -31,14 +33,19 @@ import java.util.Optional;
  * @autor Максим Быков, Даниил Змаев
  * @version 1.0
  */
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final Logger log = LoggerFactory.getLogger(OrderService.class);
+
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
+    private final ProductRepository productRepository;
+
     private final OrderMapper orderMapper;
 
     @Override
@@ -48,10 +55,67 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<OrderDTO> findOne(Long id) {
+    public OrderDTO findOne(Long id) {
         log.debug("Order to get Order : {}", id);
-        return Optional.ofNullable(orderMapper.toDto(orderRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id))));
+        Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        return orderMapper.toDto(order);
+    }
+
+    @Override
+    public OrderDTO createDraft(OrderRequest orderRequest) {
+        List<OrderItemRequest> orderItemList = orderRequest.getOrderItemList();
+        Order order = createDraftOrder(orderRequest);
+        for (OrderItemRequest orderItem: orderItemList) {
+            Product currProduct = productRepository
+                    .findById(orderItem.getProductId())
+                    .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
+            orderItemRepository.save(OrderItem.builder()
+                    .product(currProduct)
+                    .orderAmount(orderItem.getOrderAmount())
+                    .cost(currProduct.getCost())
+                    .unit(currProduct.getUnit())
+                    .name(currProduct.getProductName())
+                    .order(order)
+                    .build());
+        }
+        return orderMapper.toDto(order);
+    }
+
+    private Order createDraftOrder(OrderRequest orderRequest) {
+        Order order = new Order();
+        Client client = clientRepository
+                .findById(orderRequest.getClientId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_CLIENT::get);
+        Employee employee = employeeRepository
+                .findById(orderRequest.getEmployeeId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get);
+        order.setClient(client);
+        order.setEmployee(employee);
+        order.setOrderDate(DateTimeUtils.getTodayDate());
+        order.setOrderStatus(OrderStatus.DRAFT.name());
+        // TODO: Поменять, когда будет понятно на что
+        order.setLinkToFolder("LINK_TO_FOLDER_SAMPLE");
+        order = orderRepository.save(order);
+        return order;
+    }
+
+    @Override
+    public void generateOrder(GenerateOrderRequest request) {
+        OrderGenerator orderGenerator = new OrderGenerator();
+        Order order = orderRepository
+                .findById(request.getId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        if (order.getOrderStatus().equals(OrderStatus.DRAFT.name())) {
+            String filename = "Order_" + order.getId();
+            orderGenerator.processGeneration(
+                    order.getOrderItems(),
+                    order.getClient(),
+                    order.getEmployee(),
+                    filename + ".docx");
+            order.setOrderStatus(OrderStatus.ASSIGNED_BY_EMPLOYEE.name());
+        } else {
+            throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
+        }
     }
 
     @Override
@@ -61,13 +125,6 @@ public class OrderServiceImpl implements OrderService {
         order.setClient(clientRepository.findById(orderDTO.getClient().getId()).orElseThrow());
         order.setEmployee(employeeRepository.findById(orderDTO.getEmployee().getId()).orElseThrow());
         orderRepository.save(order);
-//        OrderGenerator orderGenerator = new OrderGenerator();
-        // Пока что путь захардкожен
-//        orderGenerator.processGeneration(
-//                order.getOrderItems(),
-//                order.getClient(),
-//                order.getEmployee(),
-//                "generated_resources/test.docx");
         return orderMapper.toDto(order);
     }
 
@@ -88,11 +145,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Long id) {
-        orderRepository
-                .findById(id)
-                .ifPresent(order -> {
-                    orderRepository.delete(order);
-                    log.debug("Deleted Order: {}", order);
-                });
+        Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        if (Objects.equals(order.getOrderStatus(), OrderStatus.DRAFT.name())) {
+            orderRepository.delete(order);
+        } else {
+            throw OrderException.CODE.CANNOT_DELETE_ORDER.get();
+        }
     }
 }

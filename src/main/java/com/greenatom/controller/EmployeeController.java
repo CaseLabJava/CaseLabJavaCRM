@@ -1,6 +1,6 @@
 package com.greenatom.controller;
 
-import com.greenatom.domain.dto.EmployeeDTO;
+import com.greenatom.domain.dto.EmployeeCleanDTO;
 import com.greenatom.service.EmployeeService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +30,12 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
-    public EmployeeDTO getEmployee(@PathVariable Long id) {
+    public EmployeeCleanDTO getEmployee(@PathVariable Long id) {
         return employeeService.findOne(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @PutMapping(value = "/update", produces = {"application/json"})
-    public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employee) {
+    public EmployeeCleanDTO updateEmployee(@RequestBody EmployeeCleanDTO employee) {
         return employeeService.updateEmployee(employee);
     }
 

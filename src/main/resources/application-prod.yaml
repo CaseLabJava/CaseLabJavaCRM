@@ -5,4 +5,4 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
-    show-sql: false
+    show-sql: true

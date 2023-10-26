@@ -128,11 +128,6 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.verison}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
     </dependencies>
 
     <profiles>

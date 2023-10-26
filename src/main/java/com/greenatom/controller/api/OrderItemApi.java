@@ -1,7 +1,7 @@
 package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.item.OrderItemDTO;
-import com.greenatom.utils.exception.message.ErrorMessage;
+import com.greenatom.utils.exception.message.OrderItemErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,7 +31,8 @@ public interface OrderItemApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderItemErrorMessage.class)
                             )
                     }
             )
@@ -61,7 +62,8 @@ public interface OrderItemApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderItemErrorMessage.class)
                             )
                     }
             )

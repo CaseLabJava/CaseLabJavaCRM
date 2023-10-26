@@ -3,7 +3,7 @@ package com.greenatom.controller.api;
 import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
 import com.greenatom.domain.dto.order.OrderRequest;
-import com.greenatom.utils.exception.message.ErrorMessage;
+import com.greenatom.utils.exception.message.OrderErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Order API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
@@ -92,7 +91,8 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
                             )
                     }
             )
@@ -123,7 +123,8 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
                             )
                     }
             ),
@@ -133,7 +134,8 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
                             )
                     }
             )

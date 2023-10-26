@@ -16,6 +16,19 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+/**
+ * AuthService является компонентом Spring и использует другие компоненты, такие как JwtCore и AuthenticationManager.
+ *
+ * <p>Регистрация: Метод registration принимает объект EmployeeDTO и создает нового сотрудника с помощью
+ * EmployeeServiceImpl. Затем генерируются токены доступа и обновления с помощью jwtCore, ивозвращается объект
+ * JwtResponse, содержащий эти токены.
+ *
+ * <p>Вход: Метод login принимает объект AuthDto, содержащий имя пользователя и пароль. AuthenticationManager пытается
+ * аутентифицировать пользователя, и в случае успешного входа генерируются токены доступа и обновления, как и при
+ * регистрации. Затем возвращается объект JwtResponse с токенами.
+ * @autor Андрей Начевный
+ * @version 1.0
+ */
 @Component
 @RequiredArgsConstructor
 public class AuthService {

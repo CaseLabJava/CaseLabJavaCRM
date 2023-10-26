@@ -14,6 +14,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ClientServiceImpl является сервисом для работы с клиентами. Он использует репозиторий ClientRepository
+ * для доступа к данным, преобразует их в формат DTO с помощью ClientMapper и возвращает список клиентов или
+ * конкретный клиент по его ID.
+ * @autor Максим Быков
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
@@ -23,20 +30,20 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientDTO> findAll() {
-        log.debug("Request to get all Clients");
+        log.debug("Order to get all Clients");
         return clientMapper.toDto(clientRepository.findAll());
     }
 
     @Override
     public Optional<ClientDTO> findOne(Long id) {
-        log.debug("Request to get Client : {}", id);
+        log.debug("Order to get Client : {}", id);
         return Optional.ofNullable(clientMapper.toDto(clientRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Request not found with id: " + id))));
+                new EntityNotFoundException("Order not found with id: " + id))));
     }
 
     @Override
     public ClientDTO save(ClientDTO clientDTO) {
-        log.debug("Request to save client : {}", clientDTO);
+        log.debug("Order to save client : {}", clientDTO);
         Client client = clientMapper.toEntity(clientDTO);
         clientRepository.save(client);
         return clientMapper.toDto(client);
@@ -44,7 +51,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDTO updateClient(ClientDTO client) {
-        log.debug("Request to partially update Client : {}", client);
+        log.debug("Order to partially update Client : {}", client);
         return clientRepository
                 .findById(client.getId())
                 .map(existingEvent -> {

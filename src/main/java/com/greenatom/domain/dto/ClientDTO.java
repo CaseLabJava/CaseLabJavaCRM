@@ -19,7 +19,11 @@ public class ClientDTO {
 
     private String name;
 
-    private String director;
+    private String surname;
+
+    private String patronymic;
+
+    private String company;
 
     private String bank;
 
@@ -29,9 +33,7 @@ public class ClientDTO {
 
     private String correspondentAccount;
 
-    private String bik;
-
     private String address;
 
-    private Long phoneNumber;
+    private String phoneNumber;
 }

@@ -1,0 +1,26 @@
+name: Test coverage
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'zulu'
+      - name: Maven Verify
+        run: mvn -B clean verify -Pprod -Dmaven.test.skip
+      - name: Test Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

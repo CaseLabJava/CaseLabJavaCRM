@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Tag(name = "Employee API", description = "API для работы с работниками")
 public interface EmployeeApi {
     @ApiResponses(value = {
@@ -44,6 +46,29 @@ public interface EmployeeApi {
             @Parameter(description = "Id работника", example = "1")
             Long id
     );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешный возврат работников",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = EmployeeDTO.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Получение всех работников"
+    )
+    List<EmployeeCleanDTO> getAllEmployees(
+            @Parameter(description = "Позиция страницы", example = "0")
+            Integer pagePosition,
+            @Parameter(description = "Длина страницы", example = "5")
+            Integer pageLength
+    );
+
 
     @ApiResponses(value = {
             @ApiResponse(

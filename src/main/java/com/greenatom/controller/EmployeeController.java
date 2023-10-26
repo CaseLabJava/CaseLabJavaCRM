@@ -4,9 +4,12 @@ import com.greenatom.controller.api.EmployeeApi;
 import com.greenatom.domain.dto.EmployeeCleanDTO;
 import com.greenatom.service.EmployeeService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Этот код является контроллером API для управления сотрудниками. Он содержит GET и PUT методы, которые
@@ -20,8 +23,9 @@ import org.springframework.web.bind.annotation.*;
  * Метод DELETE /delete/{id} удаляет сотрудника с заданным идентификатором.
  *
  * <p>Эти операции выполняются при помощи сервиса ClientService, реализующего бизнес-логику.
- * @autor Максим Быков
+ *
  * @version 1.0
+ * @autor Максим Быков
  */
 @RestController
 @RequestMapping(value = "/api/employee")
@@ -35,6 +39,12 @@ public class EmployeeController implements EmployeeApi {
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
     public EmployeeCleanDTO getEmployee(@PathVariable Long id) {
         return employeeService.findOne(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @GetMapping("/get_all")
+    public List<EmployeeCleanDTO> getAllEmployees(@Param("position") Integer pagePosition,
+                                                  @Param("length") Integer pageLength) {
+        return employeeService.findAll(pagePosition, pageLength);
     }
 
     @PutMapping(value = "/update", produces = {"application/json"})

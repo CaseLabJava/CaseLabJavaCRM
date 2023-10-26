@@ -1,8 +1,11 @@
 package com.greenatom.controller;
 
+import com.greenatom.controller.api.EmployeeApi;
 import com.greenatom.domain.dto.EmployeeCleanDTO;
 import com.greenatom.service.EmployeeService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -22,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/api/employee")
-public class EmployeeController {
+public class EmployeeController implements EmployeeApi {
     private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
@@ -41,8 +44,9 @@ public class EmployeeController {
 
     @DeleteMapping(value = "/delete/{id}",
             produces = {"application/json"})
-    public void deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

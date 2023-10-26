@@ -69,14 +69,17 @@ public class OrderServiceImpl implements OrderService {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
-            orderItemRepository.save(OrderItem.builder()
-                    .product(currProduct)
-                    .orderAmount(orderItem.getOrderAmount())
-                    .cost(currProduct.getCost())
-                    .unit(currProduct.getUnit())
-                    .name(currProduct.getProductName())
-                    .order(order)
-                    .build());
+            if (currProduct.getStorageAmount()>orderItem.getOrderAmount()) {
+                currProduct.setStorageAmount(currProduct.getStorageAmount() - orderItem.getOrderAmount());
+                orderItemRepository.save(OrderItem.builder()
+                        .product(currProduct)
+                        .orderAmount(orderItem.getOrderAmount())
+                        .cost(currProduct.getCost())
+                        .unit(currProduct.getUnit())
+                        .name(currProduct.getProductName())
+                        .order(order)
+                        .build());
+            } else throw OrderException.CODE.INVALID_ORDER.get();
         }
         return orderMapper.toDto(order);
     }

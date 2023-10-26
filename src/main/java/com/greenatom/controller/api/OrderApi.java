@@ -12,7 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 /**
  * Order API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
@@ -24,6 +25,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 //@SecurityRequirement(name = "bearer-key")
 @Tag(name = "Order API", description = "API для работы с заказами")
 public interface OrderApi {
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешный возврат заказов",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = OrderDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Заказы не были найдены",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Получение заказа"
+    )
+    ResponseEntity<List<OrderDTO>> getOrders(
+            @Parameter(description = "Номер страницы", example = "0")
+            Integer limit,
+            @Parameter(description = "Количество элементов", example = "10")
+            Integer offset,
+            @Parameter(description = "Поле сортировки", example = "orderDate")
+            String sortField,
+            @Parameter(description = "Порядок сортировки", example = "asc")
+            String sortOrder,
+            @Parameter(description = "Статус заказа")
+            String orderStatus,
+            @Parameter(description = "Ссылка на папку")
+            String linkToFolder
+    );
 
     @ApiResponses(value = {
             @ApiResponse(

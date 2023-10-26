@@ -39,8 +39,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     boolean alreadySetup = false;
 
     private final RoleRepository roleRepository;
-    private final EmployeeRepository employeeRepository;
-    private final PasswordEncoder encoder;
 
     @Override
     @Transactional
@@ -52,7 +50,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createRoleNotFound("ROLE_SUPERVISOR");
         createRoleNotFound("ROLE_MANAGER");
         createRoleNotFound("ROLE_SPECIALIST");
-        createAdminNotFound();
     }
 
     @Transactional
@@ -62,26 +59,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             Role roleToSave = new Role();
             roleToSave.setName(name);
             roleRepository.save(roleToSave);
-        }
-    }
-
-    @Transactional
-    public void createAdminNotFound(){
-        Role roleAdmin = roleRepository.findByName("ROLE_ADMIN").get();
-        List<Optional<Employee>> admins = employeeRepository.findAllByRole(roleAdmin);
-        if(admins.isEmpty()){
-            Employee employeeToSave = new Employee();
-            employeeToSave.setRole(roleAdmin);
-            employeeToSave.setFirstname("Admin");
-            employeeToSave.setSurname("Admin");
-            employeeToSave.setEmail("-");
-            employeeToSave.setSalary(0L);
-            employeeToSave.setPatronymic("Admin");
-            employeeToSave.setJobPosition(JobPosition.ADMIN);
-            employeeToSave.setPhoneNumber("0");
-            employeeToSave.setUsername("Admin_A_A_1");
-            employeeToSave.setPassword(encoder.encode("admin"));
-            employeeRepository.save(employeeToSave);
         }
     }
 }

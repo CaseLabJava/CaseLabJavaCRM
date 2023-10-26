@@ -1,10 +1,9 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface OrderItemService {
 
@@ -12,10 +11,7 @@ public interface OrderItemService {
     List<OrderItemDTO> findAll();
 
     @Transactional(readOnly = true)
-    Optional<OrderItemDTO> findOne(Long id);
-
-    @Transactional
-    OrderItemDTO save(OrderItemDTO cartProduct);
+    OrderItemDTO findOne(Long id);
 
     @Transactional
     OrderItemDTO updateCartProduct(OrderItemDTO cartProduct);

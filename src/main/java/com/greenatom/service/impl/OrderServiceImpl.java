@@ -12,13 +12,17 @@ import com.greenatom.service.OrderService;
 import com.greenatom.utils.date.DateTimeUtils;
 import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -156,6 +160,19 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.delete(order);
         } else {
             throw OrderException.CODE.CANNOT_DELETE_ORDER.get();
+        }
+    }
+
+    //в finishOrder буду конвертировать документ в PDF и отправлять клиенту на почту
+    public void convertToPDF(String docPath, String pdfPath) {
+        try {
+            InputStream doc = new FileInputStream(docPath);
+            XWPFDocument document = new XWPFDocument(doc);
+            PdfOptions options = PdfOptions.create();
+            OutputStream out = new FileOutputStream(pdfPath);
+            PdfConverter.getInstance().convert(document, out, options);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 }

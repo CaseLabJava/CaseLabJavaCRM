@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 /**
  * Order API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
  * для сохранения новых заявок, получения уже существующих заявок и их обновление.
@@ -103,6 +105,30 @@ public interface OrderApi {
 
     ResponseEntity<OrderDTO> getOrder(
             @Parameter(description = "Id заказа", example = "1")
+            Long id
+    );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешный возврат заказов",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = OrderDTO.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Получение заказов по id работника"
+    )
+    List<OrderDTO> getAllOrders(
+            @Parameter(description = "Позиция страницы", example = "0")
+            Integer pagePosition,
+            @Parameter(description = "Длина страницы", example = "5")
+            Integer pageLength,
+            @Parameter(description = "Id работника", example = "1")
             Long id
     );
 

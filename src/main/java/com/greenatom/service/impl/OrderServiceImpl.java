@@ -16,6 +16,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,9 +50,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
-    public List<OrderDTO> findAll() {
-        log.debug("Order to get all Orders");
-        return orderMapper.toDto(orderRepository.findAll());
+    public List<OrderDTO> findAll(Integer pagePosition, Integer pageLength,
+                                       Long id) {
+        log.debug("Request to get all Orders");
+        return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
+                PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override

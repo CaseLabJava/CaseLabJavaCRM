@@ -10,7 +10,7 @@ import java.util.List;
 public interface OrderService {
 
     @Transactional(readOnly = true)
-    List<OrderDTO> findAll();
+    List<OrderDTO> findAll(Integer pagePosition, Integer pageLength, Long id);
 
     @Transactional(readOnly = true)
     OrderDTO findOne(Long id);

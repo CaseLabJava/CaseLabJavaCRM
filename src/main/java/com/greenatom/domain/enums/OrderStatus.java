@@ -2,6 +2,7 @@ package com.greenatom.domain.enums;
 
 public enum OrderStatus {
     DRAFT,
-    WAITING_FOR_ASSIGN,
-    ASSIGNED
+    ASSIGNED_BY_EMPLOYEE,
+    ASSIGNED_BY_CLIENT
 }
+

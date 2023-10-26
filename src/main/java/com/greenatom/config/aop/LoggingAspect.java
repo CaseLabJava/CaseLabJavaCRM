@@ -1,8 +1,7 @@
 package com.greenatom.config.aop;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -29,8 +28,8 @@ import java.util.Arrays;
  */
 @Aspect
 @Component
+@Slf4j
 public class LoggingAspect {
-    private static final Logger LOGGER = LogManager.getLogger(LoggingAspect.class);
 
     @Around("execution(* com.greenatom.service..*(..)))")
     public Object logMethodExecutionTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -40,7 +39,7 @@ public class LoggingAspect {
         Object result = proceedingJoinPoint.proceed();
         stopWatch.stop();
 
-        LOGGER.info("Execution time of "
+        log.info("Execution time of "
                 + methodSignature.getDeclaringType().getSimpleName()
                 + "." + methodSignature.getName() + " "
                 +" with args: "+ Arrays.toString(proceedingJoinPoint.getArgs())
@@ -52,7 +51,7 @@ public class LoggingAspect {
     @Before("execution(* com.greenatom.service..*(..)))")
     public void logMethodEnter(JoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        LOGGER.debug("Order execution of method"
+        log.debug("Order execution of method"
                 + methodSignature.getDeclaringType().getSimpleName()
                 + "." + methodSignature.getName() + " "
                 +" with args: "+ Arrays.toString(joinPoint.getArgs())

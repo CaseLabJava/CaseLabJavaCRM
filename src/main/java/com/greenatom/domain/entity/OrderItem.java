@@ -10,8 +10,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "order_item")
 public class OrderItem {
@@ -22,7 +23,6 @@ public class OrderItem {
     private Long id;
 
     @Column(name = "name")
-    @NonNull
     private String name;
 
     @Column(name = "unit")
@@ -47,3 +47,5 @@ public class OrderItem {
     }
 
 }
+
+

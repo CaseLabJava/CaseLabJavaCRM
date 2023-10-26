@@ -1,29 +1,32 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.EmployeeCleanDTO;
 import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.entity.Employee;
+import com.greenatom.domain.mapper.EmployeeCleanMapper;
 import com.greenatom.domain.mapper.EmployeeMapper;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RoleRepository;
 import com.greenatom.service.EmployeeService;
 import com.greenatom.utils.exception.EmailAlreadyUsedException;
-import com.greenatom.utils.exception.UsernameAlreadyUsedException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+
 /**
  * EmployeeServiceImpl является сервисом для работы с сотрудниками. Он использует базу данных для доступа к информации
  * о сотрудниках и ролях, преобразует их в формат DTO и возвращает список сотрудников или конкретного сотрудника
  * по его ID.
- * @autor Максим Быков, Андрей Начевный
+ *
  * @version 1.0
+ * @autor Максим Быков, Андрей Начевный
  */
 @Service
 @RequiredArgsConstructor
@@ -31,19 +34,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+
+    private final EmployeeCleanMapper employeeCleanMapper;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
 
     @Override
-    public List<EmployeeDTO> findAll() {
-        log.debug("Order to get all Employees");
-        return employeeMapper.toDto(employeeRepository.findAll());
+    public List<EmployeeCleanDTO> findAll(Integer pagePosition, Integer pageLength) {
+        log.debug("Request to get all Employees");
+        return employeeCleanMapper.toDto(employeeRepository.findAll(
+                PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
-    public Optional<EmployeeDTO> findOne(Long id) {
+    public Optional<EmployeeCleanDTO> findOne(Long id) {
         log.debug("Order to get Employee : {}", id);
-        return Optional.ofNullable(employeeMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
+        return Optional.ofNullable(employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Order not found with id: " + id))));
     }
 
@@ -65,17 +71,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO updateEmployee(EmployeeDTO employee) {
+    public EmployeeCleanDTO updateEmployee(EmployeeCleanDTO employee) {
         log.debug("Order to partially update Employee : {}", employee);
         return employeeRepository
                 .findById(employee.getId())
                 .map(existingEvent -> {
-                    employeeMapper.partialUpdate(existingEvent, employee);
+                    employeeCleanMapper.partialUpdate(existingEvent, employee);
 
                     return existingEvent;
                 })
                 .map(employeeRepository::save)
-                .map(employeeMapper::toDto).orElseThrow(
+                .map(employeeCleanMapper::toDto).orElseThrow(
                         EntityNotFoundException::new);
     }
 
@@ -100,7 +106,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .append(employeeDTO.getSurname().charAt(0)).append("_")
                 .append(employeeDTO.getPatronymic().charAt(0));
         Integer countOfUsernameInDb = employeeRepository.countByUsername(username.toString());
-        if(countOfUsernameInDb > 0){
+        if (countOfUsernameInDb > 0) {
             username.append("_").append((countOfUsernameInDb + 1));
         }
         return username.toString();

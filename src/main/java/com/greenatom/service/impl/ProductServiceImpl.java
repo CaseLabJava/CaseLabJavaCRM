@@ -9,6 +9,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,4 +75,10 @@ public class ProductServiceImpl implements ProductService {
                     log.debug("Deleted Product: {}", product);
                 });
     }
+
+    @Override
+    public List<ProductDTO> findAll(Integer pagePosition, Integer pageLength,String name, Integer cost) {
+            return productMapper.toDto(productRepository.findProductByProductNameContainingAndCostBefore(
+                    PageRequest.of(pagePosition, pageLength), name, cost).toList());
+        }
 }

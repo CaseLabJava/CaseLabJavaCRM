@@ -3,7 +3,10 @@ package com.greenatom.controller;
 import com.greenatom.domain.dto.ProductDTO;
 import com.greenatom.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Этот код является контроллером для API управления продуктами. Он предоставляет методы GET, PUT и POST для
@@ -28,6 +31,15 @@ public class ProductController {
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
     public ProductDTO getProduct(@PathVariable Long id) {
         return productService.findOne(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @GetMapping(value = "/get", produces = {"application/json"})
+    public List<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") Integer pagePosition,
+                                           @RequestParam(defaultValue = "20") Integer pageLength,
+                                           @RequestParam(defaultValue = "", required = false) String name,
+                                           @RequestParam(defaultValue = "0x7fffffff", required = false) Integer cost
+                                           ){
+        return productService.findAll(pagePosition, pageLength, name, cost);
     }
 
 

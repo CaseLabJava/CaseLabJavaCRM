@@ -22,4 +22,6 @@ public interface ProductService {
 
     @Transactional
     void deleteProduct(Long id);
+    @Transactional(readOnly = true)
+    List<ProductDTO> findAll(Integer pagePosition, Integer pageLength, String name, Integer cost);
 }

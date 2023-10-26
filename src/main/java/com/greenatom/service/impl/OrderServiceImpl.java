@@ -115,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
                     order.getClient(),
                     order.getEmployee(),
                     filename + ".docx");
-            order.setOrderStatus(OrderStatus.ASSIGNED_BY_EMPLOYEE.name());
+            order.setOrderStatus(OrderStatus.SIGNED_BY_EMPLOYEE.name());
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }

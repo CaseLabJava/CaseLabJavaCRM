@@ -18,7 +18,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            export POSTGRES_DB=${{ secrets.POSTGRES_DB }} 
+            export POSTGRES_DB=${{ secrets.POSTGRES_DB }}  
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }} 
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} 
             export REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} 

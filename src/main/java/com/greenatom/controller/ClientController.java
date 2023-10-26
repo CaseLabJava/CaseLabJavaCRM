@@ -3,7 +3,11 @@ package com.greenatom.controller;
 import com.greenatom.domain.dto.ClientDTO;
 import com.greenatom.service.ClientService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Этот код - контроллер, обрабатывающий запросы API для управления клиентами. Он предоставляет GET и PUT методы
@@ -29,6 +33,17 @@ public class ClientController {
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
     public ClientDTO getClient(@PathVariable Long id) {
         return clientService.findOne(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @GetMapping (value = "/get", produces = {"application/json"})
+    public List<ClientDTO> getClientsResponse(@RequestParam(defaultValue = "0") Integer pageNumber,
+                                              @RequestParam(defaultValue = "10") Integer pageSize,
+                                              @RequestParam(defaultValue = "", required = false) String company,
+                                              @RequestParam(defaultValue = "", required = false) String firstname,
+                                              @RequestParam(defaultValue = "", required = false) String lastname,
+                                              @RequestParam(defaultValue = "", required = false) String patronymic
+                                              ) {
+        return clientService.findClientPageByParams(pageNumber, pageSize, company, firstname, lastname, patronymic);
     }
 
 

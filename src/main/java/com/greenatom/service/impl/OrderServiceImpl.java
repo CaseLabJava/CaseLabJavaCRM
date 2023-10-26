@@ -164,15 +164,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     //в finishOrder буду конвертировать документ в PDF и отправлять клиенту на почту
-    public void convertToPDF(String docPath, String pdfPath) {
-        try {
-            InputStream doc = new FileInputStream(docPath);
-            XWPFDocument document = new XWPFDocument(doc);
+    public void convertToPDF(String linkToFolder, String localPdfPath) {
+        try (InputStream doc = new FileInputStream(linkToFolder);
+             XWPFDocument document = new XWPFDocument(doc)) {
             PdfOptions options = PdfOptions.create();
-            OutputStream out = new FileOutputStream(pdfPath);
+            OutputStream out = new FileOutputStream(localPdfPath);
             PdfConverter.getInstance().convert(document, out, options);
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            log.error("conversion to PDF failed");
         }
     }
 }

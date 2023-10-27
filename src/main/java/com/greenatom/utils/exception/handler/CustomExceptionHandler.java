@@ -1,6 +1,7 @@
 package com.greenatom.utils.exception.handler;
 
 import com.greenatom.domain.dto.ResponseDTO;
+import com.greenatom.utils.exception.AuthException;
 import com.greenatom.utils.exception.EmailAlreadyUsedException;
 import com.greenatom.utils.exception.UsernameAlreadyUsedException;
 import jakarta.persistence.EntityNotFoundException;
@@ -58,5 +59,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         if (e.getMessage() != null) response.setMessage(e.getMessage());
         else response.setMessage("Authorization error: Login name already used!");
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthException.class)
+    protected ResponseEntity<ResponseDTO> handleAuthException(AuthException authException){
+        ResponseDTO response = new ResponseDTO();
+        if (authException.getMessage() != null) response.setMessage(authException.getMessage());
+        else response.setMessage("Authorization error");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

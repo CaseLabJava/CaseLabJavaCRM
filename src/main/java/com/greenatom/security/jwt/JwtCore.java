@@ -54,6 +54,7 @@ public class JwtCore {
                 .setSubject(employee.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(accessExpiration)
+                .claim("employee_id",employee.getId())
                 .claim("role", employee.getRole().getName())
                 .signWith(accessKey, SignatureAlgorithm.HS256)
                 .compact();
@@ -68,6 +69,7 @@ public class JwtCore {
                 .setSubject(employee.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(accessExpiration)
+                .claim("employee_id",employee.getId())
                 .claim("role", employee.getRole().getName())
                 .signWith(refreshKey, SignatureAlgorithm.HS256)
                 .compact();

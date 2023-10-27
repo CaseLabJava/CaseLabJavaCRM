@@ -1,6 +1,6 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.UploadDocDTO;
+import com.greenatom.domain.dto.order.UploadDocRequest;
 import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.repository.OrderRepository;
@@ -26,10 +26,10 @@ public class UploadDocImpl implements UploadDocService {
     private final Logger log = LoggerFactory.getLogger(UploadDocService.class);
 
     @Override
-    public void upload(MultipartFile file) {
+    public void upload(UploadDocRequest uploadDocRequest) {
+        MultipartFile file = uploadDocRequest.getFile();
         if (!file.isEmpty()) {
             try {
-
                 String projectRoot = System.getProperty("user.dir");
                 String uploadDir = projectRoot + "/Documents/UploadDoc";
 
@@ -44,7 +44,6 @@ public class UploadDocImpl implements UploadDocService {
                     fos.write(file.getBytes());
                 }
 
-
                 log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: " + targetFile.getAbsolutePath());
             } catch (IOException e) {
                 log.error("Ошибка при загрузке файла: " + e.getMessage());
@@ -52,12 +51,14 @@ public class UploadDocImpl implements UploadDocService {
         } else {
             log.error("Файл пустой, загрузка не выполнена.");
         }
+        updateStatus(uploadDocRequest);
     }
 
+
     @Override
-    public void updateStatus(UploadDocDTO uploadDocDTO) {
+    public void updateStatus(UploadDocRequest uploadDocRequest) {
         Order order = orderRepository
-                .findById(uploadDocDTO.getId())
+                .findById(uploadDocRequest.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE.name())) {
 

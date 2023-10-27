@@ -1,25 +1,26 @@
+server:
+  port: 8080
+
 spring:
+  profiles:
+    active: @profileActive@
+  application:
+    name: CaseLabJavaCrm
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     driver-class-name: org.postgresql.Driver
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  flyway:
-    baseline-on-migrate: true
 
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
   api-docs:
     path: /api-docs
+
 access_token: ${ACCESS_TOKEN}
 refresh_token: ${REFRESH_TOKEN}
-
 

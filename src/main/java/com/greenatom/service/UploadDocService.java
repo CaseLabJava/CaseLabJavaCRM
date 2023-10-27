@@ -1,16 +1,15 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.ProductDTO;
-import com.greenatom.domain.dto.UploadDocDTO;
+import com.greenatom.domain.dto.order.UploadDocRequest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UploadDocService {
 
     @Transactional
-    void upload(MultipartFile file);
+    void upload(UploadDocRequest uploadDocRequest);
 
     @Transactional
-    void updateStatus(UploadDocDTO uploadDocDTO);
+    void updateStatus(UploadDocRequest uploadDocRequest);
 
 }

@@ -2,10 +2,12 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.UploadDocDTO;
 import com.greenatom.domain.entity.Order;
+import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.UploadDocService;
 
 
+import com.greenatom.utils.exception.OrderException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,9 +59,9 @@ public class UploadDocImpl implements UploadDocService {
         Order order = orderRepository
                 .findById(uploadDocDTO.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (order.getOrderStatus().equals(OrderStatus.ASSIGNED_BY_EMPLOYEE.name())) {
+        if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE.name())) {
 
-            order.setOrderStatus(OrderStatus.ASSIGNED_BY_CLIENT.name());
+            order.setOrderStatus(OrderStatus.SIGNED_BY_CLIENT.name());
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }

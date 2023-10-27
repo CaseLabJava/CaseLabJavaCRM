@@ -1,6 +1,8 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.entity.Order;
 import com.greenatom.service.UploadDocService;
+import com.greenatom.utils.generator.request.OrderGenerator;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +44,19 @@ public class UploadDocImpl implements UploadDocService {
             }
         } else {
             log.error("Файл пустой, загрузка не выполнена.");
+        }
+    }
+
+    @Override
+    public void updateStatus(Long id) {
+        Order order = orderRepository
+                .findById(request.getId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        if (order.getOrderStatus().equals(OrderStatus.ASSIGNED_BY_EMPLOYEE.name())) {
+
+            order.setOrderStatus(OrderStatus.ASSIGNED_BY_CLIENT.name());
+        } else {
+            throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
     }
 

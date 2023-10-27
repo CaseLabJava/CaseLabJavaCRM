@@ -52,7 +52,7 @@ public class UploadDocImpl implements UploadDocService {
     }
 
     @Override
-    public UploadDocDTO updateStatus(UploadDocDTO uploadDocDTO) {
+    public void updateStatus(UploadDocDTO uploadDocDTO) {
         Order order = orderRepository
                 .findById(uploadDocDTO.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
@@ -62,7 +62,6 @@ public class UploadDocImpl implements UploadDocService {
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
-        return
     }
 
 }

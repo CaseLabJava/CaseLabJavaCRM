@@ -11,6 +11,6 @@ public interface UploadDocService {
     void upload(MultipartFile file);
 
     @Transactional
-    UploadDocDTO updateStatus(Long id);
+    UploadDocDTO updateStatus(UploadDocDTO uploadDocDTO);
 
 }

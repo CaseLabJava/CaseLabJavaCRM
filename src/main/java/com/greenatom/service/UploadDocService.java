@@ -11,5 +11,6 @@ public interface UploadDocService {
 
     @Transactional
     void updateStatus(UploadDocRequest uploadDocRequest);
-
+    @Transactional
+    void updatePath(UploadDocRequest uploadDocRequest);
 }

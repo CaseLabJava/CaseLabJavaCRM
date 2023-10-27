@@ -1,8 +1,11 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.ProductDTO;
 import com.greenatom.domain.dto.order.UploadDocRequest;
 import com.greenatom.domain.entity.Order;
+import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.enums.OrderStatus;
+import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.UploadDocService;
 
@@ -23,6 +26,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UploadDocImpl implements UploadDocService {
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
     private final Logger log = LoggerFactory.getLogger(UploadDocService.class);
 
     @Override
@@ -44,6 +48,8 @@ public class UploadDocImpl implements UploadDocService {
                     fos.write(file.getBytes());
                 }
 
+                uploadDocRequest.setLinkToFolder(targetFile.getAbsolutePath());
+
                 log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: " + targetFile.getAbsolutePath());
             } catch (IOException e) {
                 log.error("Ошибка при загрузке файла: " + e.getMessage());
@@ -51,7 +57,6 @@ public class UploadDocImpl implements UploadDocService {
         } else {
             log.error("Файл пустой, загрузка не выполнена.");
         }
-        updateStatus(uploadDocRequest);
     }
 
 
@@ -67,5 +72,13 @@ public class UploadDocImpl implements UploadDocService {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
     }
+    @Override
+    public void updatePath(UploadDocRequest uploadDocRequest) {
+        log.debug("Order to update link_to_folder : {}", uploadDocRequest);
 
+        Long orderId = uploadDocRequest.getId();
+        String linkToFolder = uploadDocRequest.getLinkToFolder();
+
+        orderRepository.updateLinkToFolder(orderId, linkToFolder);
+    }
 }

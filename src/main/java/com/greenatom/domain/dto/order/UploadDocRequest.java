@@ -20,6 +20,9 @@ public class UploadDocRequest {
     @Schema(description = "Подписанный документ")
     MultipartFile file;
 
+    @Schema(description = "Абсолютный путь к файлу")
+    private String linkToFolder;
+
     public UploadDocRequest(MultipartFile file, Long id) {
         this.file = file;
         this.id = id;

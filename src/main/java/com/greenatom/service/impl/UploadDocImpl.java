@@ -2,6 +2,7 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.UploadDocDTO;
 import com.greenatom.domain.entity.Order;
+import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.UploadDocService;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,9 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class UploadDocImpl implements UploadDocService {
+    private final OrderRepository orderRepository;
     private final Logger log = LoggerFactory.getLogger(UploadDocService.class);
+
     @Override
     public void upload(MultipartFile file) {
         if (!file.isEmpty()) {
@@ -51,7 +54,7 @@ public class UploadDocImpl implements UploadDocService {
     @Override
     public UploadDocDTO updateStatus(Long id) {
         Order order = orderRepository
-                .findById(request.getId())
+                .findById(id)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (order.getOrderStatus().equals(OrderStatus.ASSIGNED_BY_EMPLOYEE.name())) {
 
@@ -59,6 +62,7 @@ public class UploadDocImpl implements UploadDocService {
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
+        return
     }
 
 }

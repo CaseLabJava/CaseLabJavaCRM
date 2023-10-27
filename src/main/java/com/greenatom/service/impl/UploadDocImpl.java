@@ -52,7 +52,8 @@ public class UploadDocImpl implements UploadDocService {
     }
 
     @Override
-    public UploadDocDTO updateStatus(Long id) {
+    public UploadDocDTO updateStatus(UploadDocDTO uploadDocDTO) {
+        Order order = createDraftOrder(uploadDocDTO);
         Order order = orderRepository
                 .findById(id)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);

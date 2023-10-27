@@ -1,6 +1,6 @@
 package com.greenatom.config.swagger.annotation;
 
-import com.greenatom.utils.exception.message.ErrorMessage;
+import com.greenatom.utils.exception.message.EmployeeErrorMessage;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,7 +16,7 @@ import java.lang.annotation.*;
         content = {
                 @Content(
                         mediaType = "application/json",
-                        schema = @Schema(implementation = ErrorMessage.class)
+                        schema = @Schema(implementation = EmployeeErrorMessage.class)
                 )}
 )
 public @interface AccessDeniedResponse {

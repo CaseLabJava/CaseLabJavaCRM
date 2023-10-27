@@ -1,7 +1,7 @@
 package com.greenatom.utils.exception.handler;
 
 import com.greenatom.utils.exception.OrderItemException;
-import com.greenatom.utils.exception.message.ErrorMessage;
+import com.greenatom.utils.exception.message.OrderItemErrorMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class OrderItemExceptionHandler {
 
     @ExceptionHandler(OrderItemException.class)
-    public ResponseEntity<ErrorMessage> handleOrderItemException(OrderItemException e) {
+    public ResponseEntity<OrderItemErrorMessage> handleOrderItemException(OrderItemException e) {
         OrderItemException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_PRODUCT, NO_SUCH_ORDER, NO_SUCH_ORDER_ITEM -> HttpStatus.NOT_FOUND;
@@ -22,6 +22,6 @@ public class OrderItemExceptionHandler {
         log.error(codeStr, e);
         return ResponseEntity
                 .status(status)
-                .body(new ErrorMessage(codeStr, e.getMessage()));
+                .body(new OrderItemErrorMessage(codeStr, e.getMessage()));
     }
 }

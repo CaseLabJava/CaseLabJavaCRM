@@ -1,5 +1,6 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.UploadDocDTO;
 import com.greenatom.domain.entity.Order;
 import com.greenatom.service.UploadDocService;
 import com.greenatom.utils.generator.request.OrderGenerator;
@@ -48,7 +49,7 @@ public class UploadDocImpl implements UploadDocService {
     }
 
     @Override
-    public void updateStatus(Long id) {
+    public UploadDocDTO updateStatus(Long id) {
         Order order = orderRepository
                 .findById(request.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);

@@ -22,35 +22,36 @@ import java.io.IOException;
 public class UploadDocImpl implements UploadDocService {
     private final OrderRepository orderRepository;
 
-    @Override
-    public void upload(UploadDocRequest uploadDocRequest) {
-        MultipartFile file = uploadDocRequest.getFile();
-        if (!file.isEmpty()) {
-            try {
-                String projectRoot = System.getProperty("user.dir");
-                String uploadDir = projectRoot + "/Documents/UploadDoc";
+@Override
+public void upload(UploadDocRequest uploadDocRequest) {
+    MultipartFile file = uploadDocRequest.getFile();
+    if (!file.isEmpty()) {
+        try {
+            String projectRoot = System.getProperty("user.dir");
+            String uploadDir = projectRoot + "/Documents/UploadDoc";
 
-                String fileName = file.getOriginalFilename();
-                File uploadPath = new File(uploadDir);
-                if (!uploadPath.exists()) {
-                    uploadPath.mkdirs();
-                }
+            String fileName = cleanFileName(file.getOriginalFilename());
 
-                File targetFile = new File(uploadPath, fileName);
-                try (FileOutputStream fos = new FileOutputStream(targetFile)) {
-                    fos.write(file.getBytes());
-                }
-
-                uploadDocRequest.setLinkToFolder(targetFile.getAbsolutePath());
-
-                log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: " + targetFile.getAbsolutePath());
-            } catch (IOException e) {
-                log.error("Ошибка при загрузке файла: " + e.getMessage());
+            File uploadPath = new File(uploadDir);
+            if (!uploadPath.exists()) {
+                uploadPath.mkdirs();
             }
-        } else {
-            log.error("Файл пустой, загрузка не выполнена.");
+
+            File targetFile = new File(uploadPath, fileName);
+            try (FileOutputStream fos = new FileOutputStream(targetFile)) {
+                fos.write(file.getBytes());
+            }
+
+            uploadDocRequest.setLinkToFolder(targetFile.getAbsolutePath());
+
+            log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: " + targetFile.getAbsolutePath());
+        } catch (IOException e) {
+            log.error("Ошибка при загрузке файла: " + e.getMessage());
         }
+    } else {
+        log.error("Файл пустой, загрузка не выполнена.");
     }
+}
 
 
     @Override
@@ -74,4 +75,9 @@ public class UploadDocImpl implements UploadDocService {
 
         orderRepository.updateLinkToFolder(orderId, linkToFolder);
     }
+
+    private String cleanFileName(String fileName) {
+        return fileName.replaceAll("[^a-zA-Z0-9_-]", "");
+    }
+
 }

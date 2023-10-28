@@ -38,12 +38,13 @@ public interface UploadDocApi {
     @Operation(
             summary = "Загрузить документ"
     )
-    void uploadDocument(
-            @Parameter(description = "Введите orderID, к которому хотите прикрепить документ", example = "1")
-            Long id,
-
+    void uploadFile(
             @Parameter(description = "Выберете подписанный документ (любой формат)")
-            MultipartFile file
+            MultipartFile file,
+            @Parameter(description = "Введите orderID, к которому хотите прикрепить документ", example = "1")
+            Long id
+
+
     );
 
 }

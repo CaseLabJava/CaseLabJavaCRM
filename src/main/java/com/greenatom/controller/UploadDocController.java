@@ -4,9 +4,11 @@ import com.greenatom.controller.api.UploadDocApi;
 import com.greenatom.domain.dto.order.UploadDocRequest;
 import com.greenatom.service.UploadDocService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.greenatom.controller.api.UploadDocApi;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,12 +21,6 @@ public class UploadDocController implements UploadDocApi {
         uploadDocService.upload(uploadDocRequest);
         uploadDocService.updateStatus(uploadDocRequest);
         uploadDocService.updatePath(uploadDocRequest);
-    }
-
-
-    @Override
-    public void uploadDocument(Long id, MultipartFile file) {
-
     }
 }
 

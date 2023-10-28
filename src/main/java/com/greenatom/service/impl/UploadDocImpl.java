@@ -1,19 +1,13 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.ProductDTO;
 import com.greenatom.domain.dto.order.UploadDocRequest;
 import com.greenatom.domain.entity.Order;
-import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.enums.OrderStatus;
-import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.UploadDocService;
-
-
 import com.greenatom.utils.exception.OrderException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,10 +18,9 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UploadDocImpl implements UploadDocService {
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
-    private final Logger log = LoggerFactory.getLogger(UploadDocService.class);
 
     @Override
     public void upload(UploadDocRequest uploadDocRequest) {

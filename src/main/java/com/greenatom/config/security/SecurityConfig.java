@@ -55,7 +55,7 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers("/api/auth/signIn", "/api/auth/accessToken").permitAll()
                                 .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                                .requestMatchers("/api/files/upload").permitAll()
+                                .requestMatchers("/api/files/upload").hasRole("MANAGER")
                                 .requestMatchers("/api/auth/signUp").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

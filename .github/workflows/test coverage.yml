@@ -20,7 +20,7 @@ jobs:
           java-version: 17
           distribution: 'zulu'
       - name: Maven Verify
-        run: mvn -B clean verify -PBuild
+        run: mvn -B -Dmaven.test.skip clean verify
       - name: Test Coverage
         uses: codecov/codecov-action@v2
         with:

@@ -32,7 +32,7 @@ public class OrderDTO {
     @Schema(description = "Информация о сотруднике")
     private EmployeeDTO employee;
 
-    @Schema(description = "Ссылка на дерикторию с докуменами")
+    @Schema(description = "Ссылка на дерикторию с документами")
     private String linkToFolder;
 
     @Schema(description = "Дата заказа")

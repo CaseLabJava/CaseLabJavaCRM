@@ -50,8 +50,8 @@ public class OrderController implements OrderApi {
     }
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
-    public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.findOne(id));
+    public OrderDTO getOrder(@PathVariable Long id) {
+        return orderService.findOne(id);
     }
 
     @GetMapping("/get_all")
@@ -61,14 +61,13 @@ public class OrderController implements OrderApi {
         return orderService.findAll(pagePosition, pageLength, id);
     }
     @PostMapping(value = "/add/orderDraft")
-    public ResponseEntity<OrderDTO> addDraftOrder(@RequestBody OrderRequest orderRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.createDraft(orderRequest));
+    public OrderDTO addDraftOrder(@RequestBody OrderRequest orderRequest) {
+        return orderService.createDraft(orderRequest);
     }
 
     @PostMapping(value = "/generateOrder", produces = {"application/json"})
-    public ResponseEntity<Void> generateOrder(@RequestBody GenerateOrderRequest request) {
+    public void generateOrder(@RequestBody GenerateOrderRequest request) {
         orderService.generateOrder(request);
-        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(value = "/finish-order/{id}", produces = {"application/json"})

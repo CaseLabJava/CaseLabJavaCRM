@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 
 @Tag(name = "OrderItem API", description = "API для работы с продуктами в заказе")
 public interface OrderItemApi {
@@ -40,7 +39,7 @@ public interface OrderItemApi {
     @Operation(
             summary = "Получение продукта в заказе по id"
     )
-    ResponseEntity<OrderItemDTO> getOrderItem(
+    OrderItemDTO getOrderItem(
             @Parameter(description = "Id продукта в заказе", example = "1")
             Long id
     );
@@ -71,7 +70,7 @@ public interface OrderItemApi {
     @Operation(
             summary = "Удаление продукта в заказе по id"
     )
-    ResponseEntity<Void> deleteOrderItem(
+    void deleteOrderItem(
             @Parameter
             Long id
     );

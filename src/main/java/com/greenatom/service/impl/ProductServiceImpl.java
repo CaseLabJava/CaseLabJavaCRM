@@ -9,13 +9,10 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * ProductServiceImpl является сервисом для работы со складом. Он использует ProductRepository для доступа к базе
@@ -37,10 +34,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDTO> findOne(Long id) {
+    public ProductDTO findOne(Long id) {
         log.debug("Order to get Product : {}", id);
-        return Optional.ofNullable(productMapper.toDto(productRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id))));
+        return productMapper.toDto(productRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Order not found with id: " + id)));
     }
 
     @Override

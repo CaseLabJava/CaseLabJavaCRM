@@ -89,7 +89,7 @@ public interface OrderApi {
             )
     })
     @Operation(summary = "Создает Order и возвращает OrderDTO")
-    ResponseEntity<OrderDTO> addDraftOrder(
+    OrderDTO addDraftOrder(
             @Parameter(description = "Order Request")
             OrderRequest orderRequest
     );
@@ -111,7 +111,7 @@ public interface OrderApi {
     @Operation(
             summary = "Генерация докумена заказа"
     )
-    ResponseEntity<Void> generateOrder(
+    void generateOrder(
             @Parameter(description = "GenerationOrderRequest")
             GenerateOrderRequest orderRequest
     );
@@ -143,7 +143,7 @@ public interface OrderApi {
             summary = "Получение заказа по id"
     )
 
-    ResponseEntity<OrderDTO> getOrder(
+    OrderDTO getOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );

@@ -47,10 +47,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<EmployeeCleanDTO> findOne(Long id) {
+    public EmployeeCleanDTO findOne(Long id) {
         log.debug("Order to get Employee : {}", id);
-        return Optional.ofNullable(employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("An employee with this ID was not found: " + id))));
+        return employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("An employee with this ID was not found: " + id)));
     }
 
     @Override

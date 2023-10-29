@@ -37,10 +37,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<ClientDTO> findOne(Long id) {
+    public ClientDTO findOne(Long id) {
         log.debug("Order to get Client : {}", id);
-        return Optional.ofNullable(clientMapper.toDto(clientRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id))));
+        return clientMapper.toDto(clientRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Order not found with id: " + id)));
     }
 
     @Override

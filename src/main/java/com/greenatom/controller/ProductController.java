@@ -4,10 +4,6 @@ import com.greenatom.controller.api.ProductApi;
 import com.greenatom.domain.dto.ProductDTO;
 import com.greenatom.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +31,7 @@ public class ProductController implements ProductApi {
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
     public ProductDTO getProduct(@PathVariable Long id) {
-        return productService.findOne(id).orElseThrow(EntityNotFoundException::new);
+        return productService.findOne(id);
     }
 
     @GetMapping(value = "/get", produces = {"application/json"})
@@ -58,8 +54,7 @@ public class ProductController implements ProductApi {
         return productService.save(product);
     }
 
-    @DeleteMapping(value = "/delete/{id}",
-            produces = {"application/json"})
+    @DeleteMapping(value = "/delete/{id}", produces = {"application/json"})
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
     }

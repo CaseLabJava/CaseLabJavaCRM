@@ -4,7 +4,6 @@ import com.greenatom.domain.dto.ClientDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ClientService {
 
@@ -12,7 +11,7 @@ public interface ClientService {
     List<ClientDTO> findAll();
 
     @Transactional(readOnly = true)
-    Optional<ClientDTO> findOne(Long id);
+    ClientDTO findOne(Long id);
 
     @Transactional
     ClientDTO save(ClientDTO client);

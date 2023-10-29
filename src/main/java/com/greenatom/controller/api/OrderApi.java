@@ -42,7 +42,8 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
                             )
                     }
             )
@@ -143,6 +144,38 @@ public interface OrderApi {
     )
 
     ResponseEntity<OrderDTO> getOrder(
+            @Parameter(description = "Id заказа", example = "1")
+            Long id
+    );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешное завершение заказа",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = OrderDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Заказ по переданному id не был найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Завершение заказа"
+    )
+
+    ResponseEntity<OrderDTO> finishOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );

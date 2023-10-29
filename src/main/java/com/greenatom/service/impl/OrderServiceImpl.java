@@ -104,8 +104,8 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO finishOrder(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT.name())) {
-            order.setOrderStatus(OrderStatus.FINISHED.name());
+        if (Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
+            order.setOrderStatus(OrderStatus.FINISHED);
         } else {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
@@ -123,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
         order.setClient(client);
         order.setEmployee(employee);
         order.setOrderDate(DateTimeUtils.getTodayDate());
-        order.setOrderStatus(OrderStatus.DRAFT.name());
+        order.setOrderStatus(OrderStatus.DRAFT);
         // TODO: Поменять, когда будет понятно на что
         order.setLinkToFolder("LINK_TO_FOLDER_SAMPLE");
         order = orderRepository.save(order);
@@ -136,14 +136,14 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository
                 .findById(request.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (order.getOrderStatus().equals(OrderStatus.DRAFT.name())) {
+        if (order.getOrderStatus().equals(OrderStatus.DRAFT)) {
             String filename = "Order_" + order.getId();
             orderGenerator.processGeneration(
                     order.getOrderItems(),
                     order.getClient(),
                     order.getEmployee(),
                     filename + ".docx");
-            order.setOrderStatus(OrderStatus.SIGNED_BY_EMPLOYEE.name());
+            order.setOrderStatus(OrderStatus.SIGNED_BY_EMPLOYEE);
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
@@ -177,7 +177,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (Objects.equals(order.getOrderStatus(), OrderStatus.DRAFT.name())) {
+        if (Objects.equals(order.getOrderStatus(), OrderStatus.DRAFT)) {
             orderRepository.delete(order);
         } else {
             throw OrderException.CODE.CANNOT_DELETE_ORDER.get();

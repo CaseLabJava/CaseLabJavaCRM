@@ -175,7 +175,7 @@ public interface OrderApi {
             summary = "Завершение заказа"
     )
 
-    ResponseEntity<OrderDTO> finishOrder(
+    OrderDTO finishOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );

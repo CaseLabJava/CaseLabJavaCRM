@@ -2,8 +2,7 @@ package com.greenatom.domain.dto.order;
 
 import com.greenatom.domain.dto.ClientDTO;
 import com.greenatom.domain.dto.EmployeeDTO;
-import com.greenatom.domain.entity.Client;
-import com.greenatom.domain.entity.Employee;
+import com.greenatom.domain.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,5 +38,5 @@ public class OrderDTO {
     private Date orderDate;
 
     @Schema(description = "Статус заказа")
-    private String orderStatus;
+    private OrderStatus orderStatus;
 }

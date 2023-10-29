@@ -1,7 +1,7 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.AuthApi;
-import com.greenatom.domain.dto.AuthDto;
+import com.greenatom.domain.dto.AuthDTO;
 import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.JwtResponse;
 import com.greenatom.domain.dto.RefreshJwtRequest;
@@ -39,7 +39,7 @@ public class AuthController implements AuthApi {
 
     @PostMapping("/signIn")
     @Override
-    public JwtResponse login(@RequestBody AuthDto authDto){
+    public JwtResponse login(@RequestBody AuthDTO authDto){
         return authService.login(authDto);
     }
 

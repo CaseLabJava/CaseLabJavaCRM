@@ -1,10 +1,8 @@
 package com.greenatom.controller;
 
-import com.greenatom.controller.api.ClientAPI;
+import com.greenatom.controller.api.ClientApi;
 import com.greenatom.domain.dto.ClientDTO;
 import com.greenatom.service.ClientService;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +24,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping(value = "/api/client")
-public class ClientController implements ClientAPI {
+public class ClientController implements ClientApi {
     private final ClientService clientService;
 
     public ClientController(ClientService clientService) {

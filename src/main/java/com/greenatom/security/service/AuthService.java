@@ -1,6 +1,6 @@
 package com.greenatom.security.service;
 
-import com.greenatom.domain.dto.AuthDto;
+import com.greenatom.domain.dto.AuthDTO;
 import com.greenatom.domain.dto.EmployeeCleanDTO;
 import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.JwtResponse;
@@ -11,7 +11,6 @@ import com.greenatom.service.impl.EmployeeServiceImpl;
 import com.greenatom.utils.exception.AuthException;
 import io.jsonwebtoken.Claims;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -49,7 +48,7 @@ public class AuthService {
         return new JwtResponse(accessToken,refreshToken);
     }
 
-    public JwtResponse login(AuthDto authDto) {
+    public JwtResponse login(AuthDTO authDto) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

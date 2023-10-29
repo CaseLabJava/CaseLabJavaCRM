@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Schema(description = "Username и Password")
-public class AuthDto {
+public class AuthDTO {
 
     @Schema(description = "username")
     private String username;

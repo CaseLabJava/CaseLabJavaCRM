@@ -1,8 +1,6 @@
 package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.ClientDTO;
-import com.greenatom.domain.dto.order.OrderDTO;
-import com.greenatom.domain.dto.order.OrderRequest;
 import com.greenatom.utils.exception.message.ClientErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "Client API", description = "API для работы с клиентами")
-public interface ClientAPI {
+public interface ClientApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

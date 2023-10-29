@@ -42,7 +42,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = OrderErrorMessage.class)
                             )
                     }
             )

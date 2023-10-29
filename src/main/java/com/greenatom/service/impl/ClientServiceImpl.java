@@ -7,9 +7,7 @@ import com.greenatom.repository.ClientRepository;
 import com.greenatom.service.ClientService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +23,8 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ClientServiceImpl implements ClientService {
-    private final Logger log = LoggerFactory.getLogger(ClientService.class);
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
 

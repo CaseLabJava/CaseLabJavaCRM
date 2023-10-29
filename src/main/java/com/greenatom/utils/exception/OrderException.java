@@ -13,7 +13,8 @@ public class OrderException extends RuntimeException {
         NO_SUCH_PRODUCT("No product with such id"),
         CANNOT_ASSIGN_ORDER("Only order with DRAFT status can be assigned"),
         CANNOT_DELETE_ORDER("Assigned order can not be deleted"),
-        INVALID_ORDER("Order content are invalid");
+        INVALID_ORDER("Order content are invalid"),
+        INVALID_STATUS("Order status are invalid");
 
         final String codeDescription;
 

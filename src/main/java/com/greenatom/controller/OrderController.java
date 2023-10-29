@@ -71,6 +71,11 @@ public class OrderController implements OrderApi {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @PostMapping(value = "/finish-order/{id}", produces = {"application/json"})
+    public OrderDTO finishOrder(@PathVariable Long id) {
+        return orderService.finishOrder(id);
+    }
+
     @DeleteMapping(value = "/delete_empty/{id}",
             produces = {"application/json"})
     public void deleteOrder(@PathVariable Long id) {

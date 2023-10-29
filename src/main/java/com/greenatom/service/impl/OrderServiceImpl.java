@@ -19,21 +19,11 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.cglib.core.Local;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -45,8 +35,9 @@ import java.util.Objects;
  * сотрудника,
  * ссылку на дерикторию с документами заявки, дату создания, и статус. В методе происходит сохранение записи
  * в базу данных, а также сохранение docx документа в папку в документами заявки.
- * @autor Максим Быков, Даниил Змаев
+ *
  * @version 1.0
+ * @autor Максим Быков, Даниил Змаев
  */
 
 @Service
@@ -65,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> findAll(Integer pagePosition, Integer pageLength,
-                                       Long id) {
+                                  Long id) {
         log.debug("Request to get all Orders");
         return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
                 PageRequest.of(pagePosition, pageLength)));
@@ -90,11 +81,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO createDraft(OrderRequest orderRequest) {
         List<OrderItemRequest> orderItemList = orderRequest.getOrderItemList();
         Order order = createDraftOrder(orderRequest);
-        for (OrderItemRequest orderItem: orderItemList) {
+        for (OrderItemRequest orderItem : orderItemList) {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
-            if (currProduct.getStorageAmount()>orderItem.getOrderAmount()) {
+            if (currProduct.getStorageAmount() > orderItem.getOrderAmount()) {
                 currProduct.setStorageAmount(currProduct.getStorageAmount() - orderItem.getOrderAmount());
                 orderItemRepository.save(OrderItem.builder()
                         .product(currProduct)
@@ -105,6 +96,18 @@ public class OrderServiceImpl implements OrderService {
                         .order(order)
                         .build());
             } else throw OrderException.CODE.INVALID_ORDER.get();
+        }
+        return orderMapper.toDto(order);
+    }
+
+    @Override
+    public OrderDTO finishOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        if (Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT.name())) {
+            order.setOrderStatus(OrderStatus.FINISHED.name());
+        } else {
+            throw OrderException.CODE.INVALID_STATUS.get();
         }
         return orderMapper.toDto(order);
     }

@@ -18,6 +18,7 @@
         <java.version>17</java.version>
         <openapi.verison>2.2.0</openapi.verison>
         <poi.verison>5.2.4</poi.verison>
+        <liquibase.version>4.20.0</liquibase.version>
         <sonar.organization>caselabjava</sonar.organization>
         <sonar.projectKey>CaseLabJava_CaseLabJavaCRM</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -130,14 +131,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>fr.opensagres.xdocreport</groupId>
             <artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
             <version>2.0.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
     </dependencies>
 

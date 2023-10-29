@@ -20,4 +20,4 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build with Maven
-        run: mvn -B package -Pprod --file pom.xml
+        run: mvn -B package  -Pbuild --file pom.xml

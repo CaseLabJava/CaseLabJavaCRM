@@ -18,6 +18,7 @@
         <java.version>17</java.version>
         <openapi.verison>2.2.0</openapi.verison>
         <poi.verison>5.2.4</poi.verison>
+        <liquibase.version>4.20.0</liquibase.version>
         <sonar.organization>caselabjava</sonar.organization>
         <sonar.projectKey>CaseLabJava_CaseLabJavaCRM</sonar.projectKey>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -105,6 +106,21 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -130,8 +146,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <groupId>fr.opensagres.xdocreport</groupId>
+            <artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
     </dependencies>
 
@@ -165,9 +188,21 @@
 
         <plugins>
             <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.version}</version>
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>jdbc:postgresql://178.21.8.3:5432/</url>
+                    <username>postgres</username>
+                    <password>postgres</password>
+                    <outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.4</version>
+                <version>0.8.11</version>
                 <executions>
                     <execution>
                         <goals>

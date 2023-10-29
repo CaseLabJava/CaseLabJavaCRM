@@ -22,4 +22,7 @@ public interface ClientService {
 
     @Transactional
     void deleteClient(Long id);
+
+    @Transactional(readOnly = true)
+    List<ClientDTO> findClientPageByParams(Integer pageNumber, Integer pageSize, String company, String firstName, String secondName, String patronymic);
 }

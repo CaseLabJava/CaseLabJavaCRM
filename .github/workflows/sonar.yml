@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - develop
+      - master
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -38,5 +39,5 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}       
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
         run: mvn -B verify -Dmaven.test.skip org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CaseLabJava_CaseLabJavaCRM -Dsonar.organization=caselabjava -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN

@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "develop", "master" ]
   pull_request:
-    branches: [ "develop" ]
+    branches: [ "develop", "master" ]
 
 jobs:
   export_env:
@@ -18,12 +18,18 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            export POSTGRES_DB=${{ secrets.POSTGRES_DB }} 
+            export POSTGRES_DB=${{ secrets.POSTGRES_DB }}  
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }} 
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} 
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} > .env 
+            export REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} 
+            export ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} 
+            
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env 
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env 
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env 
+            echo ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} >> .env 
+            echo REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} >> .env 
+
             export $(cat .env | xargs) && env 
 
   push_compose:

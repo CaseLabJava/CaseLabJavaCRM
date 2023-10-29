@@ -3,7 +3,7 @@ package com.greenatom.controller.api;
 import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
 import com.greenatom.domain.dto.order.OrderRequest;
-import com.greenatom.utils.exception.message.ErrorMessage;
+import com.greenatom.utils.exception.message.OrderErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -132,7 +132,8 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
                             )
                     }
             )
@@ -143,6 +144,30 @@ public interface OrderApi {
 
     ResponseEntity<OrderDTO> getOrder(
             @Parameter(description = "Id заказа", example = "1")
+            Long id
+    );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешный возврат заказов",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = OrderDTO.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Получение заказов по id работника"
+    )
+    List<OrderDTO> getAllOrders(
+            @Parameter(description = "Позиция страницы", example = "0")
+            Integer pagePosition,
+            @Parameter(description = "Длина страницы", example = "5")
+            Integer pageLength,
+            @Parameter(description = "Id работника", example = "1")
             Long id
     );
 
@@ -163,7 +188,8 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
                             )
                     }
             ),
@@ -173,7 +199,8 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
                             )
                     }
             )

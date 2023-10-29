@@ -12,7 +12,7 @@ import java.util.List;
 public interface OrderService {
 
     @Transactional(readOnly = true)
-    List<OrderDTO> findAll();
+    List<OrderDTO> findAll(Integer pagePosition, Integer pageLength, Long id);
 
     @Transactional(readOnly = true)
     List<OrderDTO> findByPaginationAndFilters(PageRequest pageRequest, String orderStatus, String linkToFolder);

@@ -12,10 +12,14 @@ import com.greenatom.service.OrderService;
 import com.greenatom.utils.date.DateTimeUtils;
 import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
+import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import java.io.*;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -56,9 +64,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
-    public List<OrderDTO> findAll() {
-        log.debug("Order to get all Orders");
-        return orderMapper.toDto(orderRepository.findAll());
+    public List<OrderDTO> findAll(Integer pagePosition, Integer pageLength,
+                                       Long id) {
+        log.debug("Request to get all Orders");
+        return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
+                PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
@@ -84,14 +94,17 @@ public class OrderServiceImpl implements OrderService {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
-            orderItemRepository.save(OrderItem.builder()
-                    .product(currProduct)
-                    .orderAmount(orderItem.getOrderAmount())
-                    .cost(currProduct.getCost())
-                    .unit(currProduct.getUnit())
-                    .name(currProduct.getProductName())
-                    .order(order)
-                    .build());
+            if (currProduct.getStorageAmount()>orderItem.getOrderAmount()) {
+                currProduct.setStorageAmount(currProduct.getStorageAmount() - orderItem.getOrderAmount());
+                orderItemRepository.save(OrderItem.builder()
+                        .product(currProduct)
+                        .orderAmount(orderItem.getOrderAmount())
+                        .cost(currProduct.getCost())
+                        .unit(currProduct.getUnit())
+                        .name(currProduct.getProductName())
+                        .order(order)
+                        .build());
+            } else throw OrderException.CODE.INVALID_ORDER.get();
         }
         return orderMapper.toDto(order);
     }
@@ -127,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
                     order.getClient(),
                     order.getEmployee(),
                     filename + ".docx");
-            order.setOrderStatus(OrderStatus.ASSIGNED_BY_EMPLOYEE.name());
+            order.setOrderStatus(OrderStatus.SIGNED_BY_EMPLOYEE.name());
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
@@ -165,6 +178,18 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.delete(order);
         } else {
             throw OrderException.CODE.CANNOT_DELETE_ORDER.get();
+        }
+    }
+
+    //в finishOrder буду конвертировать документ в PDF и отправлять клиенту на почту
+    public void convertToPDF(String linkToFolder, String localPdfPath) {
+        try (InputStream doc = new FileInputStream(linkToFolder);
+             XWPFDocument document = new XWPFDocument(doc)) {
+            PdfOptions options = PdfOptions.create();
+            OutputStream out = new FileOutputStream(localPdfPath);
+            PdfConverter.getInstance().convert(document, out, options);
+        } catch (IOException ex) {
+            log.error("conversion to PDF failed");
         }
     }
 }

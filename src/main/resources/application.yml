@@ -8,14 +8,14 @@ spring:
     name: CaseLabJavaCrm
   datasource:
     driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
   jpa:
     hibernate:
       ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  flyway:
-    baseline-on-migrate: true
 
 springdoc:
   swagger-ui:

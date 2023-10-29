@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - 'develop'
+      - 'master'
 
 jobs:
   build:
@@ -19,4 +20,4 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build with Maven
-        run: mvn -B package -Pprod -Dmaven.test.skip --file pom.xml
+        run: mvn -B -Dmaven.test.skip package --file pom.xml

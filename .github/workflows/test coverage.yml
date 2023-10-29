@@ -6,6 +6,7 @@ on:
       - '*'
   push:
     branches:
+      - 'master'
       - 'develop'
 
 jobs:
@@ -19,7 +20,7 @@ jobs:
           java-version: 17
           distribution: 'zulu'
       - name: Maven Verify
-        run: mvn -B clean verify -Pprod -Dmaven.test.skip
+        run: mvn -B -Dmaven.test.skip clean verify
       - name: Test Coverage
         uses: codecov/codecov-action@v2
         with:

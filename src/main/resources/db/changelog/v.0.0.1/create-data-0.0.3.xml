@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="sladkkov@yandex.ru" id="1666350061925-11">
+        <insert tableName="client">
+            <column name="client_id" value="1"/>
+            <column name="address" value="Moscow"/>
+            <column name="bank_details" value="Sber"/>
+            <column name="company" value="Company"/>
+            <column name="correspondent_account" value="123"/>
+            <column name="inn_and_kpp" value="123"/>
+            <column name="firstname" value="Ivan"/>
+            <column name="ogrn" value="321"/>
+            <column name="patronymic" value="Ivanovich"/>
+            <column name="phone_number" value="123"/>
+            <column name="lastname" value="Ivanov"/>
+        </insert>
+        <insert tableName="client">
+            <column name="client_id" value="2"/>
+            <column name="address" value="SPB"/>
+            <column name="bank_details" value="Tinkoff"/>
+            <column name="company" value="Company2"/>
+            <column name="correspondent_account" value="123"/>
+            <column name="inn_and_kpp" value="123"/>
+            <column name="firstname" value="Petr"/>
+            <column name="ogrn" value="3211"/>
+            <column name="patronymic" value="Ivanovich"/>
+            <column name="phone_number" value="1234"/>
+            <column name="lastname" value="Ivanov"/>
+        </insert>
+
+        <insert tableName="employee">
+            <column name="employee_id" value="1"/>
+            <column name="address" value="Moscow"/>
+            <column name="email" value="tupichok@mail.ru"/>
+            <column name="firstname" value="Дмитрий"/>
+            <column name="job_position" value="MANAGER"/>
+            <column name="password" value="$2a$10$d0AxWw4jsbndLo5DCsu7duomCQX2zLHCjpmLclO4o6oMK6Pn6cAT2"/>
+            <column name="patronymic" value="Юрьевич"/>
+            <column name="phone_number" value="895436848"/>
+            <column name="salary" value="100000"/>
+            <column name="lastname" value="Пучков"/>
+            <column name="username" value="Дмитрий_П_Ю"/>
+            <column name="role_id" value="3"/>
+        </insert>
+        <insert tableName="employee">
+            <column name="employee_id" value="2"/>
+            <column name="address" value="1"/>
+            <column name="email" value="2"/>
+            <column name="firstname" value="Admin"/>
+            <column name="job_position" value="ADMIN"/>
+            <column name="password" value="$2a$10$Pfo3rGXlrs1B6WzPGp9gfuCFACapRA1qjcPK3PqCYSg/ALu/6RJPa"/>
+            <column name="patronymic" value="Admin"/>
+            <column name="phone_number" value="0"/>
+            <column name="salary" value="0"/>
+            <column name="lastname" value="Admin"/>
+            <column name="username" value="Admin_A_A_1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+
+        <insert tableName="client_order">
+            <column name="order_id" value="1"/>
+            <column name="link_to_folder"
+                    value="/Users/fortex/Documents/GitHub/CaseLabJavaCRM/Documents/UploadDoc/2023-10-27181158jpg"/>
+            <column name="date_time" value="2023-10-29 02:30:00.000000"/>
+            <column name="status" value="SIGNED_BY_CLIENT"/>
+            <column name="client_id" value="1"/>
+            <column name="employee_id" value="1"/>
+        </insert>
+
+        <insert tableName="product">
+            <column name="product_id" value="1"/>
+            <column name="cost" value="500"/>
+            <column name="name" value="Доски"/>
+            <column name="storage_amount" value="980"/>
+            <column name="unit" value="шт"/>
+        </insert>
+
+        <insert tableName="order_item">
+            <column name="order_item_id" value="1"/>
+            <column name="cost" value="500"/>
+            <column name="name" value="Доски"/>
+            <column name="amount" value="20"/>
+            <column name="unit" value="шт"/>
+            <column name="order_id" value="1"/>
+            <column name="product_id" value="1"/>
+        </insert>
+
+
+    </changeSet>
+</databaseChangeLog>

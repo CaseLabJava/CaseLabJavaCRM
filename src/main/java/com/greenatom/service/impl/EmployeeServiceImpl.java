@@ -13,17 +13,20 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 /**
  * EmployeeServiceImpl является сервисом для работы с сотрудниками. Он использует базу данных для доступа к информации
  * о сотрудниках и ролях, преобразует их в формат DTO и возвращает список сотрудников или конкретного сотрудника
  * по его ID.
- * @autor Максим Быков, Андрей Начевный
+ *
  * @version 1.0
+ * @autor Максим Быков, Андрей Начевный
  */
 @Service
 @RequiredArgsConstructor
@@ -37,16 +40,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final RoleRepository roleRepository;
 
     @Override
-    public List<EmployeeCleanDTO> findAll() {
-        log.debug("Order to get all Employees");
-        return employeeCleanMapper.toDto(employeeRepository.findAll());
+    public List<EmployeeCleanDTO> findAll(Integer pagePosition, Integer pageLength) {
+        log.debug("Request to get all Employees");
+        return employeeCleanMapper.toDto(employeeRepository.findAll(
+                PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
     public Optional<EmployeeCleanDTO> findOne(Long id) {
         log.debug("Order to get Employee : {}", id);
         return Optional.ofNullable(employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id))));
+                new EntityNotFoundException("An employee with this ID was not found: " + id))));
     }
 
     @Override
@@ -102,7 +106,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .append(employeeDTO.getSurname().charAt(0)).append("_")
                 .append(employeeDTO.getPatronymic().charAt(0));
         Integer countOfUsernameInDb = employeeRepository.countByUsername(username.toString());
-        if(countOfUsernameInDb > 0){
+        if (countOfUsernameInDb > 0) {
             username.append("_").append((countOfUsernameInDb + 1));
         }
         return username.toString();

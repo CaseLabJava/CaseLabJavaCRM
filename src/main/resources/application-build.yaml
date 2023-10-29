@@ -6,3 +6,6 @@ spring:
     password: ${{ secrets.POSTGRES_PASSWORD }}
   jpa:
     show-sql: false
+
+access_token: ${{ secrets.ACCESS_TOKEN }}
+refresh_token: ${{ secrets.REFRESH_TOKEN }}

@@ -25,6 +25,45 @@ import java.util.List;
 //@SecurityRequirement(name = "bearer-key")
 @Tag(name = "Order API", description = "API для работы с заказами")
 public interface OrderApi {
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешный возврат заказов",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = OrderDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Заказы не были найдены",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Получение заказа"
+    )
+    ResponseEntity<List<OrderDTO>> getOrders(
+            @Parameter(description = "Номер страницы", example = "0")
+            Integer limit,
+            @Parameter(description = "Количество элементов", example = "10")
+            Integer offset,
+            @Parameter(description = "Поле сортировки", example = "orderDate")
+            String sortField,
+            @Parameter(description = "Порядок сортировки", example = "asc")
+            String sortOrder,
+            @Parameter(description = "Статус заказа")
+            String orderStatus,
+            @Parameter(description = "Ссылка на папку")
+            String linkToFolder
+    );
 
     @ApiResponses(value = {
             @ApiResponse(

@@ -19,11 +19,21 @@ import lombok.RequiredArgsConstructor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -59,6 +69,14 @@ public class OrderServiceImpl implements OrderService {
         log.debug("Request to get all Orders");
         return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
                 PageRequest.of(pagePosition, pageLength)));
+    }
+
+    @Override
+    public List<OrderDTO> findByPaginationAndFilters(PageRequest pageRequest, String orderStatus, String linkToFolder) {
+        return orderRepository
+                .findByOrderStatusAndLinkToFolder(pageRequest, orderStatus, linkToFolder)
+                .map(orderMapper::toDto)
+                .toList();
     }
 
     @Override

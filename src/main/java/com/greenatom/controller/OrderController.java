@@ -5,6 +5,8 @@ import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
 import com.greenatom.domain.dto.order.OrderRequest;
 import com.greenatom.service.OrderService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,19 @@ public class OrderController implements OrderApi {
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
+    }
+
+    @GetMapping(value="/get", produces = {"application/json"})
+    public ResponseEntity<List<OrderDTO>> getOrders(@RequestParam(required = false, defaultValue = "0") Integer limit,
+                                                    @RequestParam(required = false, defaultValue = "10") Integer offset,
+                                                    @RequestParam(required = false, defaultValue = "orderDate") String sortField,
+                                                    @RequestParam(required = false, defaultValue = "asc") String sortOrder,
+                                                    @RequestParam(required = false) String orderStatus,
+                                                    @RequestParam(required = false) String linkToFolder) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(orderService
+                        .findByPaginationAndFilters(PageRequest.of(limit, offset, sort), orderStatus, linkToFolder));
     }
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})

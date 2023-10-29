@@ -11,8 +11,6 @@ import com.greenatom.service.EmployeeService;
 import com.greenatom.utils.exception.EmailAlreadyUsedException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-    private final Logger log = LoggerFactory.getLogger(EmployeeService.class);
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
 
@@ -41,14 +38,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeCleanDTO> findAll(Integer pagePosition, Integer pageLength) {
-        log.debug("Request to get all Employees");
         return employeeCleanMapper.toDto(employeeRepository.findAll(
                 PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
     public EmployeeCleanDTO findOne(Long id) {
-        log.debug("Order to get Employee : {}", id);
         return employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("An employee with this ID was not found: " + id)));
     }
@@ -56,7 +51,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee save(EmployeeDTO employeeDTO) {
         List<Employee> existingUsers = employeeRepository.findAll();
-        log.debug("Order to save employee : {}", employeeDTO);
         Employee employee = employeeMapper.toEntity(employeeDTO);
         employee.setPassword(encoder.encode(employeeDTO.getPassword()));
         employee.setUsername(generateUsername(employeeDTO));
@@ -72,7 +66,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeCleanDTO updateEmployee(EmployeeCleanDTO employee) {
-        log.debug("Order to partially update Employee : {}", employee);
         return employeeRepository
                 .findById(employee.getId())
                 .map(existingEvent -> {
@@ -89,10 +82,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(Long id) {
         employeeRepository
                 .findById(id)
-                .ifPresent(employee -> {
-                    employeeRepository.delete(employee);
-                    log.debug("Deleted Employee: {}", employee);
-                });
+                .ifPresent(employeeRepository::delete);
     }
 
     @Override

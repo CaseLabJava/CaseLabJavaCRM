@@ -44,7 +44,8 @@ public void upload(UploadDocRequest uploadDocRequest) {
 
             uploadDocRequest.setLinkToFolder(targetFile.getAbsolutePath());
 
-            log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: " + targetFile.getAbsolutePath());
+            log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: "
+                    + targetFile.getAbsolutePath());
         } catch (IOException e) {
             log.error("Ошибка при загрузке файла: " + e.getMessage());
         }

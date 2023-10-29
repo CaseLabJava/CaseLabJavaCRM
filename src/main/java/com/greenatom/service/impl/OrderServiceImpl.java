@@ -16,9 +16,8 @@ import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +41,8 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
-
-    private final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -57,7 +55,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDTO> findAll(Integer pagePosition, Integer pageLength,
                                   Long id) {
-        log.debug("Request to get all Orders");
         return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
                 PageRequest.of(pagePosition, pageLength)));
     }
@@ -72,7 +69,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO findOne(Long id) {
-        log.debug("Order to get Order : {}", id);
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         return orderMapper.toDto(order);
     }
@@ -151,7 +147,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO save(OrderDTO orderDTO) {
-        log.debug("Order to save order : {}", orderDTO);
         Order order = orderMapper.toEntity(orderDTO);
         order.setClient(clientRepository.findById(orderDTO.getClient().getId()).orElseThrow());
         order.setEmployee(employeeRepository.findById(orderDTO.getEmployee().getId()).orElseThrow());
@@ -161,7 +156,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO updateOrder(OrderDTO order) {
-        log.debug("Order to partially update Order : {}", order);
         return orderRepository
                 .findById(order.getId())
                 .map(existingEvent -> {
@@ -192,7 +186,7 @@ public class OrderServiceImpl implements OrderService {
             OutputStream out = new FileOutputStream(localPdfPath);
             PdfConverter.getInstance().convert(document, out, options);
         } catch (IOException ex) {
-            log.error("conversion to PDF failed");
+            log.error("Couldn't convert file");
         }
     }
 }

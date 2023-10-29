@@ -7,8 +7,6 @@ import com.greenatom.service.OrderItemService;
 import com.greenatom.utils.exception.OrderItemException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,19 +25,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderItemServiceImpl implements OrderItemService {
-    private final Logger log = LoggerFactory.getLogger(OrderItemService.class);
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
 
     @Override
     public List<OrderItemDTO> findAll() {
-        log.debug("Order to get all CartProducts");
         return orderItemMapper.toDto(orderItemRepository.findAll());
     }
 
     @Override
     public OrderItemDTO findOne(Long id) {
-        log.debug("Order to get CartProduct : {}", id);
         return orderItemMapper.toDto(orderItemRepository
                 .findById(id)
                 .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
@@ -47,7 +42,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemDTO updateCartProduct(OrderItemDTO cartProduct) {
-        log.debug("Order to partially update CartProduct : {}", cartProduct);
         return orderItemRepository
                 .findById(cartProduct.getId())
                 .map(existingEvent -> {

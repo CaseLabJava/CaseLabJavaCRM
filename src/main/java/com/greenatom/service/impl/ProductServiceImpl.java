@@ -7,8 +7,6 @@ import com.greenatom.repository.ProductRepository;
 import com.greenatom.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -23,26 +21,22 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private final Logger log = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
     @Override
     public List<ProductDTO> findAll() {
-        log.debug("Order to get all Products");
         return productMapper.toDto(productRepository.findAll());
     }
 
     @Override
     public ProductDTO findOne(Long id) {
-        log.debug("Order to get Product : {}", id);
         return productMapper.toDto(productRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Order not found with id: " + id)));
     }
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        log.debug("Order to save product : {}", productDTO);
         Product product = productMapper.toEntity(productDTO);
         productRepository.save(product);
         return productMapper.toDto(product);
@@ -50,7 +44,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(ProductDTO product) {
-        log.debug("Order to partially update Product : {}", product);
         return productRepository
                 .findById(product.getId())
                 .map(existingEvent -> {
@@ -67,10 +60,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         productRepository
                 .findById(id)
-                .ifPresent(product -> {
-                    productRepository.delete(product);
-                    log.debug("Deleted Product: {}", product);
-                });
+                .ifPresent(productRepository::delete);
     }
 
     @Override

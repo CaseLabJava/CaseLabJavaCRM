@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Order API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
  * для сохранения новых заявок, получения уже существующих заявок и их обновление.
- * @autor Даниил Змаев
+ * @author Даниил Змаев
  * @version 1.0
  */
 //@AccessDeniedResponse
@@ -42,7 +42,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorMessage.class)
+                                    schema = @Schema(implementation = OrderErrorMessage.class)
                             )
                     }
             )

@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
  *
  * <p>Все эти операции выполняются с использованием сервиса CartProductService, который предоставляет реализацию
  * бизнес-логики.
- * @autor Максим Быков
+ * @author Максим Быков
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "/api/orderItem")
+@RequestMapping(value = "/api/order-items")
 public class OrderItemController implements OrderItemApi {
 
     private final OrderItemService orderItemService;
@@ -27,12 +27,12 @@ public class OrderItemController implements OrderItemApi {
         this.orderItemService = orderItemService;
     }
 
-    @GetMapping(value = "/get/{id}", produces = {"application/json"})
+    @GetMapping(value = "/{id}", produces = {"application/json"})
     public OrderItemDTO getOrderItem(@PathVariable Long id) {
         return orderItemService.findOne(id);
     }
 
-    @DeleteMapping(value = "/delete/{id}", produces = {"application/json"})
+    @DeleteMapping(value = "/{id}", produces = {"application/json"})
     public void deleteOrderItem(@PathVariable Long id) {
         orderItemService.deleteCartProduct(id);
     }

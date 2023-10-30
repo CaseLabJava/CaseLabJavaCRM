@@ -32,7 +32,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * <p>Создание менеджера аутентификации.
  * <p>Этот код является частью общей системы безопасности и выполняет ряд действий для обеспечения безопасности
  * приложения.
- * @autor Андрей Начевный, Даниил Змаев
+ * @author Андрей Начевный, Даниил Змаев
  * @version 1.0
  */
 @Configuration
@@ -53,10 +53,10 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/api/auth/signIn", "/api/auth/accessToken").permitAll()
+                                .requestMatchers("/api/auth/signin", "/api/auth/access-token").permitAll()
                                 .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .requestMatchers("/api/files/upload").hasRole("MANAGER")
-                                .requestMatchers("/api/auth/signUp").hasRole("ADMIN")
+                                .requestMatchers("/api/auth/signup").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(

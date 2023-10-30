@@ -23,10 +23,10 @@ import java.util.List;
  * <p>Эти операции выполняются при помощи сервиса ClientService, реализующего бизнес-логику.
  *
  * @version 1.0
- * @autor Максим Быков
+ * @author Максим Быков
  */
 @RestController
-@RequestMapping(value = "/api/employee")
+@RequestMapping(value = "/api/employees")
 public class EmployeeController implements EmployeeApi {
     private final EmployeeService employeeService;
 
@@ -34,23 +34,23 @@ public class EmployeeController implements EmployeeApi {
         this.employeeService = employeeService;
     }
 
-    @GetMapping(value = "/get/{id}", produces = {"application/json"})
+    @GetMapping(value = "/{id}", produces = {"application/json"})
     public EmployeeCleanDTO getEmployee(@PathVariable Long id) {
         return employeeService.findOne(id);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping(produces = {"application/json"})
     public List<EmployeeCleanDTO> getAllEmployees(@Param("position") Integer pagePosition,
                                                   @Param("length") Integer pageLength) {
         return employeeService.findAll(pagePosition, pageLength);
     }
 
-    @PutMapping(value = "/update", produces = {"application/json"})
+    @PutMapping(produces = {"application/json"})
     public EmployeeCleanDTO updateEmployee(@RequestBody EmployeeCleanDTO employee) {
         return employeeService.updateEmployee(employee);
     }
 
-    @DeleteMapping(value = "/delete/{id}",
+    @DeleteMapping(value = "/{id}",
             produces = {"application/json"})
     public void deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);

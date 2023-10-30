@@ -7,7 +7,10 @@ import com.greenatom.domain.dto.JwtResponse;
 import com.greenatom.domain.dto.RefreshJwtRequest;
 import com.greenatom.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Этот код представляет собой контроллер для обработки запросов к API аутентификации. Он включает в себя следующие
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * <p>– /refresh - Этот метод не определен в данном коде. Он, вероятно, должен обновлять токен доступа на основе
  * полученного запроса.
  *
- * @autor Андрей Начевный, Максим Быков, Даниил Змаев
+ * @author Андрей Начевный, Максим Быков, Даниил Змаев
  * @version 1.0
  */
 @RestController
@@ -31,26 +34,22 @@ public class AuthController implements AuthApi {
 
     private final AuthService authService;
 
-    @PostMapping("/signUp")
-    @Override
+    @PostMapping("/signup")
     public JwtResponse registration(@RequestBody EmployeeDTO employeeDTO){
         return authService.registration(employeeDTO);
     }
 
-    @PostMapping("/signIn")
-    @Override
-    public JwtResponse login(@RequestBody AuthDTO authDto){
+    @PostMapping("/signin")
+    public JwtResponse login(@RequestBody AuthDto authDto){
         return authService.login(authDto);
     }
 
-    @PostMapping("/accessToken")
-    @Override
+    @PostMapping("/access-token")
     public JwtResponse getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest){
         return authService.getAccessToken(refreshJwtRequest.getRefreshToken());
     }
 
     @PostMapping("/refresh")
-    @Override
     public JwtResponse refresh(@RequestBody RefreshJwtRequest refreshJwtRequest){
         return authService.refresh(refreshJwtRequest.getRefreshToken());
     }

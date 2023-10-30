@@ -17,11 +17,11 @@ import java.util.List;
  * <p>– PUT /update обновляет информацию о продукте, используя данные из тела запроса.
  * <p>– POST /add добавляет новый продукт, используя данные из тела запроса.
  * <p>- DELETE /delete/{id} удаляет продукт с заданным идентификатором.
- * @autor Максим Быков, Степан Моргачев
+ * @author Максим Быков, Степан Моргачев
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "/api/product")
+@RequestMapping(value = "/api/products")
 public class ProductController implements ProductApi {
     private final ProductService productService;
 
@@ -44,17 +44,19 @@ public class ProductController implements ProductApi {
     }
 
 
-    @PutMapping(value = "/update", produces = {"application/json"})
+    @PutMapping(produces = {"application/json"})
     public ProductDTO updateProduct(@RequestBody ProductDTO product) {
         return productService.updateProduct(product);
     }
 
-    @PostMapping(value = "/add", produces = {"application/json"})
+    @PostMapping(produces = {"application/json"})
     public ProductDTO addProduct(@RequestBody ProductDTO product) {
         return productService.save(product);
     }
 
-    @DeleteMapping(value = "/delete/{id}", produces = {"application/json"})
+
+    @DeleteMapping(value = "/{id}",
+            produces = {"application/json"})
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
     }

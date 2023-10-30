@@ -16,24 +16,26 @@ import java.util.List;
  * <p>– POST /add - добавляет нового клиента, используя данные из запроса тела
  *
  * <p>Эти операции выполняются при помощи сервиса ClientService, реализующего бизнес-логику.
- * @autor Максим Быков
+ * @author Максим Быков
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "/api/client")
-public class ClientController implements ClientApi {
+@RequestMapping(value = "/api/clients")
+public class ClientController implements ClientAPI {
     private final ClientService clientService;
 
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
     }
 
-    @GetMapping(value = "/get/{id}", produces = {"application/json"})
+
+    @GetMapping(value = "/{id}", produces = {"application/json"})
     public ClientDTO getClient(@PathVariable Long id) {
         return clientService.findOne(id);
     }
 
-    @GetMapping (value = "/get", produces = {"application/json"})
+
+    @GetMapping (produces = {"application/json"})
     public List<ClientDTO> getClientsResponse(@RequestParam(defaultValue = "0") Integer pageNumber,
                                               @RequestParam(defaultValue = "10") Integer pageSize,
                                               @RequestParam(defaultValue = "", required = false) String company,
@@ -49,18 +51,17 @@ public class ClientController implements ClientApi {
                 patronymic);
     }
 
-
-    @PutMapping(value = "/update", produces = {"application/json"})
+    @PutMapping(produces = {"application/json"})
     public ClientDTO updateClient(@RequestBody ClientDTO client) {
         return clientService.updateClient(client);
     }
 
-    @PostMapping(value = "/add", produces = {"application/json"})
+    @PostMapping(produces = {"application/json"})
     public ClientDTO addClient(@RequestBody ClientDTO client) {
         return clientService.save(client);
     }
 
-    @DeleteMapping(value = "/delete/{id}",
+     @DeleteMapping(value = "/{id}", produces = {"application/json"})
             produces = {"application/json"})
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);

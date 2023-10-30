@@ -5,28 +5,27 @@ import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.mapper.ProductMapper;
 import com.greenatom.repository.ProductRepository;
 import com.greenatom.service.ProductService;
+import com.greenatom.utils.exception.ProductException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+
 /**
  * ProductServiceImpl является сервисом для работы со складом. Он использует ProductRepository для доступа к базе
  * данных, преобразует продукты в формат DTO и возвращает список товаров или конкретный товар по его ID.
- * @autor Максим Быков
+ * @author Максим Быков
  * @version 1.0
  */
-@Service
+@Slf4j
 @RequiredArgsConstructor
+@Service
 public class ProductServiceImpl implements ProductService {
-    private final Logger log = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
@@ -39,8 +38,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<ProductDTO> findOne(Long id) {
         log.debug("Order to get Product : {}", id);
-        return Optional.ofNullable(productMapper.toDto(productRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id))));
+        return Optional.ofNullable(productMapper.toDto(productRepository
+                .findById(id)
+                .orElseThrow(ProductException.CODE.NO_SUCH_PRODUCT::get)));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAll(Integer pagePosition, Integer pageLength,String name, Integer cost) {
-            return productMapper.toDto(productRepository.findProductByProductNameContainingAndCostBefore(
-                    PageRequest.of(pagePosition, pageLength), name, cost).toList());
-        }
+        return productMapper.toDto(productRepository.findProductByProductNameContainingAndCostBefore(
+                PageRequest.of(pagePosition, pageLength), name, cost).toList());
+    }
 }

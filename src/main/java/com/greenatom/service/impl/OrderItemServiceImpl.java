@@ -32,13 +32,11 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<OrderItemDTO> findAll() {
-        log.debug("Order to get all CartProducts");
         return orderItemMapper.toDto(orderItemRepository.findAll());
     }
 
     @Override
     public OrderItemDTO findOne(Long id) {
-        log.debug("Order to get CartProduct : {}", id);
         return orderItemMapper.toDto(orderItemRepository
                 .findById(id)
                 .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
@@ -46,7 +44,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemDTO updateCartProduct(OrderItemDTO cartProduct) {
-        log.debug("Order to partially update CartProduct : {}", cartProduct);
         return orderItemRepository
                 .findById(cartProduct.getId())
                 .map(existingEvent -> {

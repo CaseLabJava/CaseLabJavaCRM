@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * ProductServiceImpl является сервисом для работы со складом. Он использует ProductRepository для доступа к базе
@@ -29,20 +28,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAll() {
-        log.debug("Order to get all Products");
         return productMapper.toDto(productRepository.findAll());
     }
 
     @Override
-    public Optional<ProductDTO> findOne(Long id) {
-        log.debug("Order to get Product : {}", id);
-        return Optional.ofNullable(productMapper.toDto(productRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id))));
+    public ProductDTO findOne(Long id) {
+        return productMapper.toDto(productRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Order not found with id: " + id)));
     }
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        log.debug("Order to save product : {}", productDTO);
         Product product = productMapper.toEntity(productDTO);
         productRepository.save(product);
         return productMapper.toDto(product);
@@ -50,7 +46,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(ProductDTO product) {
-        log.debug("Order to partially update Product : {}", product);
         return productRepository
                 .findById(product.getId())
                 .map(existingEvent -> {
@@ -67,10 +62,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         productRepository
                 .findById(id)
-                .ifPresent(product -> {
-                    productRepository.delete(product);
-                    log.debug("Deleted Product: {}", product);
-                });
+                .ifPresent(productRepository::delete);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.greenatom.domain.entity;
 
+import com.greenatom.domain.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -30,7 +31,8 @@ public class Order {
     private Date orderDate;
 
     @Column(name = "status")
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")

@@ -31,7 +31,7 @@ public class ProductController implements ProductApi {
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
     public ProductDTO getProduct(@PathVariable Long id) {
-        return productService.findOne(id).orElseThrow(EntityNotFoundException::new);
+        return productService.findOne(id);
     }
 
     @GetMapping(value = "/get", produces = {"application/json"})
@@ -53,6 +53,7 @@ public class ProductController implements ProductApi {
     public ProductDTO addProduct(@RequestBody ProductDTO product) {
         return productService.save(product);
     }
+
 
     @DeleteMapping(value = "/{id}",
             produces = {"application/json"})

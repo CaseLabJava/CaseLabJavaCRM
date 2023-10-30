@@ -1,8 +1,6 @@
 package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.ClientDTO;
-import com.greenatom.domain.dto.order.OrderDTO;
-import com.greenatom.domain.dto.order.OrderRequest;
 import com.greenatom.utils.exception.message.ClientErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,15 +9,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "Client API", description = "API для работы с клиентами")
-public interface ClientAPI {
+public interface ClientApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -45,7 +41,7 @@ public interface ClientAPI {
     @Operation(
             summary = "Получение клиента по id"
     )
-    ResponseEntity<ClientDTO> getClient(
+    ClientDTO getClient(
             @Parameter(description = "Id клиента", example = "1")
             Long id
     );
@@ -65,7 +61,7 @@ public interface ClientAPI {
     @Operation(
             summary = "Получение всех клиентов"
     )
-    ResponseEntity<List<ClientDTO>> getClientsResponse(
+    List<ClientDTO> getClientsResponse(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "", required = false) String company,
@@ -100,7 +96,7 @@ public interface ClientAPI {
     @Operation(
             summary = "Удаление клиента по id"
     )
-    ResponseEntity<Void> deleteClient(
+    void deleteClient(
             @Parameter (description = "Id клиента", example = "1")
             Long id
     );
@@ -130,7 +126,7 @@ public interface ClientAPI {
     @Operation(
             summary = "Обновление информации о клиенте"
     )
-    ResponseEntity<ClientDTO> updateClient(@RequestBody ClientDTO clientDTO);
+    ClientDTO updateClient(@RequestBody ClientDTO clientDTO);
 
     @ApiResponse(
             responseCode = "200",
@@ -143,7 +139,7 @@ public interface ClientAPI {
             }
     )
     @Operation(summary = "Создает Client и возвращает ClientDTO")
-    ResponseEntity<ClientDTO> addClient(
+    ClientDTO addClient(
             @Parameter(description = "Client Request")
             ClientDTO clientDTO
     );

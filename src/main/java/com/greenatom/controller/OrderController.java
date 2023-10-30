@@ -50,8 +50,8 @@ public class OrderController implements OrderApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.findOne(id));
+    public OrderDTO getOrder(@PathVariable Long id) {
+        return orderService.findOne(id);
     }
 
     @GetMapping(value = "/employee/{id}", produces = {"application/json"})
@@ -60,15 +60,20 @@ public class OrderController implements OrderApi {
                                        @PathVariable("id") Long id) {
         return orderService.findAll(pagePosition, pageLength, id);
     }
+
     @PostMapping(value = "/draft")
-    public ResponseEntity<OrderDTO> addDraftOrder(@RequestBody OrderRequest orderRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.createDraft(orderRequest));
+    public OrderDTO addDraftOrder(@RequestBody OrderRequest orderRequest) {
+        return orderService.createDraft(orderRequest);
     }
 
     @PostMapping(value = "/generate", produces = {"application/json"})
-    public ResponseEntity<Void> generateOrder(@RequestBody GenerateOrderRequest request) {
+    public void generateOrder(@RequestBody GenerateOrderRequest request) {
         orderService.generateOrder(request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping(value = "/finish-order/{id}", produces = {"application/json"})
+    public OrderDTO finishOrder(@PathVariable Long id) {
+        return orderService.finishOrder(id);
     }
 
     @DeleteMapping(value = "/{id}/empty",

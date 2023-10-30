@@ -14,7 +14,7 @@ public interface EmployeeService {
     List<EmployeeCleanDTO> findAll(Integer pagePosition, Integer pageLength);
 
     @Transactional(readOnly = true)
-    Optional<EmployeeCleanDTO> findOne(Long id);
+    EmployeeCleanDTO findOne(Long id);
 
     @Transactional
     Employee save(EmployeeDTO employee);

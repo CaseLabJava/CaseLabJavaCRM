@@ -44,7 +44,8 @@ public void upload(UploadDocRequest uploadDocRequest) {
 
             uploadDocRequest.setLinkToFolder(targetFile.getAbsolutePath());
 
-            log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: " + targetFile.getAbsolutePath());
+            log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: "
+                    + targetFile.getAbsolutePath());
         } catch (IOException e) {
             log.error("Ошибка при загрузке файла: " + e.getMessage());
         }
@@ -59,9 +60,9 @@ public void upload(UploadDocRequest uploadDocRequest) {
         Order order = orderRepository
                 .findById(uploadDocRequest.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE.name())) {
+        if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE)) {
 
-            order.setOrderStatus(OrderStatus.SIGNED_BY_CLIENT.name());
+            order.setOrderStatus(OrderStatus.SIGNED_BY_CLIENT);
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }

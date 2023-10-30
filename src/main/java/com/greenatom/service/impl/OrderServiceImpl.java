@@ -34,13 +34,14 @@ import java.util.Objects;
  * сотрудника,
  * ссылку на дерикторию с документами заявки, дату создания, и статус. В методе происходит сохранение записи
  * в базу данных, а также сохранение docx документа в папку в документами заявки.
- * @autor Максим Быков, Даниил Змаев
+ *
  * @version 1.0
+ * @autor Максим Быков, Даниил Змаев
  */
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -53,8 +54,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> findAll(Integer pagePosition, Integer pageLength,
-                                       Long id) {
-        log.debug("Request to get all Orders");
+                                  Long id) {
         return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
                 PageRequest.of(pagePosition, pageLength)));
     }
@@ -69,7 +69,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO findOne(Long id) {
-        log.debug("Order to get Order : {}", id);
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         return orderMapper.toDto(order);
     }
@@ -78,11 +77,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO createDraft(OrderRequest orderRequest) {
         List<OrderItemRequest> orderItemList = orderRequest.getOrderItemList();
         Order order = createDraftOrder(orderRequest);
-        for (OrderItemRequest orderItem: orderItemList) {
+        for (OrderItemRequest orderItem : orderItemList) {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
-            if (currProduct.getStorageAmount()>orderItem.getOrderAmount()) {
+            if (currProduct.getStorageAmount() > orderItem.getOrderAmount()) {
                 currProduct.setStorageAmount(currProduct.getStorageAmount() - orderItem.getOrderAmount());
                 orderItemRepository.save(OrderItem.builder()
                         .product(currProduct)
@@ -97,6 +96,19 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(order);
     }
 
+    @Override
+    public OrderDTO finishOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        if (Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
+            order.setOrderStatus(OrderStatus.FINISHED);
+        } else {
+            throw OrderException.CODE.INVALID_STATUS.get();
+        }
+        orderRepository.save(order);
+        return orderMapper.toDto(order);
+    }
+
     private Order createDraftOrder(OrderRequest orderRequest) {
         Order order = new Order();
         Client client = clientRepository
@@ -108,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
         order.setClient(client);
         order.setEmployee(employee);
         order.setOrderDate(DateTimeUtils.getTodayDate());
-        order.setOrderStatus(OrderStatus.DRAFT.name());
+        order.setOrderStatus(OrderStatus.DRAFT);
         // TODO: Поменять, когда будет понятно на что
         order.setLinkToFolder("LINK_TO_FOLDER_SAMPLE");
         order = orderRepository.save(order);
@@ -121,14 +133,14 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository
                 .findById(request.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (order.getOrderStatus().equals(OrderStatus.DRAFT.name())) {
+        if (order.getOrderStatus().equals(OrderStatus.DRAFT)) {
             String filename = "Order_" + order.getId();
             orderGenerator.processGeneration(
                     order.getOrderItems(),
                     order.getClient(),
                     order.getEmployee(),
                     filename + ".docx");
-            order.setOrderStatus(OrderStatus.SIGNED_BY_EMPLOYEE.name());
+            order.setOrderStatus(OrderStatus.SIGNED_BY_EMPLOYEE);
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
@@ -136,7 +148,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO save(OrderDTO orderDTO) {
-        log.debug("Order to save order : {}", orderDTO);
         Order order = orderMapper.toEntity(orderDTO);
         order.setClient(clientRepository.findById(orderDTO.getClient().getId()).orElseThrow());
         order.setEmployee(employeeRepository.findById(orderDTO.getEmployee().getId()).orElseThrow());
@@ -146,7 +157,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO updateOrder(OrderDTO order) {
-        log.debug("Order to partially update Order : {}", order);
         return orderRepository
                 .findById(order.getId())
                 .map(existingEvent -> {
@@ -162,7 +172,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (Objects.equals(order.getOrderStatus(), OrderStatus.DRAFT.name())) {
+        if (Objects.equals(order.getOrderStatus(), OrderStatus.DRAFT)) {
             orderRepository.delete(order);
         } else {
             throw OrderException.CODE.CANNOT_DELETE_ORDER.get();
@@ -177,7 +187,7 @@ public class OrderServiceImpl implements OrderService {
             OutputStream out = new FileOutputStream(localPdfPath);
             PdfConverter.getInstance().convert(document, out, options);
         } catch (IOException ex) {
-            log.error("conversion to PDF failed");
+            log.error("Couldn't convert file");
         }
     }
 }

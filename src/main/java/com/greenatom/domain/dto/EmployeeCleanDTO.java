@@ -46,7 +46,7 @@ public class EmployeeCleanDTO {
     private String username;
 
     @Schema(description = "Роль сотрудника")
-    private RoleDto role;
+    private RoleDTO role;
 
     @Schema(description = "Адрес сотрудника")
     private String address;

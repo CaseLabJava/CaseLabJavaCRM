@@ -42,6 +42,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
+
                                     schema = @Schema(implementation = OrderErrorMessage.class)
                             )
                     }
@@ -88,7 +89,7 @@ public interface OrderApi {
             )
     })
     @Operation(summary = "Создает Order и возвращает OrderDTO")
-    ResponseEntity<OrderDTO> addDraftOrder(
+    OrderDTO addDraftOrder(
             @Parameter(description = "Order Request")
             OrderRequest orderRequest
     );
@@ -110,7 +111,7 @@ public interface OrderApi {
     @Operation(
             summary = "Генерация докумена заказа"
     )
-    ResponseEntity<Void> generateOrder(
+    void generateOrder(
             @Parameter(description = "GenerationOrderRequest")
             GenerateOrderRequest orderRequest
     );
@@ -142,7 +143,39 @@ public interface OrderApi {
             summary = "Получение заказа по id"
     )
 
-    ResponseEntity<OrderDTO> getOrder(
+    OrderDTO getOrder(
+            @Parameter(description = "Id заказа", example = "1")
+            Long id
+    );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешное завершение заказа",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = OrderDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Заказ по переданному id не был найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            OrderErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Завершение заказа"
+    )
+
+    OrderDTO finishOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );

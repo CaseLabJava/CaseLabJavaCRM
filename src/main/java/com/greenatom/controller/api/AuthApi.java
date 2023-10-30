@@ -1,6 +1,6 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.AuthDto;
+import com.greenatom.domain.dto.AuthDTO;
 import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.JwtResponse;
 import com.greenatom.domain.dto.RefreshJwtRequest;
@@ -67,7 +67,7 @@ public interface AuthApi {
     @Operation(summary = "Возвращает jwt и refresh токены")
     JwtResponse login(
             @Parameter(description = "Имя пользователя и пароль")
-            AuthDto authDto
+            AuthDTO authDto
             );
 
 

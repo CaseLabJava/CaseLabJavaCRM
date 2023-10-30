@@ -6,7 +6,6 @@ import com.greenatom.domain.dto.order.OrderRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
 import java.util.List;
 
 public interface OrderService {
@@ -33,4 +32,6 @@ public interface OrderService {
     void deleteOrder(Long id);
 
     OrderDTO createDraft(OrderRequest orderRequest);
+
+    OrderDTO finishOrder(Long id);
 }

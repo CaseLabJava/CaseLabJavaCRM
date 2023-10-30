@@ -1,23 +1,19 @@
 package com.greenatom.security.service;
 
-import com.greenatom.domain.dto.AuthDto;
-import com.greenatom.domain.dto.EmployeeCleanDTO;
+import com.greenatom.domain.dto.AuthDTO;
 import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.JwtResponse;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.entity.Role;
 import com.greenatom.security.jwt.JwtCore;
-import com.greenatom.service.EmployeeService;
+import com.greenatom.service.impl.EmployeeServiceImpl;
 import com.greenatom.utils.exception.AuthException;
 import io.jsonwebtoken.Claims;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 /**
  * AuthService является компонентом Spring и использует другие компоненты, такие как JwtCore и AuthenticationManager.
@@ -32,22 +28,24 @@ import java.util.Optional;
  * @author Андрей Начевный
  * @version 1.0
  */
+
 @Component
 @RequiredArgsConstructor
 public class AuthService {
 
     private final JwtCore jwtCore;
     private final AuthenticationManager authenticationManager;
-    private final EmployeeService employeeServiceImpl;
+    private final EmployeeServiceImpl employeeService;
+
 
     public JwtResponse registration(EmployeeDTO employeeDTO){
-        Employee employee = employeeServiceImpl.save(employeeDTO);
+        Employee employee = employeeService.save(employeeDTO);
         String accessToken = jwtCore.generateAccessToken(employee);
         String refreshToken = jwtCore.generateRefreshToken(employee);
         return new JwtResponse(accessToken,refreshToken);
     }
 
-    public JwtResponse login(AuthDto authDto) {
+    public JwtResponse login(AuthDTO authDto) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -57,7 +55,7 @@ public class AuthService {
         } catch (BadCredentialsException e) {
             throw AuthException.CODE.NO_SUCH_USERNAME_OR_PWD.get();
         }
-        final Employee employee = employeeServiceImpl
+        final Employee employee = employeeService
                 .findOne(authDto.getUsername())
                 .orElseThrow(AuthException.CODE.NO_SUCH_USERNAME_OR_PWD::get);
         final String accessToken = jwtCore.generateAccessToken(employee);
@@ -79,12 +77,7 @@ public class AuthService {
             final String username = claims.getSubject();
             final String roleName = (String) claims.get("role");
             final Integer id = (Integer) claims.get("employee_id");
-            Optional<EmployeeCleanDTO> employeeFromDb = employeeServiceImpl.findOne(Long.valueOf(id));
-
-            if(employeeFromDb.isEmpty()){
-                throw new EntityNotFoundException("An employee with this ID has been removed");
-            }
-
+            employeeService.findOne(Long.valueOf(id));
             Role role = new Role();
             role.setName(roleName);
             Employee employeeForJwt = new Employee();

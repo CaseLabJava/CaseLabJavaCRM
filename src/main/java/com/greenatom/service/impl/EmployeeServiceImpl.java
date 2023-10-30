@@ -29,8 +29,8 @@ import java.util.Optional;
  */
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
@@ -41,22 +41,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeCleanDTO> findAll(Integer pagePosition, Integer pageLength) {
-        log.debug("Employee to get all Employees");
         return employeeCleanMapper.toDto(employeeRepository.findAll(
                 PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
-    public Optional<EmployeeCleanDTO> findOne(Long id) {
-        log.debug("Employee to get Employee : {}", id);
-        return Optional.ofNullable(employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("An employee with this ID was not found: " + id))));
+    public EmployeeCleanDTO findOne(Long id) {
+        return employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("An employee with this ID was not found: " + id)));
     }
 
     @Override
     public Employee save(EmployeeDTO employeeDTO) {
         List<Employee> existingUsers = employeeRepository.findAll();
-        log.debug("Employee to save employee : {}", employeeDTO);
         Employee employee = employeeMapper.toEntity(employeeDTO);
         employee.setPassword(encoder.encode(employeeDTO.getPassword()));
         employee.setUsername(generateUsername(employeeDTO));
@@ -72,7 +69,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeCleanDTO updateEmployee(EmployeeCleanDTO employee) {
-        log.debug("Employee to partially update Employee : {}", employee);
         return employeeRepository
                 .findById(employee.getId())
                 .map(existingEvent -> {
@@ -89,10 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(Long id) {
         employeeRepository
                 .findById(id)
-                .ifPresent(employee -> {
-                    employeeRepository.delete(employee);
-                    log.debug("Deleted Employee: {}", employee);
-                });
+                .ifPresent(employeeRepository::delete);
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.greenatom.domain.dto.ProductDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
 
@@ -12,13 +11,13 @@ public interface ProductService {
     List<ProductDTO> findAll();
 
     @Transactional(readOnly = true)
-    Optional<ProductDTO> findOne(Long id);
+    ProductDTO findOne(Long id);
 
     @Transactional
-    ProductDTO save(ProductDTO Product);
+    ProductDTO save(ProductDTO product);
 
     @Transactional
-    ProductDTO updateProduct(ProductDTO Product);
+    ProductDTO updateProduct(ProductDTO product);
 
     @Transactional
     void deleteProduct(Long id);

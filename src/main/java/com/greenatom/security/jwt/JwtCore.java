@@ -5,8 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -30,13 +29,12 @@ import java.util.Date;
  * @version 1.0
  */
 @Component
+@Slf4j
 public class JwtCore {
 
     private final SecretKey accessKey;
 
     private final SecretKey refreshKey;
-
-    private final Logger logger = LoggerFactory.getLogger(JwtCore.class);
 
     @Autowired
     public JwtCore(@Value("${access_token}") String accessKey,
@@ -107,15 +105,15 @@ public class JwtCore {
                     .parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            logger.info("Token has expired");
+            log.info("Token has expired");
         } catch (UnsupportedJwtException e) {
-            logger.info("Something went wrong");
+            log.info("Something went wrong");
         } catch (MalformedJwtException e) {
-            logger.info("Invalid JWT token");
+            log.info("Invalid JWT token");
         } catch (SignatureException e) {
-            logger.info("Invalid signature");
+            log.info("Invalid signature");
         } catch (IllegalArgumentException e) {
-            logger.info("");
+            log.info("");
         }
         return false;
     }

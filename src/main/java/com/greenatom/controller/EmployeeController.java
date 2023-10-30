@@ -3,10 +3,7 @@ package com.greenatom.controller;
 import com.greenatom.controller.api.EmployeeApi;
 import com.greenatom.domain.dto.EmployeeCleanDTO;
 import com.greenatom.service.EmployeeService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +35,7 @@ public class EmployeeController implements EmployeeApi {
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     public EmployeeCleanDTO getEmployee(@PathVariable Long id) {
-        return employeeService.findOne(id).orElseThrow(EntityNotFoundException::new);
+        return employeeService.findOne(id);
     }
 
     @GetMapping(produces = {"application/json"})
@@ -54,9 +51,8 @@ public class EmployeeController implements EmployeeApi {
 
     @DeleteMapping(value = "/{id}",
             produces = {"application/json"})
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    public void deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

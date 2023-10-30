@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -31,21 +30,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAll() {
-        log.debug("Order to get all Products");
         return productMapper.toDto(productRepository.findAll());
     }
 
     @Override
-    public Optional<ProductDTO> findOne(Long id) {
+    public ProductDTO findOne(Long id) {
         log.debug("Order to get Product : {}", id);
-        return Optional.ofNullable(productMapper.toDto(productRepository
+        return productMapper.toDto(productRepository
                 .findById(id)
-                .orElseThrow(ProductException.CODE.NO_SUCH_PRODUCT::get)));
+                .orElseThrow(ProductException.CODE.NO_SUCH_PRODUCT::get));
     }
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        log.debug("Order to save product : {}", productDTO);
         Product product = productMapper.toEntity(productDTO);
         productRepository.save(product);
         return productMapper.toDto(product);
@@ -53,7 +50,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(ProductDTO product) {
-        log.debug("Order to partially update Product : {}", product);
         return productRepository
                 .findById(product.getId())
                 .map(existingEvent -> {
@@ -70,10 +66,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         productRepository
                 .findById(id)
-                .ifPresent(product -> {
-                    productRepository.delete(product);
-                    log.debug("Deleted Product: {}", product);
-                });
+                .ifPresent(productRepository::delete);
     }
 
     @Override

@@ -23,6 +23,7 @@ import java.util.List;
  * @author Максим Быков, Даниил Змаев
  * @version 1.0
  */
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -38,7 +39,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemDTO findOne(Long id) {
-        log.debug("Order to get CartProduct : {}", id);
         return orderItemMapper.toDto(orderItemRepository
                 .findById(id)
                 .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
@@ -46,7 +46,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemDTO updateCartProduct(OrderItemDTO cartProduct) {
-        log.debug("Order to partially update CartProduct : {}", cartProduct);
         return orderItemRepository
                 .findById(cartProduct.getId())
                 .map(existingEvent -> {

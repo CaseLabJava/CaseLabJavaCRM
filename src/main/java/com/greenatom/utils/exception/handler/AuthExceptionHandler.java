@@ -1,14 +1,15 @@
 package com.greenatom.utils.exception.handler;
 
-import com.greenatom.domain.dto.ResponseDTO;
 import com.greenatom.utils.exception.AuthException;
-import com.greenatom.utils.exception.EmailAlreadyUsedException;
-import com.greenatom.utils.exception.UsernameAlreadyUsedException;
-import jakarta.persistence.EntityNotFoundException;
+import com.greenatom.utils.exception.message.AuthErrorMessage;
+import com.greenatom.utils.exception.message.ErrorMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -28,44 +29,39 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *
  * <p>Этот код предназначен для обработки исключений, которые могут возникнуть при выполнении операций авторизации и
  * поиска сущностей в REST-сервисе.
- * @autor Максим Быков
+ * @author Змаев Даниил, Максим Быков
  * @version 1.0
  */
 
+@Slf4j
 @RestControllerAdvice
-public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    protected ResponseEntity<ResponseDTO> handleEntityNotFoundException(EntityNotFoundException notFoundException) {
-
-        ResponseDTO response = new ResponseDTO();
-        if (notFoundException.getMessage() != null) response.setMessage(notFoundException.getMessage());
-        else response.setMessage("Entity Not Found");
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(EmailAlreadyUsedException.class)
-    protected ResponseEntity<ResponseDTO> handleEmailAlreadyUsedException(EmailAlreadyUsedException e) {
-        ResponseDTO response = new ResponseDTO();
-        if (e.getMessage() != null) response.setMessage(e.getMessage());
-        else response.setMessage("Authorization error: Email is already in use!");
-        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler(UsernameAlreadyUsedException.class)
-    protected ResponseEntity<ResponseDTO> handleUsernameAlreadyUsedException(
-            UsernameAlreadyUsedException e) {
-        ResponseDTO response = new ResponseDTO();
-        if (e.getMessage() != null) response.setMessage(e.getMessage());
-        else response.setMessage("Authorization error: Login name already used!");
-        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
-    }
+public class AuthExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthException.class)
-    protected ResponseEntity<ResponseDTO> handleAuthException(AuthException authException){
-        ResponseDTO response = new ResponseDTO();
-        if (authException.getMessage() != null) response.setMessage(authException.getMessage());
-        else response.setMessage("Authorization error");
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<AuthErrorMessage> handleAuthException(AuthException e) {
+        AuthException.CODE code = e.getCode();
+        HttpStatus status = switch (code) {
+            case NO_SUCH_USERNAME_OR_PWD -> HttpStatus.NOT_FOUND;
+            case JWT_VALIDATION_ERROR -> HttpStatus.UNAUTHORIZED;
+            case EMAIL_IN_USE -> HttpStatus.CONFLICT;
+        };
+        String codeStr = code.toString();
+        return ResponseEntity
+                .status(status)
+                .body(new AuthErrorMessage(codeStr, e.getMessage()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorMessage> handleAuthException(AuthenticationException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorMessage(HttpStatus.BAD_REQUEST.name(), e.getMessage()));
+    }
+
+    @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
+    public ResponseEntity<ErrorMessage> handleAuthException(HttpClientErrorException.Unauthorized e) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorMessage(HttpStatus.UNAUTHORIZED.name(), e.getMessage()));
     }
 }

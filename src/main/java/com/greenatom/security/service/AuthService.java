@@ -7,11 +7,10 @@ import com.greenatom.domain.dto.JwtResponse;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.entity.Role;
 import com.greenatom.security.jwt.JwtCore;
-import com.greenatom.service.impl.EmployeeServiceImpl;
+import com.greenatom.service.EmployeeService;
 import com.greenatom.utils.exception.AuthException;
 import io.jsonwebtoken.Claims;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,7 +29,7 @@ import java.util.Optional;
  * <p>Вход: Метод login принимает объект AuthDto, содержащий имя пользователя и пароль. AuthenticationManager пытается
  * аутентифицировать пользователя, и в случае успешного входа генерируются токены доступа и обновления, как и при
  * регистрации. Затем возвращается объект JwtResponse с токенами.
- * @autor Андрей Начевный
+ * @author Андрей Начевный
  * @version 1.0
  */
 @Component
@@ -39,8 +38,7 @@ public class AuthService {
 
     private final JwtCore jwtCore;
     private final AuthenticationManager authenticationManager;
-    private final EmployeeServiceImpl employeeServiceImpl;
-
+    private final EmployeeService employeeServiceImpl;
 
     public JwtResponse registration(EmployeeDTO employeeDTO){
         Employee employee = employeeServiceImpl.save(employeeDTO);
@@ -57,9 +55,11 @@ public class AuthService {
                     )
             );
         } catch (BadCredentialsException e) {
-            throw new AuthException("Incorrect username or password");
+            throw AuthException.CODE.NO_SUCH_USERNAME_OR_PWD.get();
         }
-        final Employee employee = employeeServiceImpl.findOne(authDto.getUsername()).get();
+        final Employee employee = employeeServiceImpl
+                .findOne(authDto.getUsername())
+                .orElseThrow(AuthException.CODE.NO_SUCH_USERNAME_OR_PWD::get);
         final String accessToken = jwtCore.generateAccessToken(employee);
         final String refreshToken = jwtCore.generateRefreshToken(employee);
         return new JwtResponse(accessToken,refreshToken);

@@ -3,7 +3,6 @@ package com.greenatom.controller;
 import com.greenatom.controller.api.ProductApi;
 import com.greenatom.domain.dto.ProductDTO;
 import com.greenatom.service.ProductService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

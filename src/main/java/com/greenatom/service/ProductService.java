@@ -14,10 +14,10 @@ public interface ProductService {
     ProductDTO findOne(Long id);
 
     @Transactional
-    ProductDTO save(ProductDTO Product);
+    ProductDTO save(ProductDTO product);
 
     @Transactional
-    ProductDTO updateProduct(ProductDTO Product);
+    ProductDTO updateProduct(ProductDTO product);
 
     @Transactional
     void deleteProduct(Long id);

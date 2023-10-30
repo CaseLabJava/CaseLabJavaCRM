@@ -25,7 +25,7 @@ import java.util.Date;
  * действия, имя пользователя и роль.
  *
  * <p>Аналогично, метод generateRefreshToken создает токен обновления с теми же параметрами.
- * @autor Андрей Начевный
+ * @author Андрей Начевный
  * @version 1.0
  */
 @Component

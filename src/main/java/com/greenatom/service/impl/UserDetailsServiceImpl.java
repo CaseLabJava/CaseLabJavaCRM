@@ -2,7 +2,7 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.repository.EmployeeRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.greenatom.utils.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -19,7 +19,7 @@ import java.util.Collections;
  * Метод loadUserByUsername ищет информацию о пользователе с помощью репозитория EmployeeRepository и создаёт
  * объект UserDetails в случае успеха. Если пользователь не найден, метод бросает исключение
  * UsernameNotFoundException.
- * @autor Андрей Начевный
+ * @author Андрей Начевный
  * @version 1.0
  */
 @RequiredArgsConstructor
@@ -31,9 +31,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Employee employee = employeeRepository.findByUsername(username).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with username: " + username));
-
+        Employee employee = employeeRepository
+                .findByUsername(username)
+                .orElseThrow(AuthException.CODE.NO_SUCH_USERNAME_OR_PWD::get);
         return new User(
                 employee.getUsername(),
                 employee.getPassword(),

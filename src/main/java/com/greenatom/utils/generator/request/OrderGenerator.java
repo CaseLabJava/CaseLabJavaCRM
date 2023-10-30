@@ -1,11 +1,10 @@
 package com.greenatom.utils.generator.request;
 
-import com.greenatom.domain.entity.OrderItem;
 import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.entity.Employee;
+import com.greenatom.domain.entity.OrderItem;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Slf4j
 public class OrderGenerator {
 
     private static final int FONT_SIZE = 16;
@@ -28,14 +28,13 @@ public class OrderGenerator {
     private static final int COST_COL_POS = 3;
     private static final int TOTAL_COL_POS = 4;
 
-    private final Logger log = LoggerFactory.getLogger(OrderGenerator.class);
     private final XWPFDocument document;
 
     public OrderGenerator() {
         this.document = new XWPFDocument();
     }
 
-    // Когда появится облако - изменить
+    // TODO: Когда появится облако - изменить
     public void processGeneration(List<OrderItem> products, Client client, Employee employee, String path) {
         log.debug("Process request generation");
         createTitle();
@@ -124,18 +123,18 @@ public class OrderGenerator {
         signatureFields.setAlignment(ParagraphAlignment.LEFT);
         assignByManager(signatureFields, employee);
         signatureFields.createRun().addBreak();
-        signatureFields.createRun().setText(Constants.BUYER_SIGNATIRE_PLACE);
+        signatureFields.createRun().setText(Constants.BUYER_SIGNATURE_PLACE);
     }
 
     private void assignByManager(XWPFParagraph paragraph, Employee employee) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         paragraph.createRun().setText(String.format(
-                Constants.SELLER_SIGNATIRE,
+                Constants.SELLER_SIGNATURE,
                 employee.getFullName(),
                 LocalDateTime.now().format(formatter)));
     }
 
-    // Вот тут надо подумать как будет документ сохраняться
+    // TODO: Вот тут надо подумать как будет документ сохраняться
     public void writeToFile(String path) {
         log.debug("Writing document to {}", path);
         try (FileOutputStream outputStream = new FileOutputStream(path)) {

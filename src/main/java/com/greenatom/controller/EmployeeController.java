@@ -3,7 +3,6 @@ package com.greenatom.controller;
 import com.greenatom.controller.api.EmployeeApi;
 import com.greenatom.domain.dto.EmployeeCleanDTO;
 import com.greenatom.service.EmployeeService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 

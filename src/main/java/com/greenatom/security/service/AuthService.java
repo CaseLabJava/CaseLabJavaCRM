@@ -9,7 +9,6 @@ import com.greenatom.security.jwt.JwtCore;
 import com.greenatom.service.impl.EmployeeServiceImpl;
 import com.greenatom.utils.exception.AuthException;
 import io.jsonwebtoken.Claims;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,20 +25,21 @@ import org.springframework.stereotype.Component;
  * <p>Вход: Метод login принимает объект AuthDto, содержащий имя пользователя и пароль. AuthenticationManager пытается
  * аутентифицировать пользователя, и в случае успешного входа генерируются токены доступа и обновления, как и при
  * регистрации. Затем возвращается объект JwtResponse с токенами.
- * @autor Андрей Начевный
+ * @author Андрей Начевный
  * @version 1.0
  */
+
 @Component
 @RequiredArgsConstructor
 public class AuthService {
 
     private final JwtCore jwtCore;
     private final AuthenticationManager authenticationManager;
-    private final EmployeeServiceImpl employeeServiceImpl;
+    private final EmployeeServiceImpl employeeService;
 
 
     public JwtResponse registration(EmployeeDTO employeeDTO){
-        Employee employee = employeeServiceImpl.save(employeeDTO);
+        Employee employee = employeeService.save(employeeDTO);
         String accessToken = jwtCore.generateAccessToken(employee);
         String refreshToken = jwtCore.generateRefreshToken(employee);
         return new JwtResponse(accessToken,refreshToken);
@@ -53,10 +53,11 @@ public class AuthService {
                     )
             );
         } catch (BadCredentialsException e) {
-            throw new AuthException("Incorrect username or password");
+            throw AuthException.CODE.NO_SUCH_USERNAME_OR_PWD.get();
         }
-        final Employee employee = employeeServiceImpl.findOne(authDto.getUsername())
-                .orElseThrow(EntityNotFoundException::new);
+        final Employee employee = employeeService
+                .findOne(authDto.getUsername())
+                .orElseThrow(AuthException.CODE.NO_SUCH_USERNAME_OR_PWD::get);
         final String accessToken = jwtCore.generateAccessToken(employee);
         final String refreshToken = jwtCore.generateRefreshToken(employee);
         return new JwtResponse(accessToken,refreshToken);
@@ -76,7 +77,7 @@ public class AuthService {
             final String username = claims.getSubject();
             final String roleName = (String) claims.get("role");
             final Integer id = (Integer) claims.get("employee_id");
-            employeeServiceImpl.findOne(Long.valueOf(id));
+            employeeService.findOne(Long.valueOf(id));
             Role role = new Role();
             role.setName(roleName);
             Employee employeeForJwt = new Employee();

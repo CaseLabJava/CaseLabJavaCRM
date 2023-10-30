@@ -3,7 +3,6 @@ package com.greenatom.domain.entity;
 import com.greenatom.domain.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 import java.util.List;
@@ -19,8 +18,7 @@ import java.util.List;
 @Table(name = "client_order")
 public class Order {
     @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
 

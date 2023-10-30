@@ -8,8 +8,8 @@ import com.greenatom.domain.mapper.EmployeeMapper;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RoleRepository;
 import com.greenatom.service.EmployeeService;
-import com.greenatom.utils.exception.EmailAlreadyUsedException;
-import jakarta.persistence.EntityNotFoundException;
+import com.greenatom.utils.exception.AuthException;
+import com.greenatom.utils.exception.EmployeeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -25,11 +25,12 @@ import java.util.Optional;
  * по его ID.
  *
  * @version 1.0
- * @autor Максим Быков, Андрей Начевный
+ * @author Максим Быков, Андрей Начевный
  */
-@Service
-@RequiredArgsConstructor
+
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
@@ -46,8 +47,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeCleanDTO findOne(Long id) {
-        return employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("An employee with this ID was not found: " + id)));
+        return employeeCleanMapper.toDto(employeeRepository
+                .findById(id)
+                .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get));
     }
 
     @Override
@@ -59,7 +61,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setRole(roleRepository.findByName(employeeDTO.getRole().getName()).orElse(null));
         for (Employee e : existingUsers) {
             if ((e.getEmail().equals(employee.getEmail()))) {
-                throw new EmailAlreadyUsedException();
+                throw AuthException.CODE.EMAIL_IN_USE.get();
             }
         }
         employeeRepository.save(employee);
@@ -76,8 +78,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                     return existingEvent;
                 })
                 .map(employeeRepository::save)
-                .map(employeeCleanMapper::toDto).orElseThrow(
-                        EntityNotFoundException::new);
+                .map(employeeCleanMapper::toDto)
+                .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
     }
 
     @Override

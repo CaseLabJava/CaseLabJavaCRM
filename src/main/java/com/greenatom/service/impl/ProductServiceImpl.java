@@ -5,6 +5,7 @@ import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.mapper.ProductMapper;
 import com.greenatom.repository.ProductRepository;
 import com.greenatom.service.ProductService;
+import com.greenatom.utils.exception.ProductException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +17,13 @@ import java.util.List;
 /**
  * ProductServiceImpl является сервисом для работы со складом. Он использует ProductRepository для доступа к базе
  * данных, преобразует продукты в формат DTO и возвращает список товаров или конкретный товар по его ID.
- * @autor Максим Быков
+ * @author Максим Быков
  * @version 1.0
  */
-@Service
-@RequiredArgsConstructor
+
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
@@ -33,8 +35,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO findOne(Long id) {
-        return productMapper.toDto(productRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id)));
+        log.debug("Order to get Product : {}", id);
+        return productMapper.toDto(productRepository
+                .findById(id)
+                .orElseThrow(ProductException.CODE.NO_SUCH_PRODUCT::get));
     }
 
     @Override
@@ -50,12 +54,11 @@ public class ProductServiceImpl implements ProductService {
                 .findById(product.getId())
                 .map(existingEvent -> {
                     productMapper.partialUpdate(existingEvent, product);
-
                     return existingEvent;
                 })
                 .map(productRepository::save)
-                .map(productMapper::toDto).orElseThrow(
-                        EntityNotFoundException::new);
+                .map(productMapper::toDto)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findAll(Integer pagePosition, Integer pageLength,String name, Integer cost) {
-            return productMapper.toDto(productRepository.findProductByProductNameContainingAndCostBefore(
-                    PageRequest.of(pagePosition, pageLength), name, cost).toList());
-        }
+        return productMapper.toDto(productRepository.findProductByProductNameContainingAndCostBefore(
+                PageRequest.of(pagePosition, pageLength), name, cost).toList());
+    }
 }

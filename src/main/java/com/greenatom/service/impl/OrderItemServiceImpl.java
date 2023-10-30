@@ -20,12 +20,13 @@ import java.util.List;
  * <p>findOne() - метод для получения конкретного товара из заказа по его ID. Он также регистрирует сообщение
  * в логе и преобразует найденный товар в формат DTO с помощью mapper. В случае, если товар не найден,
  * выбрасывается исключение.
- * @autor Максим Быков, Даниил Змаев
+ * @author Максим Быков, Даниил Змаев
  * @version 1.0
  */
-@Service
+
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
@@ -52,8 +53,8 @@ public class OrderItemServiceImpl implements OrderItemService {
                     return existingEvent;
                 })
                 .map(orderItemRepository::save)
-                .map(orderItemMapper::toDto).orElseThrow(
-                        EntityNotFoundException::new);
+                .map(orderItemMapper::toDto)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

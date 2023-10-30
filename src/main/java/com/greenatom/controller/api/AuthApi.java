@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * <p>Кроме того, AuthApi имеет аннотацию @Tag, которая позволяет добавлять метаданные к API. В данном случае,
  * она используется для указания названия и описания API.
- * @autor Даниил Змаев
+ * @author Даниил Змаев
  * @version 1.0
  */
 @Tag(name = "Auth API", description = "API для входа в систему")

@@ -39,10 +39,9 @@ import java.util.Objects;
  * @autor Максим Быков, Даниил Змаев
  */
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
-@Slf4j
+@Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;

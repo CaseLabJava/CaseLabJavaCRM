@@ -6,6 +6,7 @@ import com.greenatom.domain.mapper.ClientMapper;
 import com.greenatom.repository.ClientRepository;
 import com.greenatom.service.ClientService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,10 @@ import java.util.List;
  * @autor Максим Быков
  * @version 1.0
  */
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;

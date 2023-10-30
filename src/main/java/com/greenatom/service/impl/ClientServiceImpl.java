@@ -7,9 +7,7 @@ import com.greenatom.repository.ClientRepository;
 import com.greenatom.service.ClientService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +18,13 @@ import java.util.Optional;
  * ClientServiceImpl является сервисом для работы с клиентами. Он использует репозиторий ClientRepository
  * для доступа к данным, преобразует их в формат DTO с помощью ClientMapper и возвращает список клиентов или
  * конкретный клиент по его ID.
- * @autor Максим Быков
+ * @author Максим Быков
  * @version 1.0
  */
-@Service
+@Slf4j
 @RequiredArgsConstructor
+@Service
 public class ClientServiceImpl implements ClientService {
-    private final Logger log = LoggerFactory.getLogger(ClientService.class);
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
 

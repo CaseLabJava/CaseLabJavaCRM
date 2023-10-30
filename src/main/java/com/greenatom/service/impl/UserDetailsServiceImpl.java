@@ -19,7 +19,7 @@ import java.util.Collections;
  * Метод loadUserByUsername ищет информацию о пользователе с помощью репозитория EmployeeRepository и создаёт
  * объект UserDetails в случае успеха. Если пользователь не найден, метод бросает исключение
  * UsernameNotFoundException.
- * @autor Андрей Начевный
+ * @author Андрей Начевный
  * @version 1.0
  */
 @RequiredArgsConstructor

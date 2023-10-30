@@ -7,8 +7,7 @@ import com.greenatom.service.OrderItemService;
 import com.greenatom.utils.exception.OrderItemException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +20,13 @@ import java.util.List;
  * <p>findOne() - метод для получения конкретного товара из заказа по его ID. Он также регистрирует сообщение
  * в логе и преобразует найденный товар в формат DTO с помощью mapper. В случае, если товар не найден,
  * выбрасывается исключение.
- * @autor Максим Быков, Даниил Змаев
+ * @author Максим Быков, Даниил Змаев
  * @version 1.0
  */
-@Service
+@Slf4j
 @RequiredArgsConstructor
+@Service
 public class OrderItemServiceImpl implements OrderItemService {
-    private final Logger log = LoggerFactory.getLogger(OrderItemService.class);
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
 

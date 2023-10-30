@@ -24,11 +24,11 @@ import java.util.List;
  *
  * <p>Все эти операции выполняются с использованием сервиса OrderService, который реализует бизнес-логику
  * управления заявками.
- * @autor Максим Быков
+ * @author Максим Быков
  * @version 1.0
  */
 @RestController
-@RequestMapping(value = "/api/order")
+@RequestMapping(value = "/api/orders")
 public class OrderController implements OrderApi {
     private final OrderService orderService;
 
@@ -36,7 +36,7 @@ public class OrderController implements OrderApi {
         this.orderService = orderService;
     }
 
-    @GetMapping(value="/get", produces = {"application/json"})
+    @GetMapping(produces = {"application/json"})
     public ResponseEntity<List<OrderDTO>> getOrders(@RequestParam(required = false, defaultValue = "0") Integer limit,
                                                     @RequestParam(required = false, defaultValue = "10") Integer offset,
                                                     @RequestParam(required = false, defaultValue = "orderDate") String sortField,
@@ -49,32 +49,31 @@ public class OrderController implements OrderApi {
                         .findByPaginationAndFilters(PageRequest.of(limit, offset, sort), orderStatus, linkToFolder));
     }
 
-    @GetMapping(value = "/get/{id}", produces = {"application/json"})
+    @GetMapping(value = "/{id}", produces = {"application/json"})
     public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findOne(id));
     }
 
-    @GetMapping("/get_all")
+    @GetMapping(value = "/employee/{id}", produces = {"application/json"})
     public List<OrderDTO> getAllOrders(@Param("position") Integer pagePosition,
-                                                  @Param("length") Integer pageLength,
-                                                  @Param("employee") Long id) {
+                                       @Param("length") Integer pageLength,
+                                       @PathVariable("id") Long id) {
         return orderService.findAll(pagePosition, pageLength, id);
     }
-    @PostMapping(value = "/add/orderDraft")
+    @PostMapping(value = "/draft")
     public ResponseEntity<OrderDTO> addDraftOrder(@RequestBody OrderRequest orderRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(orderService.createDraft(orderRequest));
     }
 
-    @PostMapping(value = "/generateOrder", produces = {"application/json"})
+    @PostMapping(value = "/generate", produces = {"application/json"})
     public ResponseEntity<Void> generateOrder(@RequestBody GenerateOrderRequest request) {
         orderService.generateOrder(request);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping(value = "/delete_empty/{id}",
+    @DeleteMapping(value = "/{id}/empty",
             produces = {"application/json"})
     public void deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
     }
-
 }

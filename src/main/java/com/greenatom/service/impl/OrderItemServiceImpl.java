@@ -7,6 +7,7 @@ import com.greenatom.service.OrderItemService;
 import com.greenatom.utils.exception.OrderItemException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.List;
  * @version 1.0
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemRepository orderItemRepository;

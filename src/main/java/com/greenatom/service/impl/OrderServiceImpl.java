@@ -40,6 +40,7 @@ import java.util.Objects;
  */
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Slf4j
 public class OrderServiceImpl implements OrderService {

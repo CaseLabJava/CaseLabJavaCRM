@@ -2,11 +2,7 @@ package com.greenatom.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -63,19 +59,5 @@ public class Client {
 
     public String getFullName() {
         return String.format("%s %s %s", surname, name, patronymic);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
-            return false;
-        Client that = (Client) o;
-        return getId() != null && Objects.equals(getId(), that.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }

@@ -40,7 +40,7 @@ public class AuthController implements AuthApi {
     }
 
     @PostMapping("/signin")
-    public JwtResponse login(@RequestBody AuthDto authDto){
+    public JwtResponse login(@RequestBody AuthDTO authDto){
         return authService.login(authDto);
     }
 

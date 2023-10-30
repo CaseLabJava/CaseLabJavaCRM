@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/api/clients")
-public class ClientController implements ClientAPI {
+public class ClientController implements ClientApi {
     private final ClientService clientService;
 
     public ClientController(ClientService clientService) {
@@ -62,7 +62,6 @@ public class ClientController implements ClientAPI {
     }
 
      @DeleteMapping(value = "/{id}", produces = {"application/json"})
-            produces = {"application/json"})
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
     }

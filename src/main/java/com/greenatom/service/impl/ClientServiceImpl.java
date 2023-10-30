@@ -5,7 +5,7 @@ import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.mapper.ClientMapper;
 import com.greenatom.repository.ClientRepository;
 import com.greenatom.service.ClientService;
-import jakarta.persistence.EntityNotFoundException;
+import com.greenatom.utils.exception.ClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -35,8 +35,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDTO findOne(Long id) {
-        return clientMapper.toDto(clientRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with id: " + id)));
+        return clientMapper.toDto(clientRepository
+                .findById(id)
+                .orElseThrow(ClientException.CODE.NO_SUCH_CLIENT::get));
     }
 
     @Override
@@ -57,7 +58,7 @@ public class ClientServiceImpl implements ClientService {
                 })
                 .map(clientRepository::save)
                 .map(clientMapper::toDto).orElseThrow(
-                        EntityNotFoundException::new);
+                        ClientException.CODE.NO_SUCH_CLIENT::get);
     }
 
     @Override
@@ -68,8 +69,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDTO> findClientPageByParams(Integer pageNumber, Integer pageSize, String company, String firstName, String secondName, String patronymic) {
-        return clientRepository.findClientsByCompanyContainingAndNameContainingAndSurnameContainingAndPatronymicContaining(PageRequest.of(pageNumber, pageSize),
+    public List<ClientDTO> findClientPageByParams(Integer pageNumber,
+                                                  Integer pageSize,
+                                                  String company,
+                                                  String firstName,
+                                                  String secondName,
+                                                  String patronymic) {
+        return clientRepository
+                .findClientsByCompanyContainingAndNameContainingAndSurnameContainingAndPatronymicContaining(
+                        PageRequest.of(pageNumber, pageSize),
                         company,
                         firstName,
                         secondName,

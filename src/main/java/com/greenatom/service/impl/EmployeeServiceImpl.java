@@ -9,7 +9,7 @@ import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RoleRepository;
 import com.greenatom.service.EmployeeService;
 import com.greenatom.utils.exception.AuthException;
-import jakarta.persistence.EntityNotFoundException;
+import com.greenatom.utils.exception.EmployeeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -47,8 +47,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeCleanDTO findOne(Long id) {
-        return employeeCleanMapper.toDto(employeeRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("An employee with this ID was not found: " + id)));
+        return employeeCleanMapper.toDto(employeeRepository
+                .findById(id)
+                .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get));
     }
 
     @Override
@@ -77,8 +78,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                     return existingEvent;
                 })
                 .map(employeeRepository::save)
-                .map(employeeCleanMapper::toDto).orElseThrow(
-                        EntityNotFoundException::new);
+                .map(employeeCleanMapper::toDto)
+                .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
     }
 
     @Override

@@ -14,7 +14,6 @@ import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -97,7 +96,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO finishOrder(Long id) {
-        Order order = orderRepository.findById(id)
+        Order order = orderRepository
+                .findById(id)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
             order.setOrderStatus(OrderStatus.FINISHED);
@@ -148,8 +148,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO save(OrderDTO orderDTO) {
         Order order = orderMapper.toEntity(orderDTO);
-        order.setClient(clientRepository.findById(orderDTO.getClient().getId()).orElseThrow());
-        order.setEmployee(employeeRepository.findById(orderDTO.getEmployee().getId()).orElseThrow());
+        order.setClient(clientRepository.findById(
+                orderDTO.getClient().getId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get));
+        order.setEmployee(employeeRepository.findById(
+                orderDTO.getEmployee().getId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get));
         orderRepository.save(order);
         return orderMapper.toDto(order);
     }
@@ -164,8 +168,8 @@ public class OrderServiceImpl implements OrderService {
                     return existingEvent;
                 })
                 .map(orderRepository::save)
-                .map(orderMapper::toDto).orElseThrow(
-                        EntityNotFoundException::new);
+                .map(orderMapper::toDto)
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
     }
 
     @Override

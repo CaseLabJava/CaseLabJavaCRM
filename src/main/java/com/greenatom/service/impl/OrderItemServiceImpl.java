@@ -33,7 +33,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<OrderItemDTO> findAll() {
-        log.debug("Order to get all CartProducts");
         return orderItemMapper.toDto(orderItemRepository.findAll());
     }
 
@@ -54,8 +53,8 @@ public class OrderItemServiceImpl implements OrderItemService {
                     return existingEvent;
                 })
                 .map(orderItemRepository::save)
-                .map(orderItemMapper::toDto).orElseThrow(
-                        EntityNotFoundException::new);
+                .map(orderItemMapper::toDto)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

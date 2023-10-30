@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 /**
  * ProductServiceImpl является сервисом для работы со складом. Он использует ProductRepository для доступа к базе
  * данных, преобразует продукты в формат DTO и возвращает список товаров или конкретный товар по его ID.
  * @author Максим Быков
  * @version 1.0
  */
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -54,12 +54,11 @@ public class ProductServiceImpl implements ProductService {
                 .findById(product.getId())
                 .map(existingEvent -> {
                     productMapper.partialUpdate(existingEvent, product);
-
                     return existingEvent;
                 })
                 .map(productRepository::save)
-                .map(productMapper::toDto).orElseThrow(
-                        EntityNotFoundException::new);
+                .map(productMapper::toDto)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

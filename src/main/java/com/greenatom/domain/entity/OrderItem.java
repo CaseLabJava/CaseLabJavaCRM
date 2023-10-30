@@ -2,11 +2,11 @@ package com.greenatom.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * A CartProduct.
  */
+
 @Getter
 @Setter
 @ToString
@@ -17,8 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "order_item")
 public class OrderItem {
     @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
     private Long id;
 

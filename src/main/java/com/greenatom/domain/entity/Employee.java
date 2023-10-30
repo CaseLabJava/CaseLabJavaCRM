@@ -3,14 +3,13 @@ package com.greenatom.domain.entity;
 import com.greenatom.domain.enums.JobPosition;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.util.List;
 import java.util.Set;
 
 /**
- * A Employee.
+ * An Employee.
  */
+
 @Getter
 @Setter
 @ToString
@@ -20,8 +19,7 @@ import java.util.Set;
 @Table(name = "employee")
 public class Employee {
     @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
     private Long id;
 

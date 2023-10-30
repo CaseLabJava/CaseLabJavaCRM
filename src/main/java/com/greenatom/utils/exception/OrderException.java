@@ -39,7 +39,7 @@ public class OrderException extends RuntimeException {
 
     }
 
-    protected CODE code;
+    protected final CODE code;
 
     protected OrderException(CODE code, String msg) {
         this(code, null, msg);
@@ -49,5 +49,4 @@ public class OrderException extends RuntimeException {
         super(msg, e);
         this.code = code;
     }
-
 }

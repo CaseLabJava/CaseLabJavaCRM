@@ -1,5 +1,6 @@
 package com.greenatom.controller;
 
+import com.greenatom.config.swagger.annotation.AccessDeniedResponse;
 import com.greenatom.controller.api.OrderApi;
 import com.greenatom.domain.dto.order.GenerateOrderRequest;
 import com.greenatom.domain.dto.order.OrderDTO;
@@ -28,6 +29,7 @@ import java.util.List;
  * @version 1.0
  */
 @RestController
+@AccessDeniedResponse
 @RequestMapping(value = "/api/orders")
 public class OrderController implements OrderApi {
     private final OrderService orderService;

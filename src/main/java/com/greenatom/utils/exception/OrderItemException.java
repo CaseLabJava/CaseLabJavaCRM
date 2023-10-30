@@ -34,7 +34,7 @@ public class OrderItemException extends RuntimeException {
 
     }
 
-    protected OrderItemException.CODE code;
+    protected final OrderItemException.CODE code;
 
     protected OrderItemException(OrderItemException.CODE code, String msg) {
         this(code, null, msg);

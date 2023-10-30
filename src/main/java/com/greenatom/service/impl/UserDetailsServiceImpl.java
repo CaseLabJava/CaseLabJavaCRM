@@ -2,7 +2,7 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.repository.EmployeeRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.greenatom.utils.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -31,9 +31,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Employee employee = employeeRepository.findByUsername(username).orElseThrow(() ->
-                new EntityNotFoundException("Order not found with username: " + username));
-
+        Employee employee = employeeRepository
+                .findByUsername(username)
+                .orElseThrow(AuthException.CODE.NO_SUCH_USERNAME_OR_PWD::get);
         return new User(
                 employee.getUsername(),
                 employee.getPassword(),

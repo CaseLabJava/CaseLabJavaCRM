@@ -105,6 +105,7 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
+        orderRepository.save(order);
         return orderMapper.toDto(order);
     }
 

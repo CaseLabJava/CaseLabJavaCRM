@@ -10,6 +10,7 @@ import com.greenatom.repository.RoleRepository;
 import com.greenatom.service.EmployeeService;
 import com.greenatom.utils.exception.AuthException;
 import com.greenatom.utils.exception.EmployeeException;
+import com.greenatom.utils.mapper.TranslateRusToEng;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -95,9 +96,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private String generateUsername(CreateEmployeeRequestDTO employeeRequest) {
         StringBuilder username = new StringBuilder();
-        username.append(employeeRequest.getFirstname()).append("_")
-                .append(employeeRequest.getSurname().charAt(0)).append("_")
-                .append(employeeRequest.getPatronymic().charAt(0));
+        String firstname = TranslateRusToEng.translateFromRusToEng(employeeRequest.getFirstname());
+        String surname = TranslateRusToEng.translateFromRusToEng(employeeRequest.getSurname());
+        String patronymic = TranslateRusToEng.translateFromRusToEng(employeeRequest.getPatronymic());
+        username.append(surname)
+                .append(firstname.charAt(0))
+                .append(patronymic.charAt(0));
         Integer countOfUsernameInDb = employeeRepository.countByUsername(username.toString());
         if (countOfUsernameInDb > 0) {
             username.append("_").append((countOfUsernameInDb + 1));

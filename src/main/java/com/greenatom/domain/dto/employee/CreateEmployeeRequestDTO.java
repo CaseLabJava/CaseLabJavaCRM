@@ -40,9 +40,6 @@ public class CreateEmployeeRequestDTO {
     @Schema(description = "Номер телефона сотрудника", example = "895436848")
     private String phoneNumber;
     
-    @Schema(description = "Имя пользователя сотрудника", example = "Puchkov_D_Y_1")
-    private String username;
-
     @Schema(description = "Пороль сотрудника", example = "Qwer123as")
     private String password;
 

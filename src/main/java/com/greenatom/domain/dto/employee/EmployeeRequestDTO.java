@@ -10,9 +10,6 @@ public class EmployeeRequestDTO {
     @Schema(description = "Имя сотрудника", example = "Дмитрий")
     private String firstname;
 
-    @Schema(description = "Фамилия сотрудника", example = "Пучков")
-    private String surname;
-
     @Schema(description = "Отчество сотрудника", example = "Юрьевич")
     private String patronymic;
 

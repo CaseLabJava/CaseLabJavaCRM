@@ -1,6 +1,6 @@
 package com.greenatom.domain.dto.order;
 
-import com.greenatom.domain.dto.item.OrderItemRequest;
+import com.greenatom.domain.dto.item.OrderItemRequestDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,5 +23,5 @@ public class OrderRequestDTO {
     private Long employeeId;
 
     @Schema(description = "Список продуктов для заказа")
-    private List<OrderItemRequest> orderItemList;
+    private List<OrderItemRequestDTO> orderItemList;
 }

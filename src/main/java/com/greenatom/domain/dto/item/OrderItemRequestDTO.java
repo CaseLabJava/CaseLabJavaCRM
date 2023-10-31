@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Класс для создания OrderItem")
-public class OrderItemRequest {
+public class OrderItemRequestDTO {
 
     @Schema(description = "Id продукта")
     Long productId;

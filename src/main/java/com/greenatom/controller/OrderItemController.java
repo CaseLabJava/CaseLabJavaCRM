@@ -1,7 +1,7 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.OrderItemApi;
-import com.greenatom.domain.dto.item.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemResponseDTO;
 import com.greenatom.service.OrderItemService;
 import org.springframework.web.bind.annotation.*;
 /**
@@ -28,7 +28,7 @@ public class OrderItemController implements OrderItemApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public OrderItemDTO getOrderItem(@PathVariable Long id) {
+    public OrderItemResponseDTO getOrderItem(@PathVariable Long id) {
         return orderItemService.findOne(id);
     }
 

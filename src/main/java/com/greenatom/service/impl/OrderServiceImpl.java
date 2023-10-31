@@ -1,6 +1,6 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.item.OrderItemRequest;
+import com.greenatom.domain.dto.item.OrderItemRequestDTO;
 import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
@@ -73,9 +73,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO) {
-        List<OrderItemRequest> orderItemList = orderRequestDTO.getOrderItemList();
+        List<OrderItemRequestDTO> orderItemList = orderRequestDTO.getOrderItemList();
         Order order = createDraftOrder(orderRequestDTO);
-        for (OrderItemRequest orderItem: orderItemList) {
+        for (OrderItemRequestDTO orderItem: orderItemList) {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);

@@ -1,9 +1,9 @@
 package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.AuthDTO;
-import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.JwtResponse;
 import com.greenatom.domain.dto.RefreshJwtRequest;
+import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
 import com.greenatom.utils.exception.message.EmployeeErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -84,7 +84,7 @@ public interface AuthApi {
             )
     })
     @Operation(summary = "Возвращает jwt и refresh токены")
-    JwtResponse registration(@RequestBody EmployeeDTO employeeDTO);
+    JwtResponse registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO);
 
 
     @ApiResponses(value = {

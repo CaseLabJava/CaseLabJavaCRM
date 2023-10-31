@@ -1,10 +1,11 @@
 package com.greenatom.security.service;
 
 import com.greenatom.domain.dto.AuthDTO;
-import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.JwtResponse;
+import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.entity.Role;
+import com.greenatom.domain.mapper.EmployeeMapper;
 import com.greenatom.security.jwt.JwtCore;
 import com.greenatom.service.impl.EmployeeServiceImpl;
 import com.greenatom.utils.exception.AuthException;
@@ -36,10 +37,11 @@ public class AuthService {
     private final JwtCore jwtCore;
     private final AuthenticationManager authenticationManager;
     private final EmployeeServiceImpl employeeService;
+    private final EmployeeMapper employeeMapper;
 
 
-    public JwtResponse registration(EmployeeDTO employeeDTO){
-        Employee employee = employeeService.save(employeeDTO);
+    public JwtResponse registration(CreateEmployeeRequestDTO createEmployeeRequestDTO){
+        Employee employee = employeeMapper.toEntity(employeeService.save(createEmployeeRequestDTO));
         String accessToken = jwtCore.generateAccessToken(employee);
         String refreshToken = jwtCore.generateRefreshToken(employee);
         return new JwtResponse(accessToken,refreshToken);

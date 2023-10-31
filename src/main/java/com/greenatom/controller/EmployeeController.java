@@ -1,7 +1,8 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.EmployeeApi;
-import com.greenatom.domain.dto.EmployeeCleanDTO;
+import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.service.EmployeeService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
@@ -34,19 +35,19 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public EmployeeCleanDTO getEmployee(@PathVariable Long id) {
+    public EmployeeResponseDTO getEmployee(@PathVariable Long id) {
         return employeeService.findOne(id);
     }
 
     @GetMapping(produces = {"application/json"})
-    public List<EmployeeCleanDTO> getAllEmployees(@Param("position") Integer pagePosition,
-                                                  @Param("length") Integer pageLength) {
+    public List<EmployeeResponseDTO> getAllEmployees(@Param("position") Integer pagePosition,
+                                                          @Param("length") Integer pageLength) {
         return employeeService.findAll(pagePosition, pageLength);
     }
 
-    @PutMapping(produces = {"application/json"})
-    public EmployeeCleanDTO updateEmployee(@RequestBody EmployeeCleanDTO employee) {
-        return employeeService.updateEmployee(employee);
+    @PatchMapping(value = "/{id}", produces = {"application/json"})
+    public EmployeeResponseDTO updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDTO employee) {
+        return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping(value = "/{id}",

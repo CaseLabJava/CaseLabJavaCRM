@@ -1,7 +1,8 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.EmployeeCleanDTO;
-import com.greenatom.domain.dto.EmployeeDTO;
+import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.entity.Employee;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,16 +12,16 @@ import java.util.Optional;
 public interface EmployeeService {
 
     @Transactional(readOnly = true)
-    List<EmployeeCleanDTO> findAll(Integer pagePosition, Integer pageLength);
+    List<EmployeeResponseDTO> findAll(Integer pagePosition, Integer pageLength);
 
     @Transactional(readOnly = true)
-    EmployeeCleanDTO findOne(Long id);
+    EmployeeResponseDTO findOne(Long id);
 
     @Transactional
-    Employee save(EmployeeDTO employee);
+    EmployeeResponseDTO save(CreateEmployeeRequestDTO employee);
 
     @Transactional
-    EmployeeCleanDTO updateEmployee(EmployeeCleanDTO employee);
+    EmployeeResponseDTO updateEmployee(Long id, EmployeeRequestDTO employee);
 
     @Transactional
     void deleteEmployee(Long id);

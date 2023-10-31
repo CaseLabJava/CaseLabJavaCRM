@@ -1,7 +1,7 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.EmployeeCleanDTO;
-import com.greenatom.domain.dto.EmployeeDTO;
+import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.utils.exception.message.EmployeeErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@Tag(name = "Employee API", description = "API для работы с работниками")
+@Tag(name = "Employee API", description = "API для работы с сотрудниками")
 public interface EmployeeApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Успешный возврат работника",
+                    description = "Успешный возврат сотрудника",
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeDTO.class)
+                                    schema = @Schema(implementation = EmployeeResponseDTO.class)
                             )
                     }
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Работник по переданному id не был найден",
+                    description = "Сотрудник по переданному id не был найден",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -39,29 +39,29 @@ public interface EmployeeApi {
             )
     })
     @Operation(
-            summary = "Получение работника по id"
+            summary = "Получение сотрудника по id"
     )
-    EmployeeCleanDTO getEmployee(
-            @Parameter(description = "Id работника", example = "1")
+    EmployeeResponseDTO getEmployee(
+            @Parameter(description = "Id сотрудника", example = "1")
             Long id
     );
 
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Успешный возврат работников",
+                    description = "Успешный возврат сотрудника",
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeDTO.class)
+                                    schema = @Schema(implementation = EmployeeResponseDTO.class)
                             )
                     }
             )
     })
     @Operation(
-            summary = "Получение всех работников"
+            summary = "Получение всех сотрудников"
     )
-    List<EmployeeCleanDTO> getAllEmployees(
+    List<EmployeeResponseDTO> getAllEmployees(
             @Parameter(description = "Позиция страницы", example = "0")
             Integer pagePosition,
             @Parameter(description = "Длина страницы", example = "5")
@@ -72,17 +72,17 @@ public interface EmployeeApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Успешное удаление работника",
+                    description = "Успешное удаление сотрудника",
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeDTO.class)
+                                    schema = @Schema(implementation = EmployeeResponseDTO.class)
                             )
                     }
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Работник по переданному id не был найден",
+                    description = "Сотрудник по переданному id не был найден",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -92,7 +92,7 @@ public interface EmployeeApi {
             )
     })
     @Operation(
-            summary = "Удаление работника по id"
+            summary = "Удаление сотрудника по id"
     )
     void deleteEmployee(
             @Parameter
@@ -102,17 +102,17 @@ public interface EmployeeApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Успешное обновление работника",
+                    description = "Успешное обновление сотрудника",
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeDTO.class)
+                                    schema = @Schema(implementation = EmployeeResponseDTO.class)
                             )
                     }
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Указанный работник не был найден",
+                    description = "Указанный сотрудник не был найден",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -122,7 +122,11 @@ public interface EmployeeApi {
             )
     })
     @Operation(
-            summary = "Обновление информации о работнике"
+            summary = "Обновление информации о сотруднике"
     )
-    EmployeeCleanDTO updateEmployee(@RequestBody EmployeeCleanDTO employee);
+    EmployeeResponseDTO updateEmployee(
+            @Parameter(description = "Id сотрудника")
+            Long id,
+            @Parameter(description = "Информация о сотруднике")
+            @RequestBody EmployeeRequestDTO employee);
 }

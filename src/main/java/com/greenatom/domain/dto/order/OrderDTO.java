@@ -1,7 +1,7 @@
 package com.greenatom.domain.dto.order;
 
-import com.greenatom.domain.dto.EmployeeDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
+import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class OrderDTO {
     private ClientResponseDTO client;
 
     @Schema(description = "Информация о сотруднике")
-    private EmployeeDTO employee;
+    private EmployeeResponseDTO employee;
 
     @Schema(description = "Ссылка на дерикторию с документами")
     private String linkToFolder;

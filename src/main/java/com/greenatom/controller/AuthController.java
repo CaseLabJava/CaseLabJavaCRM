@@ -1,10 +1,10 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.AuthApi;
-import com.greenatom.domain.dto.AuthDTO;
-import com.greenatom.domain.dto.JwtResponse;
-import com.greenatom.domain.dto.RefreshJwtRequest;
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
+import com.greenatom.domain.dto.security.AuthDTO;
+import com.greenatom.domain.dto.security.JwtResponse;
+import com.greenatom.domain.dto.security.RefreshJwtRequest;
 import com.greenatom.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,8 +1,8 @@
 package com.greenatom.security.service;
 
-import com.greenatom.domain.dto.AuthDTO;
-import com.greenatom.domain.dto.JwtResponse;
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
+import com.greenatom.domain.dto.security.AuthDTO;
+import com.greenatom.domain.dto.security.JwtResponse;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.entity.Role;
 import com.greenatom.domain.mapper.EmployeeMapper;

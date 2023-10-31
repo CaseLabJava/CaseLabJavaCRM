@@ -1,9 +1,9 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.AuthDTO;
-import com.greenatom.domain.dto.JwtResponse;
-import com.greenatom.domain.dto.RefreshJwtRequest;
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
+import com.greenatom.domain.dto.security.AuthDTO;
+import com.greenatom.domain.dto.security.JwtResponse;
+import com.greenatom.domain.dto.security.RefreshJwtRequest;
 import com.greenatom.utils.exception.message.EmployeeErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

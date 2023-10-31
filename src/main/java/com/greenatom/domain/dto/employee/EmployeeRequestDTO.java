@@ -1,6 +1,6 @@
 package com.greenatom.domain.dto.employee;
 
-import com.greenatom.domain.dto.RoleDTO;
+import com.greenatom.domain.dto.security.RoleDTO;
 import com.greenatom.domain.enums.JobPosition;
 import io.swagger.v3.oas.annotations.media.Schema;
 

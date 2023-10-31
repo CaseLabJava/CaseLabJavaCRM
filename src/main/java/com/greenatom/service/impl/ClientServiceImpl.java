@@ -1,6 +1,7 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.ClientDTO;
+import com.greenatom.domain.dto.client.ClientRequestDTO;
+import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.mapper.ClientMapper;
 import com.greenatom.repository.ClientRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,31 +31,34 @@ public class ClientServiceImpl implements ClientService {
     private final ClientMapper clientMapper;
 
     @Override
-    public List<ClientDTO> findAll() {
+    @Transactional(readOnly = true)
+    public List<ClientResponseDTO> findAll() {
         return clientMapper.toDto(clientRepository.findAll());
     }
 
     @Override
-    public ClientDTO findOne(Long id) {
+    @Transactional(readOnly = true)
+    public ClientResponseDTO findOne(Long id) {
         return clientMapper.toDto(clientRepository
                 .findById(id)
                 .orElseThrow(ClientException.CODE.NO_SUCH_CLIENT::get));
     }
 
     @Override
-    public ClientDTO save(ClientDTO clientDTO) {
-        Client client = clientMapper.toEntity(clientDTO);
+    @Transactional
+    public ClientResponseDTO save(ClientRequestDTO clientRequestDTO) {
+        Client client = clientMapper.toEntity(clientRequestDTO);
         clientRepository.save(client);
         return clientMapper.toDto(client);
     }
 
     @Override
-    public ClientDTO updateClient(ClientDTO client) {
+    @Transactional
+    public ClientResponseDTO updateClient(Long id, ClientRequestDTO clientRequestDTO) {
         return clientRepository
-                .findById(client.getId())
+                .findById(id)
                 .map(existingEvent -> {
-                    clientMapper.partialUpdate(existingEvent, client);
-
+                    clientMapper.partialUpdate(existingEvent, clientMapper.toResponse(clientRequestDTO));
                     return existingEvent;
                 })
                 .map(clientRepository::save)
@@ -62,6 +67,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public void deleteClient(Long id) {
         clientRepository
                 .findById(id)
@@ -69,12 +75,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDTO> findClientPageByParams(Integer pageNumber,
-                                                  Integer pageSize,
-                                                  String company,
-                                                  String firstName,
-                                                  String secondName,
-                                                  String patronymic) {
+    @Transactional(readOnly = true)
+    public List<ClientResponseDTO> findClientPageByParams(Integer pageNumber,
+                                                          Integer pageSize,
+                                                          String company,
+                                                          String firstName,
+                                                          String secondName,
+                                                          String patronymic) {
         return clientRepository
                 .findClientsByCompanyContainingAndNameContainingAndSurnameContainingAndPatronymicContaining(
                         PageRequest.of(pageNumber, pageSize),

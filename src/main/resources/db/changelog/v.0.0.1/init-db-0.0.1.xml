@@ -12,7 +12,7 @@
     </changeSet>
     <changeSet author="sladkkov" id="1698581124717-2">
         <createTable tableName="employee">
-            <column name="employee_id" type="BIGINT">
+            <column name="employee_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pkey"/>
             </column>
             <column name="address" type="VARCHAR(200)"/>
@@ -30,7 +30,7 @@
     </changeSet>
     <changeSet author="sladkkov" id="1698581124717-3">
         <createTable tableName="client">
-            <column name="client_id" type="BIGINT">
+            <column name="client_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="client_pkey"/>
             </column>
             <column name="address" type="VARCHAR(255)"/>
@@ -47,7 +47,7 @@
     </changeSet>
     <changeSet author="sladkkov" id="1698581124717-4">
         <createTable tableName="client_order">
-            <column name="order_id" type="BIGINT">
+            <column name="order_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="client_order_pkey"/>
             </column>
             <column name="link_to_folder" type="VARCHAR(255)"/>
@@ -59,7 +59,7 @@
     </changeSet>
     <changeSet author="sladkkov" id="1698581124717-5">
         <createTable tableName="order_item">
-            <column name="order_item_id" type="BIGINT">
+            <column name="order_item_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="order_item_pkey"/>
             </column>
             <column name="cost" type="BIGINT"/>
@@ -72,7 +72,7 @@
     </changeSet>
     <changeSet author="sladkkov" id="1698581124717-6">
         <createTable tableName="product">
-            <column name="product_id" type="BIGINT">
+            <column name="product_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="product_pkey"/>
             </column>
             <column name="cost" type="BIGINT"/>

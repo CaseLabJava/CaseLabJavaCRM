@@ -2,9 +2,9 @@ package com.greenatom.controller;
 
 import com.greenatom.config.swagger.annotation.AccessDeniedResponse;
 import com.greenatom.controller.api.OrderApi;
-import com.greenatom.domain.dto.order.GenerateOrderRequest;
-import com.greenatom.domain.dto.order.OrderDTO;
-import com.greenatom.domain.dto.order.OrderRequest;
+import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
+import com.greenatom.domain.dto.order.OrderRequestDTO;
+import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.service.OrderService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -39,12 +39,12 @@ public class OrderController implements OrderApi {
     }
 
     @GetMapping(produces = {"application/json"})
-    public ResponseEntity<List<OrderDTO>> getOrders(@RequestParam(required = false, defaultValue = "0") Integer limit,
-                                                    @RequestParam(required = false, defaultValue = "10") Integer offset,
-                                                    @RequestParam(required = false, defaultValue = "orderDate") String sortField,
-                                                    @RequestParam(required = false, defaultValue = "asc") String sortOrder,
-                                                    @RequestParam(required = false) String orderStatus,
-                                                    @RequestParam(required = false) String linkToFolder) {
+    public ResponseEntity<List<OrderResponseDTO>> getOrders(@RequestParam(required = false, defaultValue = "0") Integer limit,
+                                                            @RequestParam(required = false, defaultValue = "10") Integer offset,
+                                                            @RequestParam(required = false, defaultValue = "orderDate") String sortField,
+                                                            @RequestParam(required = false, defaultValue = "asc") String sortOrder,
+                                                            @RequestParam(required = false) String orderStatus,
+                                                            @RequestParam(required = false) String linkToFolder) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(orderService
@@ -52,29 +52,29 @@ public class OrderController implements OrderApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public OrderDTO getOrder(@PathVariable Long id) {
+    public OrderResponseDTO getOrder(@PathVariable Long id) {
         return orderService.findOne(id);
     }
 
     @GetMapping(value = "/employee/{id}", produces = {"application/json"})
-    public List<OrderDTO> getAllOrders(@Param("position") Integer pagePosition,
-                                       @Param("length") Integer pageLength,
-                                       @PathVariable("id") Long id) {
+    public List<OrderResponseDTO> getAllOrders(@Param("position") Integer pagePosition,
+                                               @Param("length") Integer pageLength,
+                                               @PathVariable("id") Long id) {
         return orderService.findAll(pagePosition, pageLength, id);
     }
 
     @PostMapping(value = "/draft")
-    public OrderDTO addDraftOrder(@RequestBody OrderRequest orderRequest) {
-        return orderService.createDraft(orderRequest);
+    public OrderResponseDTO addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        return orderService.createDraft(orderRequestDTO);
     }
 
     @PostMapping(value = "/generate", produces = {"application/json"})
-    public void generateOrder(@RequestBody GenerateOrderRequest request) {
+    public void generateOrder(@RequestBody GenerateOrderRequestDTO request) {
         orderService.generateOrder(request);
     }
 
     @PostMapping(value = "/finish-order/{id}", produces = {"application/json"})
-    public OrderDTO finishOrder(@PathVariable Long id) {
+    public OrderResponseDTO finishOrder(@PathVariable Long id) {
         return orderService.finishOrder(id);
     }
 

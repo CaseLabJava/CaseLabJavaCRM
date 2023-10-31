@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Класс для запроса генерации документа заявки")
-public class GenerateOrderRequest {
+public class GenerateOrderRequestDTO {
 
     @Schema(description = "Id заказа")
     Long id;

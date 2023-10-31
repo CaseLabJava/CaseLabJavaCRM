@@ -1,7 +1,7 @@
 package com.greenatom.domain.dto.item;
 
 import com.greenatom.domain.dto.ProductDTO;
-import com.greenatom.domain.dto.order.OrderDTO;
+import com.greenatom.domain.dto.order.OrderResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class OrderItemDTO {
     private Long id;
 
     @Schema(description = "Связь с заказом")
-    private OrderDTO order;
+    private OrderResponseDTO order;
 
     @Schema(description = "Связь с продуктом")
     private ProductDTO product;

@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Класс для запроса загрузки документа")
-public class UploadDocRequest {
+public class UploadDocumentRequestDTO {
 
     @Schema(description = "Id заказа")
     private Long id;
@@ -23,7 +23,7 @@ public class UploadDocRequest {
     @Schema(description = "Абсолютный путь к файлу")
     private String linkToFolder;
 
-    public UploadDocRequest(MultipartFile file, Long id) {
+    public UploadDocumentRequestDTO(MultipartFile file, Long id) {
         this.file = file;
         this.id = id;
     }

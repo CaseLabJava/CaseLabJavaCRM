@@ -20,7 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Описание класса Order")
-public class OrderDTO {
+public class OrderResponseDTO {
 
     @Schema(description = "Id заказа")
     private Long id;

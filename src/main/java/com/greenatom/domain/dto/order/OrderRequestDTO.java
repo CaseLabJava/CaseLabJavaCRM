@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Класс для создания Order")
-public class OrderRequest {
+public class OrderRequestDTO {
 
     @Schema(description = "Информация о клиенте")
     private Long clientId;

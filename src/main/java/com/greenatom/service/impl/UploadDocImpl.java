@@ -1,6 +1,6 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.order.UploadDocRequest;
+import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.repository.OrderRepository;
@@ -23,8 +23,8 @@ public class UploadDocImpl implements UploadDocService {
     private final OrderRepository orderRepository;
 
 @Override
-public void upload(UploadDocRequest uploadDocRequest) {
-    MultipartFile file = uploadDocRequest.getFile();
+public void upload(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
+    MultipartFile file = uploadDocumentRequestDTO.getFile();
     if (!file.isEmpty()) {
         try {
             String projectRoot = System.getProperty("user.dir");
@@ -42,7 +42,7 @@ public void upload(UploadDocRequest uploadDocRequest) {
                 fos.write(file.getBytes());
             }
 
-            uploadDocRequest.setLinkToFolder(targetFile.getAbsolutePath());
+            uploadDocumentRequestDTO.setLinkToFolder(targetFile.getAbsolutePath());
 
             log.info("Файл успешно загружен. Имя файла: " + fileName + ", Путь: "
                     + targetFile.getAbsolutePath());
@@ -56,9 +56,9 @@ public void upload(UploadDocRequest uploadDocRequest) {
 
 
     @Override
-    public void updateStatus(UploadDocRequest uploadDocRequest) {
+    public void updateStatus(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
         Order order = orderRepository
-                .findById(uploadDocRequest.getId())
+                .findById(uploadDocumentRequestDTO.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE)) {
 
@@ -68,11 +68,11 @@ public void upload(UploadDocRequest uploadDocRequest) {
         }
     }
     @Override
-    public void updatePath(UploadDocRequest uploadDocRequest) {
-        log.debug("Order to update link_to_folder : {}", uploadDocRequest);
+    public void updatePath(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
+        log.debug("Order to update link_to_folder : {}", uploadDocumentRequestDTO);
 
-        Long orderId = uploadDocRequest.getId();
-        String linkToFolder = uploadDocRequest.getLinkToFolder();
+        Long orderId = uploadDocumentRequestDTO.getId();
+        String linkToFolder = uploadDocumentRequestDTO.getLinkToFolder();
 
         orderRepository.updateLinkToFolder(orderId, linkToFolder);
     }

@@ -3,6 +3,7 @@ package com.greenatom.service;
 import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
+import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,4 +35,7 @@ public interface OrderService {
     OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO);
 
     OrderResponseDTO finishOrder(Long id);
+
+    @Transactional
+    void upload(UploadDocumentRequestDTO uploadDocumentRequestDTO);
 }

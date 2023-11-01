@@ -5,6 +5,7 @@ import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.service.EmployeeService;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,23 +36,27 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR')")
     public EmployeeResponseDTO getEmployee(@PathVariable Long id) {
         return employeeService.findOne(id);
     }
 
     @GetMapping(produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR')")
     public List<EmployeeResponseDTO> getAllEmployees(@Param("position") Integer pagePosition,
                                                           @Param("length") Integer pageLength) {
         return employeeService.findAll(pagePosition, pageLength);
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public EmployeeResponseDTO updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDTO employee) {
         return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping(value = "/{id}",
             produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public void deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
     }

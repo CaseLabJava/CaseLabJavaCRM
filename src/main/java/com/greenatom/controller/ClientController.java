@@ -4,6 +4,7 @@ import com.greenatom.controller.api.ClientApi;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.service.ClientService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,12 +32,14 @@ public class ClientController implements ClientApi {
 
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR')")
     public ClientResponseDTO getClient(@PathVariable Long id) {
         return clientService.findOne(id);
     }
 
 
     @GetMapping (produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public List<ClientResponseDTO> getClientsResponse(@RequestParam(defaultValue = "0") Integer pageNumber,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
                                                       @RequestParam(defaultValue = "", required = false) String company,
@@ -52,16 +55,19 @@ public class ClientController implements ClientApi {
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ClientResponseDTO updateClient(@PathVariable Long id, @RequestBody ClientRequestDTO client) {
         return clientService.updateClient(id, client);
     }
 
     @PostMapping(produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ClientResponseDTO addClient(@RequestBody ClientRequestDTO client) {
         return clientService.save(client);
     }
 
      @DeleteMapping(value = "/{id}", produces = {"application/json"})
+     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
     }

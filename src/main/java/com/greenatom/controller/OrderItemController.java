@@ -3,6 +3,7 @@ package com.greenatom.controller;
 import com.greenatom.controller.api.OrderItemApi;
 import com.greenatom.domain.dto.item.OrderItemResponseDTO;
 import com.greenatom.service.OrderItemService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 /**
  * Этот код является контроллером, который обрабатывает запросы к API, связанному с управлением продуктами в корзине.
@@ -28,11 +29,13 @@ public class OrderItemController implements OrderItemApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public OrderItemResponseDTO getOrderItem(@PathVariable Long id) {
         return orderItemService.findOne(id);
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public void deleteOrderItem(@PathVariable Long id) {
         orderItemService.deleteCartProduct(id);
     }

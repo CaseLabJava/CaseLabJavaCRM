@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,6 +42,7 @@ public class OrderController implements OrderApi {
     }
 
     @GetMapping(produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER','ROLE_SUPERVISOR')")
     public ResponseEntity<List<OrderResponseDTO>> getOrders(@RequestParam(required = false, defaultValue = "0") Integer limit,
                                                             @RequestParam(required = false, defaultValue = "10") Integer offset,
                                                             @RequestParam(required = false, defaultValue = "orderDate") String sortField,
@@ -54,11 +56,13 @@ public class OrderController implements OrderApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public OrderResponseDTO getOrder(@PathVariable Long id) {
         return orderService.findOne(id);
     }
 
     @GetMapping(value = "/employee/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER','ROLE_SUPERVISOR')")
     public List<OrderResponseDTO> getAllOrders(@Param("position") Integer pagePosition,
                                                @Param("length") Integer pageLength,
                                                @PathVariable("id") Long id) {
@@ -66,22 +70,26 @@ public class OrderController implements OrderApi {
     }
 
     @PostMapping(value = "/draft")
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public OrderResponseDTO addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
         return orderService.createDraft(orderRequestDTO);
     }
 
     @PostMapping(value = "/generate", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public void generateOrder(@RequestBody GenerateOrderRequestDTO request) {
         orderService.generateOrder(request);
     }
 
     @PostMapping(value = "/finish-order/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public OrderResponseDTO finishOrder(@PathVariable Long id) {
         return orderService.finishOrder(id);
     }
 
     @DeleteMapping(value = "/{id}/empty",
             produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public void deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
     }

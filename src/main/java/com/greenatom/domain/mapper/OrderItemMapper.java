@@ -1,18 +1,19 @@
 package com.greenatom.domain.mapper;
-import com.greenatom.domain.dto.item.OrderItemDTO;
-import com.greenatom.domain.dto.item.OrderItemRequest;
+
+import com.greenatom.domain.dto.item.OrderItemRequestDTO;
+import com.greenatom.domain.dto.item.OrderItemResponseDTO;
 import com.greenatom.domain.entity.OrderItem;
 import org.mapstruct.Mapper;
 
 /**
- * Mapper for the entity {@link OrderItem} and its DTO called {@link OrderItemDTO}.
+ * Mapper for the entity {@link OrderItem} and its DTO called {@link OrderItemResponseDTO}.
  */
 
 @Mapper(componentModel = "spring")
-public interface OrderItemMapper extends EntityMapper<OrderItemDTO, OrderItem> {
-    OrderItemDTO toDto(OrderItem s);
+public interface OrderItemMapper extends EntityMapper<OrderItemResponseDTO, OrderItem> {
+    OrderItemResponseDTO toDto(OrderItem s);
 
-    OrderItem toEntity(OrderItemDTO s);
+    OrderItem toEntity(OrderItemResponseDTO s);
 
-    OrderItem toEntity(OrderItemRequest s);
+    OrderItem toEntity(OrderItemRequestDTO s);
 }

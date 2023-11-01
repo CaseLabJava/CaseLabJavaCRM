@@ -1,8 +1,8 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.order.GenerateOrderRequest;
-import com.greenatom.domain.dto.order.OrderDTO;
-import com.greenatom.domain.dto.order.OrderRequest;
+import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
+import com.greenatom.domain.dto.order.OrderRequestDTO;
+import com.greenatom.domain.dto.order.OrderResponseDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,27 +11,27 @@ import java.util.List;
 public interface OrderService {
 
     @Transactional(readOnly = true)
-    List<OrderDTO> findAll(Integer pagePosition, Integer pageLength, Long id);
+    List<OrderResponseDTO> findAll(Integer pagePosition, Integer pageLength, Long id);
 
     @Transactional(readOnly = true)
-    List<OrderDTO> findByPaginationAndFilters(PageRequest pageRequest, String orderStatus, String linkToFolder);
+    List<OrderResponseDTO> findByPaginationAndFilters(PageRequest pageRequest, String orderStatus, String linkToFolder);
 
     @Transactional(readOnly = true)
-    OrderDTO findOne(Long id);
+    OrderResponseDTO findOne(Long id);
 
     @Transactional
-    OrderDTO save(OrderDTO orderDTO);
+    OrderResponseDTO save(OrderResponseDTO orderResponseDTO);
 
     @Transactional
-    void generateOrder(GenerateOrderRequest request);
+    void generateOrder(GenerateOrderRequestDTO request);
 
     @Transactional
-    OrderDTO updateOrder(OrderDTO orderDTO);
+    OrderResponseDTO updateOrder(OrderResponseDTO orderResponseDTO);
 
     @Transactional
     void deleteOrder(Long id);
 
-    OrderDTO createDraft(OrderRequest orderRequest);
+    OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO);
 
-    OrderDTO finishOrder(Long id);
+    OrderResponseDTO finishOrder(Long id);
 }

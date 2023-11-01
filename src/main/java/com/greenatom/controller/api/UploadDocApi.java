@@ -1,7 +1,7 @@
 package com.greenatom.controller.api;
 
 
-import com.greenatom.domain.dto.JwtResponse;
+import com.greenatom.domain.dto.security.JwtResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.api.ErrorMessage;
-
 import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "UploadDoc API", description = "API для загрузки подписанных документов")

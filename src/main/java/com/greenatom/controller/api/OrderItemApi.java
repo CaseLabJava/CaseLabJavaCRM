@@ -1,6 +1,6 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.item.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemResponseDTO;
 import com.greenatom.utils.exception.message.OrderItemErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +20,7 @@ public interface OrderItemApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderItemDTO.class)
+                                    schema = @Schema(implementation = OrderItemResponseDTO.class)
                             )
                     }
             ),
@@ -39,7 +39,7 @@ public interface OrderItemApi {
     @Operation(
             summary = "Получение продукта в заказе по id"
     )
-    OrderItemDTO getOrderItem(
+    OrderItemResponseDTO getOrderItem(
             @Parameter(description = "Id продукта в заказе", example = "1")
             Long id
     );
@@ -51,7 +51,7 @@ public interface OrderItemApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderItemDTO.class)
+                                    schema = @Schema(implementation = OrderItemResponseDTO.class)
                             )
                     }
             ),

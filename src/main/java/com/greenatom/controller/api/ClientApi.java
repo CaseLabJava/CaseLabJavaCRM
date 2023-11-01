@@ -1,6 +1,7 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.ClientDTO;
+import com.greenatom.domain.dto.client.ClientRequestDTO;
+import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.utils.exception.message.ClientErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface ClientApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ClientDTO.class)
+                                    schema = @Schema(implementation = ClientResponseDTO.class)
                             )
                     }
             ),
@@ -41,7 +41,7 @@ public interface ClientApi {
     @Operation(
             summary = "Получение клиента по id"
     )
-    ClientDTO getClient(
+    ClientResponseDTO getClient(
             @Parameter(description = "Id клиента", example = "1")
             Long id
     );
@@ -53,7 +53,7 @@ public interface ClientApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ClientDTO.class)
+                                    schema = @Schema(implementation = ClientResponseDTO.class)
                             )
                     }
             )
@@ -61,7 +61,7 @@ public interface ClientApi {
     @Operation(
             summary = "Получение всех клиентов"
     )
-    List<ClientDTO> getClientsResponse(
+    List<ClientResponseDTO> getClientsResponse(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "", required = false) String company,
@@ -78,7 +78,7 @@ public interface ClientApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ClientDTO.class)
+                                    schema = @Schema(implementation = ClientResponseDTO.class)
                             )
                     }
             ),
@@ -108,7 +108,7 @@ public interface ClientApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ClientDTO.class)
+                                    schema = @Schema(implementation = ClientResponseDTO.class)
                             )
                     }
             ),
@@ -126,7 +126,12 @@ public interface ClientApi {
     @Operation(
             summary = "Обновление информации о клиенте"
     )
-    ClientDTO updateClient(@RequestBody ClientDTO clientDTO);
+    ClientResponseDTO updateClient(
+            @Parameter(description = "Id клиента")
+            Long id,
+            @Parameter(description = "Инфомрация о клиенте")
+            ClientRequestDTO clientRequestDTO
+    );
 
     @ApiResponse(
             responseCode = "200",
@@ -134,13 +139,13 @@ public interface ClientApi {
             content = {
                     @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = ClientDTO.class)
+                            schema = @Schema(implementation = ClientResponseDTO.class)
                     )
             }
     )
     @Operation(summary = "Создает Client и возвращает ClientDTO")
-    ClientDTO addClient(
-            @Parameter(description = "Client Request")
-            ClientDTO clientDTO
+    ClientResponseDTO addClient(
+            @Parameter(description = "Инфомрация о клиенте")
+            ClientRequestDTO clientRequestDTO
     );
 }

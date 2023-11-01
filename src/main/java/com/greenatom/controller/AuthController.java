@@ -1,10 +1,10 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.AuthApi;
-import com.greenatom.domain.dto.AuthDTO;
-import com.greenatom.domain.dto.EmployeeDTO;
-import com.greenatom.domain.dto.JwtResponse;
-import com.greenatom.domain.dto.RefreshJwtRequest;
+import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
+import com.greenatom.domain.dto.security.AuthDTO;
+import com.greenatom.domain.dto.security.JwtResponse;
+import com.greenatom.domain.dto.security.RefreshJwtRequest;
 import com.greenatom.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +35,8 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public JwtResponse registration(@RequestBody EmployeeDTO employeeDTO){
-        return authService.registration(employeeDTO);
+    public JwtResponse registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO){
+        return authService.registration(employeeRequestDTO);
     }
 
     @PostMapping("/signin")

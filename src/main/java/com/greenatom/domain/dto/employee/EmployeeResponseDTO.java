@@ -1,5 +1,6 @@
-package com.greenatom.domain.dto;
+package com.greenatom.domain.dto.employee;
 
+import com.greenatom.domain.dto.security.RoleDTO;
 import com.greenatom.domain.enums.JobPosition;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Описание модели \"Сотрудник\"")
-public class EmployeeDTO {
+@Schema(description = "Описание модели ответа \"Сотрудник\"")
+public class EmployeeResponseDTO {
 
     @Schema(description = "Id сотрудника", example = "1")
     private Long id;
@@ -41,9 +42,6 @@ public class EmployeeDTO {
 
     @Schema(description = "Номер телефона сотрудника", example = "895436848")
     private String phoneNumber;
-
-    @Schema(description = "Пороль сотрудника", example = "Qwer123as")
-    private String password;
 
     @Schema(description = "Имя пользователя сотрудника", example = "Puchkov_D_Y_1")
     private String username;

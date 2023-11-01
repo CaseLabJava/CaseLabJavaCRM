@@ -1,8 +1,8 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.order.GenerateOrderRequest;
-import com.greenatom.domain.dto.order.OrderDTO;
-import com.greenatom.domain.dto.order.OrderRequest;
+import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
+import com.greenatom.domain.dto.order.OrderRequestDTO;
+import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.utils.exception.message.OrderErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +32,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderDTO.class)
+                                    schema = @Schema(implementation = OrderResponseDTO.class)
                             )
                     }
             ),
@@ -51,7 +51,7 @@ public interface OrderApi {
     @Operation(
             summary = "Получение заказа"
     )
-    ResponseEntity<List<OrderDTO>> getOrders(
+    ResponseEntity<List<OrderResponseDTO>> getOrders(
             @Parameter(description = "Номер страницы", example = "0")
             Integer limit,
             @Parameter(description = "Количество элементов", example = "10")
@@ -73,7 +73,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderDTO.class)
+                                    schema = @Schema(implementation = OrderResponseDTO.class)
                             )
                     }
             ),
@@ -83,15 +83,15 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderDTO.class)
+                                    schema = @Schema(implementation = OrderResponseDTO.class)
                             )
                     }
             )
     })
     @Operation(summary = "Создает Order и возвращает OrderDTO")
-    OrderDTO addDraftOrder(
+    OrderResponseDTO addDraftOrder(
             @Parameter(description = "Order Request")
-            OrderRequest orderRequest
+            OrderRequestDTO orderRequestDTO
     );
 
     @ApiResponses(value = {
@@ -113,7 +113,7 @@ public interface OrderApi {
     )
     void generateOrder(
             @Parameter(description = "GenerationOrderRequest")
-            GenerateOrderRequest orderRequest
+            GenerateOrderRequestDTO orderRequest
     );
 
     @ApiResponses(value = {
@@ -123,7 +123,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderDTO.class)
+                                    schema = @Schema(implementation = OrderResponseDTO.class)
                             )
                     }
             ),
@@ -142,8 +142,7 @@ public interface OrderApi {
     @Operation(
             summary = "Получение заказа по id"
     )
-
-    OrderDTO getOrder(
+    OrderResponseDTO getOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );
@@ -155,7 +154,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderDTO.class)
+                                    schema = @Schema(implementation = OrderResponseDTO.class)
                             )
                     }
             ),
@@ -174,8 +173,7 @@ public interface OrderApi {
     @Operation(
             summary = "Завершение заказа"
     )
-
-    OrderDTO finishOrder(
+    OrderResponseDTO finishOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );
@@ -187,7 +185,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderDTO.class)
+                                    schema = @Schema(implementation = OrderResponseDTO.class)
                             )
                     }
             )
@@ -195,7 +193,7 @@ public interface OrderApi {
     @Operation(
             summary = "Получение заказов по id работника"
     )
-    List<OrderDTO> getAllOrders(
+    List<OrderResponseDTO> getAllOrders(
             @Parameter(description = "Позиция страницы", example = "0")
             Integer pagePosition,
             @Parameter(description = "Длина страницы", example = "5")
@@ -211,7 +209,7 @@ public interface OrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = OrderDTO.class)
+                                    schema = @Schema(implementation = OrderResponseDTO.class)
                             )
                     }
             ),

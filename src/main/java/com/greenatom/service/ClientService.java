@@ -1,27 +1,21 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.ClientDTO;
-import org.springframework.transaction.annotation.Transactional;
+import com.greenatom.domain.dto.client.ClientRequestDTO;
+import com.greenatom.domain.dto.client.ClientResponseDTO;
 
 import java.util.List;
 
 public interface ClientService {
 
-    @Transactional(readOnly = true)
-    List<ClientDTO> findAll();
+    List<ClientResponseDTO> findAll();
 
-    @Transactional(readOnly = true)
-    ClientDTO findOne(Long id);
+    ClientResponseDTO findOne(Long id);
 
-    @Transactional
-    ClientDTO save(ClientDTO client);
+    ClientResponseDTO save(ClientRequestDTO client);
 
-    @Transactional
-    ClientDTO updateClient(ClientDTO client);
+    ClientResponseDTO updateClient(Long id, ClientRequestDTO client);
 
-    @Transactional
     void deleteClient(Long id);
 
-    @Transactional(readOnly = true)
-    List<ClientDTO> findClientPageByParams(Integer pageNumber, Integer pageSize, String company, String firstName, String secondName, String patronymic);
+    List<ClientResponseDTO> findClientPageByParams(Integer pageNumber, Integer pageSize, String company, String firstName, String secondName, String patronymic);
 }

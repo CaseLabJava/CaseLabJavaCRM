@@ -1,9 +1,9 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.EmployeeCleanDTO;
-import com.greenatom.domain.dto.EmployeeDTO;
+import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.entity.Employee;
-import com.greenatom.domain.mapper.EmployeeCleanMapper;
 import com.greenatom.domain.mapper.EmployeeMapper;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RoleRepository;
@@ -36,50 +36,49 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
 
-    private final EmployeeCleanMapper employeeCleanMapper;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
 
     @Override
-    public List<EmployeeCleanDTO> findAll(Integer pagePosition, Integer pageLength) {
-        return employeeCleanMapper.toDto(employeeRepository.findAll(
+    public List<EmployeeResponseDTO> findAll(Integer pagePosition, Integer pageLength) {
+        return employeeMapper.toDto(employeeRepository.findAll(
                 PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
-    public EmployeeCleanDTO findOne(Long id) {
-        return employeeCleanMapper.toDto(employeeRepository
+    public EmployeeResponseDTO findOne(Long id) {
+        return employeeMapper.toDto(employeeRepository
                 .findById(id)
                 .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get));
     }
 
     @Override
-    public Employee save(EmployeeDTO employeeDTO) {
+    public EmployeeResponseDTO save(CreateEmployeeRequestDTO employeeResponseDTO) {
         List<Employee> existingUsers = employeeRepository.findAll();
-        Employee employee = employeeMapper.toEntity(employeeDTO);
-        employee.setPassword(encoder.encode(employeeDTO.getPassword()));
-        employee.setUsername(generateUsername(employeeDTO));
-        employee.setRole(roleRepository.findByName(employeeDTO.getRole().getName()).orElse(null));
+        Employee employee = employeeMapper.toEntity(employeeResponseDTO);
+        employee.setPassword(encoder.encode(employeeResponseDTO.getPassword()));
+        employee.setUsername(generateUsername(employeeResponseDTO));
+        employee.setRole(roleRepository.findByName(employeeResponseDTO.getRole().getName()).orElse(null));
         for (Employee e : existingUsers) {
             if ((e.getEmail().equals(employee.getEmail()))) {
                 throw AuthException.CODE.EMAIL_IN_USE.get();
             }
         }
         employeeRepository.save(employee);
-        return employee;
+        return employeeMapper.toDto(employee);
     }
 
     @Override
-    public EmployeeCleanDTO updateEmployee(EmployeeCleanDTO employee) {
+    public EmployeeResponseDTO updateEmployee(Long id, EmployeeRequestDTO employee) {
         return employeeRepository
-                .findById(employee.getId())
+                .findById(id)
                 .map(existingEvent -> {
-                    employeeCleanMapper.partialUpdate(existingEvent, employee);
+                    employeeMapper.partialUpdate(existingEvent, employeeMapper.toResponse(employee));
 
                     return existingEvent;
                 })
                 .map(employeeRepository::save)
-                .map(employeeCleanMapper::toDto)
+                .map(employeeMapper::toDto)
                 .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
     }
 
@@ -95,11 +94,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findByUsername(username);
     }
 
-    private String generateUsername(EmployeeDTO employeeDTO) {
+    private String generateUsername(CreateEmployeeRequestDTO employeeRequest) {
         StringBuilder username = new StringBuilder();
-        String firstname = TranslateRusToEng.translateFromRusToEng(employeeDTO.getFirstname());
-        String surname = TranslateRusToEng.translateFromRusToEng(employeeDTO.getSurname());
-        String patronymic = TranslateRusToEng.translateFromRusToEng(employeeDTO.getPatronymic());
+        String firstname = TranslateRusToEng.translateFromRusToEng(employeeRequest.getFirstname());
+        String surname = TranslateRusToEng.translateFromRusToEng(employeeRequest.getSurname());
+        String patronymic = TranslateRusToEng.translateFromRusToEng(employeeRequest.getPatronymic());
         username.append(surname)
                 .append(firstname.charAt(0))
                 .append(patronymic.charAt(0));

@@ -1,6 +1,6 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.item.OrderItemDTO;
+import com.greenatom.domain.dto.item.OrderItemResponseDTO;
 import com.greenatom.domain.mapper.OrderItemMapper;
 import com.greenatom.repository.OrderItemRepository;
 import com.greenatom.service.OrderItemService;
@@ -32,19 +32,19 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
-    public List<OrderItemDTO> findAll() {
+    public List<OrderItemResponseDTO> findAll() {
         return orderItemMapper.toDto(orderItemRepository.findAll());
     }
 
     @Override
-    public OrderItemDTO findOne(Long id) {
+    public OrderItemResponseDTO findOne(Long id) {
         return orderItemMapper.toDto(orderItemRepository
                 .findById(id)
                 .orElseThrow(OrderItemException.CODE.NO_SUCH_ORDER::get));
     }
 
     @Override
-    public OrderItemDTO updateCartProduct(OrderItemDTO cartProduct) {
+    public OrderItemResponseDTO updateCartProduct(OrderItemResponseDTO cartProduct) {
         return orderItemRepository
                 .findById(cartProduct.getId())
                 .map(existingEvent -> {

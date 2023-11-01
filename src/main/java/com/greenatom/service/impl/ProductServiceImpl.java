@@ -1,12 +1,12 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.ProductDTO;
+import com.greenatom.domain.dto.product.ProductRequestDTO;
+import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.mapper.ProductMapper;
 import com.greenatom.repository.ProductRepository;
 import com.greenatom.service.ProductService;
 import com.greenatom.utils.exception.ProductException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -29,12 +29,12 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
-    public List<ProductDTO> findAll() {
+    public List<ProductResponseDTO> findAll() {
         return productMapper.toDto(productRepository.findAll());
     }
 
     @Override
-    public ProductDTO findOne(Long id) {
+    public ProductResponseDTO findOne(Long id) {
         log.debug("Order to get Product : {}", id);
         return productMapper.toDto(productRepository
                 .findById(id)
@@ -42,23 +42,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO save(ProductDTO productDTO) {
-        Product product = productMapper.toEntity(productDTO);
+    public ProductResponseDTO save(ProductRequestDTO productRequestDTO) {
+        Product product = productMapper.toEntity(productRequestDTO);
         productRepository.save(product);
         return productMapper.toDto(product);
     }
 
     @Override
-    public ProductDTO updateProduct(ProductDTO product) {
+    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO product) {
         return productRepository
-                .findById(product.getId())
+                .findById(id)
                 .map(existingEvent -> {
-                    productMapper.partialUpdate(existingEvent, product);
+                    productMapper.partialUpdate(existingEvent, productMapper.toResponse(product));
                     return existingEvent;
                 })
                 .map(productRepository::save)
                 .map(productMapper::toDto)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(ProductException.CODE.NO_SUCH_PRODUCT::get);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> findAll(Integer pagePosition, Integer pageLength,String name, Integer cost) {
+    public List<ProductResponseDTO> findAll(Integer pagePosition, Integer pageLength, String name, Integer cost) {
         return productMapper.toDto(productRepository.findProductByProductNameContainingAndCostBefore(
                 PageRequest.of(pagePosition, pageLength), name, cost).toList());
     }

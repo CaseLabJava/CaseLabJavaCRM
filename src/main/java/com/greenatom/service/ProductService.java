@@ -1,6 +1,7 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.ProductDTO;
+import com.greenatom.domain.dto.product.ProductRequestDTO;
+import com.greenatom.domain.dto.product.ProductResponseDTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -8,19 +9,19 @@ import java.util.List;
 public interface ProductService {
 
     @Transactional(readOnly = true)
-    List<ProductDTO> findAll();
+    List<ProductResponseDTO> findAll();
 
     @Transactional(readOnly = true)
-    ProductDTO findOne(Long id);
+    ProductResponseDTO findOne(Long id);
 
     @Transactional
-    ProductDTO save(ProductDTO product);
+    ProductResponseDTO save(ProductRequestDTO product);
 
     @Transactional
-    ProductDTO updateProduct(ProductDTO product);
+    ProductResponseDTO updateProduct(Long id, ProductRequestDTO product);
 
     @Transactional
     void deleteProduct(Long id);
     @Transactional(readOnly = true)
-    List<ProductDTO> findAll(Integer pagePosition, Integer pageLength, String name, Integer cost);
+    List<ProductResponseDTO> findAll(Integer pagePosition, Integer pageLength, String name, Integer cost);
 }

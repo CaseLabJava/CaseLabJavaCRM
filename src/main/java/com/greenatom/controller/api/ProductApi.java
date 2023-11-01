@@ -1,6 +1,7 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.ProductDTO;
+import com.greenatom.domain.dto.product.ProductRequestDTO;
+import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.utils.exception.message.ProductErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,11 +10,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Product API - это интерфейс, который описывает набор методов для работы с продуктами. Он включает методы
@@ -30,7 +29,7 @@ public interface ProductApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ProductDTO.class)
+                                    schema = @Schema(implementation = ProductResponseDTO.class)
                             )
                     }
             ),
@@ -49,7 +48,7 @@ public interface ProductApi {
     @Operation(
             summary = "Получение продукта по id"
     )
-    ProductDTO getProduct(
+    ProductResponseDTO getProduct(
             @Parameter(description = "Id продукта", example = "5")
             Long id
     );
@@ -61,7 +60,7 @@ public interface ProductApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ProductDTO.class)
+                                    schema = @Schema(implementation = ProductResponseDTO.class)
                             )
                     }
             )
@@ -69,7 +68,7 @@ public interface ProductApi {
     @Operation(
             summary = "Получение продуктов с фильтрацией по названию и стоимости"
     )
-    List<ProductDTO> getAllProducts(
+    List<ProductResponseDTO> getAllProducts(
             @Parameter(description = "Позиция страницы", example = "0")
             Integer pagePosition,
             @Parameter(description = "Длина страницы", example = "5")
@@ -87,7 +86,7 @@ public interface ProductApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ProductDTO.class)
+                                    schema = @Schema(implementation = ProductResponseDTO.class)
                             )
                     }
             ),
@@ -105,7 +104,11 @@ public interface ProductApi {
     @Operation(
             summary = "Обновление информации о продукте"
     )
-    ProductDTO updateProduct(@RequestBody ProductDTO product);
+    ProductResponseDTO updateProduct(
+            @Parameter(description = "Id продукта")
+            Long id,
+            @Parameter(description = "Информация о продукте")
+            @RequestBody ProductRequestDTO product);
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -114,13 +117,13 @@ public interface ProductApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ProductDTO.class)
+                                    schema = @Schema(implementation = ProductResponseDTO.class)
                             )
                     }
             )
     })
     @Operation(summary = "Создает Product и возвращает ProductDTO")
-    ProductDTO addProduct(@RequestBody ProductDTO product);
+    ProductResponseDTO addProduct(@RequestBody ProductRequestDTO product);
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -129,7 +132,7 @@ public interface ProductApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ProductDTO.class)
+                                    schema = @Schema(implementation = ProductResponseDTO.class)
                             )
                     }
             ),

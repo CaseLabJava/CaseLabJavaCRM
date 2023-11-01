@@ -4,13 +4,16 @@ import java.util.HashMap;
 
 public class TranslateRusToEng {
 
+    private TranslateRusToEng() { }
+
     private static final HashMap<String,String> letters;
 
     static {
         letters = new HashMap<>();
         letters.put("а","a");
         letters.put("б","b");
-        letters.put("к","c");
+        letters.put("ц","ts");
+        letters.put("к","k");
         letters.put("д","d");
         letters.put("и","e");
         letters.put("г","g");
@@ -31,10 +34,10 @@ public class TranslateRusToEng {
         letters.put("з","z");
         letters.put("ч","ch");
         letters.put("ф","f");
-        letters.put("х","k");
+        letters.put("х","kh");
         letters.put("я","y");
         letters.put("ю","y");
-        letters.put("ь","`");
+        letters.put("ь"," ");
         letters.put("е","e");
     }
 

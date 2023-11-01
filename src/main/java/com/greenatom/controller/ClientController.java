@@ -1,7 +1,8 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.ClientApi;
-import com.greenatom.domain.dto.ClientDTO;
+import com.greenatom.domain.dto.client.ClientRequestDTO;
+import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.service.ClientService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,19 +31,18 @@ public class ClientController implements ClientApi {
 
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    public ClientDTO getClient(@PathVariable Long id) {
+    public ClientResponseDTO getClient(@PathVariable Long id) {
         return clientService.findOne(id);
     }
 
 
     @GetMapping (produces = {"application/json"})
-    public List<ClientDTO> getClientsResponse(@RequestParam(defaultValue = "0") Integer pageNumber,
-                                              @RequestParam(defaultValue = "10") Integer pageSize,
-                                              @RequestParam(defaultValue = "", required = false) String company,
-                                              @RequestParam(defaultValue = "", required = false) String firstname,
-                                              @RequestParam(defaultValue = "", required = false) String lastname,
-                                              @RequestParam(defaultValue = "", required = false) String patronymic
-                                              ) {
+    public List<ClientResponseDTO> getClientsResponse(@RequestParam(defaultValue = "0") Integer pageNumber,
+                                                      @RequestParam(defaultValue = "10") Integer pageSize,
+                                                      @RequestParam(defaultValue = "", required = false) String company,
+                                                      @RequestParam(defaultValue = "", required = false) String firstname,
+                                                      @RequestParam(defaultValue = "", required = false) String lastname,
+                                                      @RequestParam(defaultValue = "", required = false) String patronymic) {
         return clientService.findClientPageByParams(pageNumber,
                 pageSize,
                 company,
@@ -51,13 +51,13 @@ public class ClientController implements ClientApi {
                 patronymic);
     }
 
-    @PutMapping(produces = {"application/json"})
-    public ClientDTO updateClient(@RequestBody ClientDTO client) {
-        return clientService.updateClient(client);
+    @PatchMapping(value = "/{id}", produces = {"application/json"})
+    public ClientResponseDTO updateClient(@PathVariable Long id, @RequestBody ClientRequestDTO client) {
+        return clientService.updateClient(id, client);
     }
 
     @PostMapping(produces = {"application/json"})
-    public ClientDTO addClient(@RequestBody ClientDTO client) {
+    public ClientResponseDTO addClient(@RequestBody ClientRequestDTO client) {
         return clientService.save(client);
     }
 

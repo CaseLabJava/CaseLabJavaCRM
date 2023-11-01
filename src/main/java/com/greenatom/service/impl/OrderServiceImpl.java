@@ -1,9 +1,9 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.item.OrderItemRequest;
-import com.greenatom.domain.dto.order.GenerateOrderRequest;
-import com.greenatom.domain.dto.order.OrderDTO;
-import com.greenatom.domain.dto.order.OrderRequest;
+import com.greenatom.domain.dto.item.OrderItemRequestDTO;
+import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
+import com.greenatom.domain.dto.order.OrderRequestDTO;
+import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
@@ -51,14 +51,14 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
-    public List<OrderDTO> findAll(Integer pagePosition, Integer pageLength,
-                                  Long id) {
+    public List<OrderResponseDTO> findAll(Integer pagePosition, Integer pageLength,
+                                          Long id) {
         return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
                 PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
-    public List<OrderDTO> findByPaginationAndFilters(PageRequest pageRequest, String orderStatus, String linkToFolder) {
+    public List<OrderResponseDTO> findByPaginationAndFilters(PageRequest pageRequest, String orderStatus, String linkToFolder) {
         return orderRepository
                 .findByOrderStatusAndLinkToFolder(pageRequest, orderStatus, linkToFolder)
                 .map(orderMapper::toDto)
@@ -66,16 +66,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO findOne(Long id) {
+    public OrderResponseDTO findOne(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         return orderMapper.toDto(order);
     }
 
     @Override
-    public OrderDTO createDraft(OrderRequest orderRequest) {
-        List<OrderItemRequest> orderItemList = orderRequest.getOrderItemList();
-        Order order = createDraftOrder(orderRequest);
-        for (OrderItemRequest orderItem: orderItemList) {
+    public OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO) {
+        List<OrderItemRequestDTO> orderItemList = orderRequestDTO.getOrderItemList();
+        Order order = createDraftOrder(orderRequestDTO);
+        for (OrderItemRequestDTO orderItem: orderItemList) {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
@@ -95,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO finishOrder(Long id) {
+    public OrderResponseDTO finishOrder(Long id) {
         Order order = orderRepository
                 .findById(id)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
@@ -108,13 +108,13 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(order);
     }
 
-    private Order createDraftOrder(OrderRequest orderRequest) {
+    private Order createDraftOrder(OrderRequestDTO orderRequestDTO) {
         Order order = new Order();
         Client client = clientRepository
-                .findById(orderRequest.getClientId())
+                .findById(orderRequestDTO.getClientId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_CLIENT::get);
         Employee employee = employeeRepository
-                .findById(orderRequest.getEmployeeId())
+                .findById(orderRequestDTO.getEmployeeId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get);
         order.setClient(client);
         order.setEmployee(employee);
@@ -127,7 +127,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void generateOrder(GenerateOrderRequest request) {
+    public void generateOrder(GenerateOrderRequestDTO request) {
         OrderGenerator orderGenerator = new OrderGenerator();
         Order order = orderRepository
                 .findById(request.getId())
@@ -146,20 +146,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO save(OrderDTO orderDTO) {
-        Order order = orderMapper.toEntity(orderDTO);
+    public OrderResponseDTO save(OrderResponseDTO orderResponseDTO) {
+        Order order = orderMapper.toEntity(orderResponseDTO);
         order.setClient(clientRepository.findById(
-                orderDTO.getClient().getId())
+                orderResponseDTO.getClient().getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get));
         order.setEmployee(employeeRepository.findById(
-                orderDTO.getEmployee().getId())
+                orderResponseDTO.getEmployee().getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get));
         orderRepository.save(order);
         return orderMapper.toDto(order);
     }
 
     @Override
-    public OrderDTO updateOrder(OrderDTO order) {
+    public OrderResponseDTO updateOrder(OrderResponseDTO order) {
         return orderRepository
                 .findById(order.getId())
                 .map(existingEvent -> {

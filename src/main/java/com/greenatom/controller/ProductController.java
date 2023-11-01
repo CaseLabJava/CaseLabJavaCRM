@@ -1,7 +1,8 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.ProductApi;
-import com.greenatom.domain.dto.ProductDTO;
+import com.greenatom.domain.dto.product.ProductRequestDTO;
+import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,27 +30,27 @@ public class ProductController implements ProductApi {
     }
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
-    public ProductDTO getProduct(@PathVariable Long id) {
+    public ProductResponseDTO getProduct(@PathVariable Long id) {
         return productService.findOne(id);
     }
 
     @GetMapping(value = "/get", produces = {"application/json"})
-    public List<ProductDTO> getAllProducts(@RequestParam(defaultValue = "0") Integer pagePosition,
-                                           @RequestParam(defaultValue = "20") Integer pageLength,
-                                           @RequestParam(defaultValue = "", required = false) String name,
-                                           @RequestParam(defaultValue = "0x7fffffff", required = false) Integer cost
+    public List<ProductResponseDTO> getAllProducts(@RequestParam(defaultValue = "0") Integer pagePosition,
+                                                   @RequestParam(defaultValue = "20") Integer pageLength,
+                                                   @RequestParam(defaultValue = "", required = false) String name,
+                                                   @RequestParam(defaultValue = "0x7fffffff", required = false) Integer cost
                                            ){
         return productService.findAll(pagePosition, pageLength, name, cost);
     }
 
 
-    @PutMapping(produces = {"application/json"})
-    public ProductDTO updateProduct(@RequestBody ProductDTO product) {
-        return productService.updateProduct(product);
+    @PatchMapping(value = "/{id}", produces = {"application/json"})
+    public ProductResponseDTO updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO product) {
+        return productService.updateProduct(id, product);
     }
 
     @PostMapping(produces = {"application/json"})
-    public ProductDTO addProduct(@RequestBody ProductDTO product) {
+    public ProductResponseDTO addProduct(@RequestBody ProductRequestDTO product) {
         return productService.save(product);
     }
 

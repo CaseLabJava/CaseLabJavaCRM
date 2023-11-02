@@ -205,11 +205,15 @@ public class OrderServiceImpl implements OrderService {
             try {
                 String projectRoot = System.getProperty("user.dir");
                 String uploadDir = projectRoot + "/Documents/UploadDoc";
-                String fileName = cleanFileName(file.getOriginalFilename());
+                String fileName = cleanFileName(Objects.requireNonNull(file.getOriginalFilename()));
 
                 File uploadPath = new File(uploadDir);
                 if (!uploadPath.exists()) {
-                    uploadPath.mkdirs();
+                    if (uploadPath.mkdirs()) {
+                        log.info("Dir created");
+                    } else {
+                        log.error("Error with dir creation");
+                    }
                 }
 
                 File targetFile = new File(uploadPath, fileName);
@@ -254,7 +258,4 @@ public class OrderServiceImpl implements OrderService {
     private String cleanFileName(String fileName) {
         return fileName.replaceAll("[^a-zA-Z0-9_-]", "");
     }
-
-
-
 }

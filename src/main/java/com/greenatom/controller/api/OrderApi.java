@@ -3,7 +3,6 @@ package com.greenatom.controller.api;
 import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
-import com.greenatom.domain.dto.security.JwtResponse;
 import com.greenatom.utils.exception.message.OrderErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -250,13 +249,7 @@ public interface OrderApi {
     @ApiResponses(value = {
         @ApiResponse(
             responseCode = "200",
-            description = "Документ успешно загружен",
-            content = {
-                    @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = JwtResponse.class)
-                    )
-            }
+            description = "Документ успешно загружен"
         ),
     @ApiResponse(
             responseCode = "400",

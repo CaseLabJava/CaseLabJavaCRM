@@ -7,5 +7,6 @@
     <include file="v.0.0.1/init-db-0.0.1.xml" relativeToChangelogFile="true"/>
     <include file="v.0.0.1/create-role-0.0.2.xml" relativeToChangelogFile="true"/>
     <include file="v.0.0.1/create-data-0.0.3.xml" relativeToChangelogFile="true"/>
+    <include file="v.0.0.1/order-lifecycle-update-0.0.4.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

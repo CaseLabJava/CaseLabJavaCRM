@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * A DTO for the Order.
@@ -25,17 +25,17 @@ public class OrderResponseDTO {
     @Schema(description = "Id заказа")
     private Long id;
 
-    @Schema(description = "Информациыя о клиенте")
+    @Schema(description = "Информация о клиенте")
     private ClientResponseDTO client;
 
     @Schema(description = "Информация о сотруднике")
     private EmployeeResponseDTO employee;
 
-    @Schema(description = "Ссылка на дерикторию с документами")
+    @Schema(description = "Ссылка на директорию с документами")
     private String linkToFolder;
 
     @Schema(description = "Дата заказа")
-    private Date orderDate;
+    private Instant orderDate;
 
     @Schema(description = "Статус заказа")
     private OrderStatus orderStatus;

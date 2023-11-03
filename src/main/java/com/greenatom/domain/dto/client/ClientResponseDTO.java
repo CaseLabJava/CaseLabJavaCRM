@@ -46,6 +46,9 @@ public class ClientResponseDTO {
     @Schema(description = "Адресс клиента", example = "119017, город Москва, ул. Большая Ордынка, д.24 ")
     private String address;
 
+    @Schema(description = "Электронная почта клиента", example = "pudge@mail.ru")
+    private String email;
+
     @Schema(description = "Номер телефона клиента", example = "88005553535")
     private String phoneNumber;
 }

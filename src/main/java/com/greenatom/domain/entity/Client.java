@@ -54,8 +54,14 @@ public class Client {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "mail")
+    private String email;
+
     @OneToMany(mappedBy = "client")
     private Set<Order> orders;
+
+    @OneToMany(mappedBy = "client")
+    private Set<Claim> claims;
 
     public String getFullName() {
         return String.format("%s %s %s", surname, name, patronymic);

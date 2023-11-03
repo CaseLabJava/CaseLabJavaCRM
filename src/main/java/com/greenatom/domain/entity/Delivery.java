@@ -22,10 +22,12 @@ public class Delivery {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @NonNull
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+    @NonNull
     private Employee employee;
 
 

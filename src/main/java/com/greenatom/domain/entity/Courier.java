@@ -24,5 +24,6 @@ public class Courier {
 
     @OneToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+    @NonNull
     private Employee employee;
 }

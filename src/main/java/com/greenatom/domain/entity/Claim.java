@@ -25,14 +25,17 @@ public class Claim {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @NonNull
     private Order order;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+    @NonNull
     private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "client_id")
+    @NonNull
     private Client client;
 
     @Column(name = "status")

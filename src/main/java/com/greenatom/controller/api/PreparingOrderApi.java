@@ -32,4 +32,15 @@ public interface PreparingOrderApi {
     ResponseEntity<List<PreparingOrderResponseDTO>> getPreparingOrders(@RequestParam(defaultValue = "0") Integer pageNumber,
                                                                        @RequestParam(defaultValue = "10") Integer pageSize,
                                                                        @RequestParam(defaultValue = "WAITING_FOR_PREPARING", required = false) String status);
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "203",
+                    description = "Успешное назначение сборщика"
+            )
+    })
+    @Operation(
+            summary = "Назначение сборщика на заказ"
+    )
+    ResponseEntity<Void> appointCollector(@RequestParam(required = false) Long employeeId,
+                                          @RequestParam Long preparingOrderId);
 }

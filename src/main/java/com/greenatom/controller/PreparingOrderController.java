@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,5 +32,13 @@ public class PreparingOrderController implements PreparingOrderApi {
                                                                                       schema = @Schema(allowableValues = {"WAITING_FOR_PREPARING", "IN_PROCESS", "DONE"}))
                                                                               @RequestParam(name = "статус заказа", defaultValue = "WAITING_FOR_PREPARING", required = false) String status) {
         return ResponseEntity.ok(preparingOrderService.findPreparingOrdersPageByParams(pageNumber, pageSize, status));
+    }
+    @PutMapping
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
+    @Override
+    public ResponseEntity<Void> appointCollector(@RequestParam(required = false) Long employeeId,
+                                                 @RequestParam Long preparingOrderId) {
+        preparingOrderService.appointCollector(employeeId, preparingOrderId);
+        return ResponseEntity.noContent().build();
     }
 }

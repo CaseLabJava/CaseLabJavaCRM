@@ -61,6 +61,18 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<Order> orders;
 
+    @OneToMany(mappedBy = "employee")
+    private Set<Claim> claims;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<PreparingOrder> preparingOrders;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<Delivery> deliveries;
+
+    @OneToOne(mappedBy = "employee")
+    private Courier courier;
+
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
     private Role role;

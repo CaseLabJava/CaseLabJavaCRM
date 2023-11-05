@@ -1,11 +1,16 @@
 package com.greenatom.domain.entity;
 
+import com.greenatom.domain.enums.DeliveryType;
 import com.greenatom.domain.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A Order.
@@ -26,11 +31,15 @@ public class Order {
     private String linkToFolder;
 
     @Column(name = "date_time")
-    private Date orderDate;
+    private Instant orderDate;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    @Column(name = "delivery_type")
+    @Enumerated(EnumType.STRING)
+    private DeliveryType deliveryType;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
@@ -40,6 +49,16 @@ public class Order {
     @JoinColumn(name = "client_id")
     private Client client;
 
+
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
+
+    @OneToOne(mappedBy = "order")
+    private Claim claim;
+
+    @OneToOne(mappedBy = "order")
+    private PreparingOrder preparingOrder;
+
+    @OneToMany(mappedBy = "order")
+    private Set<Delivery> deliviries;
 }

@@ -10,7 +10,6 @@ import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
-import com.greenatom.utils.date.DateTimeUtils;
 import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
@@ -121,7 +121,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get);
         order.setClient(client);
         order.setEmployee(employee);
-        order.setOrderDate(DateTimeUtils.getTodayDate());
+        order.setOrderDate(Instant.now());
         order.setOrderStatus(OrderStatus.DRAFT);
         // TODO: Поменять, когда будет понятно на что
         order.setLinkToFolder("LINK_TO_FOLDER_SAMPLE");

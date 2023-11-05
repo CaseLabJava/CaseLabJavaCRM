@@ -29,21 +29,8 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="79969" id="1698581124788-3">
-        <createTable tableName="delivery">
-            <column name="deliveryr_id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"
-                             primaryKeyName="delivery_pkey"/>
-            </column>
-            <column name="order_id" type="BIGINT"/>
-            <column name="employee_id" type="BIGINT"/>
-            <column name="status" type="VARCHAR(50)"/>
-            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
-            <column name="end_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
-        </createTable>
-    </changeSet>
 
-    <changeSet author="79969" id="1698581124788-4">
+    <changeSet author="79969" id="1698581124788-3">
         <createTable tableName="delivery">
             <column name="delivery_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"
@@ -57,7 +44,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="79969" id="1698581124788-5">
+    <changeSet author="79969" id="1698581124788-4">
         <createTable tableName="preparing_order">
             <column name="preparing_order_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"
@@ -71,7 +58,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="79969" id="1698581124788-6">
+    <changeSet author="79969" id="1698581124788-5">
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="claim"
                                  constraintName="fk551losx9j75ss5d6bfsqg5hh1"
                                  deferrable="false"
@@ -80,7 +67,7 @@
                                  referencedColumnNames="order_id"
                                  referencedTableName="order"/>
     </changeSet>
-    <changeSet author="79969" id="1698581124788-7">
+    <changeSet author="79969" id="1698581124788-6">
         <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="claim"
                                  constraintName="fk551losx9j75ss5d6bfsqs123h"
                                  deferrable="false"
@@ -89,7 +76,7 @@
                                  referencedColumnNames="employee_id"
                                  referencedTableName="employee"/>
     </changeSet>
-    <changeSet author="79969" id="1698581124788-8">
+    <changeSet author="79969" id="1698581124788-7">
         <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="claim"
                                  constraintName="fk551losx9j75ss5d6bfsqmjyd0"
                                  deferrable="false"
@@ -98,7 +85,7 @@
                                  referencedColumnNames="client_id"
                                  referencedTableName="client"/>
     </changeSet>
-    <changeSet author="79969" id="1698581124788-9">
+    <changeSet author="79969" id="1698581124788-8">
         <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="courier"
                                  constraintName="fk551losx9j75ss5d6bfsqhhy57"
                                  deferrable="false"
@@ -107,7 +94,7 @@
                                  referencedColumnNames="employee_id"
                                  referencedTableName="employee"/>
     </changeSet>
-    <changeSet author="79969" id="1698581124788-10">
+    <changeSet author="79969" id="1698581124788-9">
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="delivery"
                                  constraintName="fk551losx9j75ss5d6bfsq6fa1e"
                                  deferrable="false"
@@ -116,7 +103,7 @@
                                  referencedColumnNames="order_id"
                                  referencedTableName="order"/>
     </changeSet>
-    <changeSet author="79969" id="1698581124788-11">
+    <changeSet author="79969" id="1698581124788-10">
         <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="delivery"
                                  constraintName="fk551losx9j75ss5d6bfsqghppo"
                                  deferrable="false"
@@ -125,7 +112,7 @@
                                  referencedColumnNames="employee_id"
                                  referencedTableName="employee"/>
     </changeSet>
-    <changeSet author="79969" id="1698581124788-12">
+    <changeSet author="79969" id="1698581124788-11">
         <addForeignKeyConstraint baseColumnNames="order_id"
                                  baseTableName="preparing_order"
                                  constraintName="fk551losx9j75ss5d6bfsq112fd"
@@ -135,7 +122,7 @@
                                  referencedColumnNames="order_id"
                                  referencedTableName="order"/>
     </changeSet>
-    <changeSet author="79969" id="1698581124788-13">
+    <changeSet author="79969" id="1698581124788-12">
         <addForeignKeyConstraint baseColumnNames="employee_id"
                                  baseTableName="preparing_order"
                                  constraintName="fk551losx9j75ss5d6bfsqscuf7"
@@ -145,12 +132,12 @@
                                  referencedColumnNames="employee_id"
                                  referencedTableName="employee"/>
     </changeSet>
-    <changeSet id="1698581124788-14" author="79969">
+    <changeSet id="1698581124788-13" author="79969">
         <addColumn tableName="client">
             <column name="email" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
-    <changeSet id="1698581124788-15" author="79969">
+    <changeSet id="1698581124788-14" author="79969">
         <addColumn tableName="order">
             <column name="delivery_type" type="VARCHAR(50)"/>
         </addColumn>

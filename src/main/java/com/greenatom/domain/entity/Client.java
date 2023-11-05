@@ -54,7 +54,7 @@ public class Client {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "mail")
+    @Column(name = "email")
     private String email;
 
     @OneToMany(mappedBy = "client")

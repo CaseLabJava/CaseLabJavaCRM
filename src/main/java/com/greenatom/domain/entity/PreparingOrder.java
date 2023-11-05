@@ -13,6 +13,8 @@ import java.time.Instant;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Entity
 @Table(name = "preparing_order")
@@ -30,7 +32,6 @@ public class PreparingOrder {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
-    @NonNull
     private Employee employee;
 
 

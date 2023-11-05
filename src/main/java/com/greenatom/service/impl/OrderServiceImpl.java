@@ -7,6 +7,7 @@ import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
+import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
@@ -23,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
+    private final PreparingOrderRepository preparingOrderRepository;
 
     private final OrderMapper orderMapper;
 
@@ -142,10 +146,20 @@ public class OrderServiceImpl implements OrderService {
                     order.getClient(),
                     order.getEmployee(),
                     filename + ".docx");
-            order.setOrderStatus(OrderStatus.SIGNED_BY_EMPLOYEE);
+            generatePreparingOrder(order);
+            order.setOrderStatus(OrderStatus.IN_PROCESS);
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
+    }
+
+    @Override
+    public void generatePreparingOrder(Order order) {
+        preparingOrderRepository.save(new PreparingOrder().builder()
+                .order(order)
+                .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
+                .startTime(Instant.now())
+                .build());
     }
 
     @Override
@@ -231,6 +245,7 @@ public class OrderServiceImpl implements OrderService {
         }
         updateStatus(uploadDocumentRequestDTO);
     }
+
 
     //Обновляем статус в заявке на SIGNED_BY_CLIENT
     private void updateStatus(UploadDocumentRequestDTO uploadDocumentRequestDTO) {

@@ -1,6 +1,7 @@
 package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.preparing_order.PreparingOrderResponseDTO;
+import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.PreparingOrderMapper;
 import com.greenatom.repository.PreparingOrderRepository;
 import com.greenatom.service.PreparingOrderService;
@@ -21,7 +22,7 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
     @Override
     public List<PreparingOrderResponseDTO> findPreparingOrdersPageByParams(Integer pageNumber, Integer pageSize, String status) {
         return preparingOrderRepository.findPreparingOrdersByPreparingOrderStatus(
-                PageRequest.of(pageNumber, pageSize), status)
+                PageRequest.of(pageNumber, pageSize), PreparingOrderStatus.valueOf(status))
                 .map(mapper::toDto)
                 .toList();
     }

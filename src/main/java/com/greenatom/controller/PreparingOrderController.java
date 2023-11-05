@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@AccessDeniedResponse
+//@AccessDeniedResponse
 @RequestMapping(value = "/api/preparing_orders")
 @RequiredArgsConstructor
 public class PreparingOrderController implements PreparingOrderApi {
     private final PreparingOrderServiceImpl preparingOrderService;
 
     @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_WAREHOUSE_WORKER', 'ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
     @Override
     public ResponseEntity<List<PreparingOrderResponseDTO>> getPreparingOrders(@RequestParam(defaultValue = "0") Integer pageNumber,
                                                                               @RequestParam(defaultValue = "10") Integer pageSize,

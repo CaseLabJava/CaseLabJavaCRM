@@ -67,9 +67,6 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<PreparingOrder> preparingOrders;
 
-    @OneToMany(mappedBy = "employee")
-    private Set<Delivery> deliveries;
-
     @OneToOne(mappedBy = "employee")
     private Courier courier;
 

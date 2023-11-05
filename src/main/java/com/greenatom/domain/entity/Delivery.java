@@ -26,9 +26,9 @@ public class Delivery {
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
+    @JoinColumn(name = "courier_id", referencedColumnName = "courier_id")
     @NonNull
-    private Employee employee;
+    private Courier courier;
 
 
     @Column(name = "status")

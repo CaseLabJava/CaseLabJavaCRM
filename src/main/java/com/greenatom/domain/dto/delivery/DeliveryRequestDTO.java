@@ -18,8 +18,8 @@ public class DeliveryRequestDTO {
     @Schema(description = "Id заказа", example = "1")
     private Long orderId;
 
-    @Schema(description = "Id сотрудника", example = "3")
-    private Long employeeId;
+    @Schema(description = "Id курьера", example = "3")
+    private Long courierId;
 
     @Schema(description = "Статус доставки", example = "IN_PROCESS")
     private DeliveryStatus deliveryStatus;

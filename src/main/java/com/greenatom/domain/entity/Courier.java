@@ -3,6 +3,8 @@ package com.greenatom.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 /**
  * A Courier
  */
@@ -26,4 +28,7 @@ public class Courier {
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
     @NonNull
     private Employee employee;
+
+    @OneToMany(mappedBy = "courier")
+    private Set<Delivery> deliveries;
 }

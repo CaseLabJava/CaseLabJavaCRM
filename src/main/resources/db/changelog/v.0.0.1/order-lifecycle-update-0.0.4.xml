@@ -104,13 +104,13 @@
                                  referencedTableName="client_order"/>
     </changeSet>
     <changeSet author="79969" id="1698581124788-10">
-        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="delivery"
+        <addForeignKeyConstraint baseColumnNames="courier_id" baseTableName="delivery"
                                  constraintName="fk551losx9j75ss5d6bfsqghppo"
                                  deferrable="false"
                                  initiallyDeferred="false" onDelete="NO ACTION"
                                  onUpdate="NO ACTION"
-                                 referencedColumnNames="employee_id"
-                                 referencedTableName="employee"/>
+                                 referencedColumnNames="courier_id"
+                                 referencedTableName="courier"/>
     </changeSet>
     <changeSet author="79969" id="1698581124788-11">
         <addForeignKeyConstraint baseColumnNames="order_id"

@@ -138,7 +138,7 @@
         </addColumn>
     </changeSet>
     <changeSet id="1698581124788-14" author="79969">
-        <addColumn tableName="order">
+        <addColumn tableName="client_order">
             <column name="delivery_type" type="VARCHAR(50)"/>
         </addColumn>
     </changeSet>

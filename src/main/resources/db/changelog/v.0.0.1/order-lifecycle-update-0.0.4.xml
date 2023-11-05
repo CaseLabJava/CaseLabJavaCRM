@@ -65,7 +65,7 @@
                                  initiallyDeferred="false" onDelete="NO ACTION"
                                  onUpdate="NO ACTION"
                                  referencedColumnNames="order_id"
-                                 referencedTableName="order"/>
+                                 referencedTableName="client_order"/>
     </changeSet>
     <changeSet author="79969" id="1698581124788-6">
         <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="claim"
@@ -101,7 +101,7 @@
                                  initiallyDeferred="false" onDelete="NO ACTION"
                                  onUpdate="NO ACTION"
                                  referencedColumnNames="order_id"
-                                 referencedTableName="order"/>
+                                 referencedTableName="client_order"/>
     </changeSet>
     <changeSet author="79969" id="1698581124788-10">
         <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="delivery"
@@ -120,7 +120,7 @@
                                  initiallyDeferred="false" onDelete="NO ACTION"
                                  onUpdate="NO ACTION"
                                  referencedColumnNames="order_id"
-                                 referencedTableName="order"/>
+                                 referencedTableName="client_order"/>
     </changeSet>
     <changeSet author="79969" id="1698581124788-12">
         <addForeignKeyConstraint baseColumnNames="employee_id"

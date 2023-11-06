@@ -12,10 +12,9 @@ import java.time.Instant;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor(force = true)
 @Builder
-@NoArgsConstructor
 @Entity
 @Table(name = "preparing_order")
 public class PreparingOrder {

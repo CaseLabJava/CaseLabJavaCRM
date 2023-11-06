@@ -24,8 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -155,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void generatePreparingOrder(Order order) {
-        preparingOrderRepository.save(new PreparingOrder().builder()
+        preparingOrderRepository.save(PreparingOrder.builder()
                 .order(order)
                 .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
                 .startTime(Instant.now())

@@ -2,7 +2,6 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.preparing_order.PreparingOrderResponseDTO;
 import com.greenatom.domain.entity.Employee;
-import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.entity.PreparingOrder;
 import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.PreparingOrderMapper;

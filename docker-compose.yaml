@@ -39,7 +39,7 @@ services:
       case-lab-db:
         condition: service_healthy
       minio:
-        condition: service_healthy
+        condition: service_started
 
   minio:
     image: minio/minio:latest
@@ -54,11 +54,6 @@ services:
       - ~/minio/data:/data
     networks:
       case-lab:
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://minio:9000/localhost/health/live" ]
-      interval: 30s
-      timeout: 20s
-      retries: 3
 
   zookeeper:
     image: zookeeper:3.7.0

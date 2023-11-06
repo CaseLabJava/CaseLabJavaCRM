@@ -28,6 +28,8 @@ spring:
           auth: true
           starttls:
             enable: true
+          ssl:
+            enable: true
 
 springdoc:
   swagger-ui:

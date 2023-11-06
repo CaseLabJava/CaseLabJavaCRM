@@ -33,7 +33,6 @@ public class PreparingOrder {
     @NonNull
     private Employee employee;
 
-
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private PreparingOrderStatus preparingOrderStatus;

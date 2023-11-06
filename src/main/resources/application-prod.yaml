@@ -6,3 +6,11 @@ spring:
     password: ${POSTGRES_PASSWORD}
   jpa:
     show-sql: true
+
+kafka:
+  url: ${BOOTSTRAP_SERVERS_CONFIG}
+
+minio:
+  access-key: ${MINIO_ACCESS}
+  secret-key: ${MINIO_SECRET}
+  url: ${MINIO_URL}

@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 /**
@@ -27,16 +28,20 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class OrderItemServiceImpl implements OrderItemService {
+
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderItemResponseDTO> findAll() {
         return orderItemMapper.toDto(orderItemRepository.findAll());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OrderItemResponseDTO findOne(Long id) {
         return orderItemMapper.toDto(orderItemRepository
                 .findById(id)

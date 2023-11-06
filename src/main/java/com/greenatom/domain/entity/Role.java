@@ -3,7 +3,6 @@ package com.greenatom.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -26,7 +25,4 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private List<Employee> employees;
 
-    public Role(String name){
-        this.name = name;
-    }
 }

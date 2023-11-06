@@ -23,8 +23,8 @@ import java.util.List;
  *
  * <p>Эти операции выполняются при помощи сервиса ClientService, реализующего бизнес-логику.
  *
- * @version 1.0
  * @author Максим Быков
+ * @version 1.0
  */
 @RestController
 @RequestMapping(value = "/api/employees")
@@ -44,7 +44,7 @@ public class EmployeeController implements EmployeeApi {
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR')")
     public List<EmployeeResponseDTO> getAllEmployees(@Param("position") Integer pagePosition,
-                                                          @Param("length") Integer pageLength) {
+                                                     @Param("length") Integer pageLength) {
         return employeeService.findAll(pagePosition, pageLength);
     }
 

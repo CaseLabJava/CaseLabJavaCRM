@@ -1,6 +1,6 @@
 package com.greenatom.utils.generator.request;
 
-public class Constants {
+public final class Constants {
 
     private Constants() {}
 
@@ -13,7 +13,5 @@ public class Constants {
     public static final String[] REQUEST_COL_HEADERS = {"№ п/п", "Наименование", "Количество, шт", "Цена, руб", "Сумма, руб"};
     public static final String SELLER_SIGNATURE = "Подпись менеджера: %s %s";
     public static final String BUYER_SIGNATURE_PLACE = "Подпись покупателя: _________________________";
-
-
 
 }

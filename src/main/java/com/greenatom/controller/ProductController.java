@@ -18,6 +18,7 @@ import java.util.List;
  * <p>– PUT /update обновляет информацию о продукте, используя данные из тела запроса.
  * <p>– POST /add добавляет новый продукт, используя данные из тела запроса.
  * <p>- DELETE /delete/{id} удаляет продукт с заданным идентификатором.
+ *
  * @author Максим Быков, Степан Моргачев
  * @version 1.0
  */
@@ -41,11 +42,9 @@ public class ProductController implements ProductApi {
     public List<ProductResponseDTO> getAllProducts(@RequestParam(defaultValue = "0") Integer pagePosition,
                                                    @RequestParam(defaultValue = "20") Integer pageLength,
                                                    @RequestParam(defaultValue = "", required = false) String name,
-                                                   @RequestParam(defaultValue = "0x7fffffff", required = false) Integer cost
-                                           ){
+                                                   @RequestParam(defaultValue = "0x7fffffff", required = false) Integer cost) {
         return productService.findAll(pagePosition, pageLength, name, cost);
     }
-
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
@@ -59,9 +58,7 @@ public class ProductController implements ProductApi {
         return productService.save(product);
     }
 
-
-    @DeleteMapping(value = "/{id}",
-            produces = {"application/json"})
+    @DeleteMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);

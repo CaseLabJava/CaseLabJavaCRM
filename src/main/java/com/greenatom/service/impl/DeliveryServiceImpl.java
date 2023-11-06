@@ -48,8 +48,6 @@ public class DeliveryServiceImpl implements DeliveryService {
         } else {
             throw DeliveryException.CODE.INVALID_STATUS.get();
         }
-
-        courierRepository.save(courier);
         deliveryRepository.save(delivery);
     }
 

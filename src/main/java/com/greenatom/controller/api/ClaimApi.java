@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public interface ClaimApi {
     @Operation(
             summary = "Получение жалобы по id"
     )
-    ClaimResponseDTO getClaim(
+    ResponseEntity<ClaimResponseDTO> getClaim(
             @Parameter(description = "Id жалобы", example = "1")
             Long id
     );
@@ -65,7 +66,7 @@ public interface ClaimApi {
     @Operation(
             summary = "Получение всех жалоб"
     )
-    List<ClaimResponseDTO> getClaimsResponse(
+    ResponseEntity<List<ClaimResponseDTO>> getClaimsResponse(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize);
 
@@ -129,7 +130,7 @@ public interface ClaimApi {
     @Operation(
             summary = "Обновление информации о жалобе"
     )
-    ClaimResponseDTO updateClaim(
+    ResponseEntity<ClaimResponseDTO> updateClaim(
             @Parameter(description = "Id жалобы")
             Long id,
             @Parameter(description = "Информация о жалобе")
@@ -147,7 +148,7 @@ public interface ClaimApi {
             }
     )
     @Operation(summary = "Создает Claim и возвращает ClaimDTO")
-    ClaimResponseDTO addClaim(
+    ResponseEntity<ClaimResponseDTO> addClaim(
             @Parameter(description = "Информация о жалобе")
             ClaimRequestDTO claimRequestDTO
     );

@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,7 @@ import java.util.Objects;
  * сотрудника,
  * ссылку на дерикторию с документами заявки, дату создания, и статус. В методе происходит сохранение записи
  * в базу данных, а также сохранение docx документа в папку в документами заявки.
+ *
  * @author Максим Быков, Даниил Змаев
  * @version 1.0
  */
@@ -83,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO) {
         List<OrderItemRequestDTO> orderItemList = orderRequestDTO.getOrderItemList();
         Order order = createDraftOrder(orderRequestDTO);
-        for (OrderItemRequestDTO orderItem: orderItemList) {
+        for (OrderItemRequestDTO orderItem : orderItemList) {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
@@ -132,15 +134,15 @@ public class OrderServiceImpl implements OrderService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
-            helper = new MimeMessageHelper(message,true);
+            helper = new MimeMessageHelper(message, true);
             helper.setFrom(fromAddress, senderName);
             helper.setTo(toAddress);
             helper.setSubject(subject);
-            File file = new File(order.getId()+".docx");
-            helper.addAttachment("Заказ",file);
+            File file = new File(order.getId() + ".docx");
+            helper.addAttachment("Заказ", file);
             helper.setText(content, true);
         } catch (MessagingException | IOException e) {
-            throw new RuntimeException(e);
+            throw new MailSendException("Couldn't send email to address: " + toAddress, e);
         }
         mailSender.send(message);
     }

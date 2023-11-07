@@ -1,7 +1,6 @@
 package com.greenatom.repository;
 
 import com.greenatom.domain.entity.Delivery;
-import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.enums.DeliveryStatus;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

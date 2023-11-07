@@ -66,4 +66,5 @@ public class Client {
     public String getFullName() {
         return String.format("%s %s %s", surname, name, patronymic);
     }
+
 }

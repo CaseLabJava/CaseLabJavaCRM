@@ -33,7 +33,6 @@ public class PreparingOrder {
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
     private Employee employee;
 
-
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private PreparingOrderStatus preparingOrderStatus;

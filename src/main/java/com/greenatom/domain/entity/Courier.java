@@ -21,7 +21,7 @@ public class Courier {
     @Column(name = "courier_id")
     private Long id;
 
-   @Column(name = "is_active")
+    @Column(name = "is_active")
     private Boolean isActive;
 
     @OneToOne
@@ -31,4 +31,5 @@ public class Courier {
 
     @OneToMany(mappedBy = "courier")
     private Set<Delivery> deliveries;
+
 }

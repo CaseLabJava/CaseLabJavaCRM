@@ -1,9 +1,7 @@
 package com.greenatom.utils.exception.handler;
 
 import com.greenatom.utils.exception.DeliveryException;
-import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.exception.message.DeliveryErrorMessage;
-import com.greenatom.utils.exception.message.OrderErrorMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

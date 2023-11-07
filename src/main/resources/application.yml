@@ -26,3 +26,7 @@ springdoc:
 access_token: ${ACCESS_TOKEN}
 refresh_token: ${REFRESH_TOKEN}
 
+minio:
+  access-key: ${MINIO_ACCESS}
+  secret-key: ${MINIO_SECRET}
+  url: ${MINIO_URL}

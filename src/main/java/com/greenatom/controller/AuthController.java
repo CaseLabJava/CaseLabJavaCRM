@@ -37,22 +37,22 @@ public class AuthController implements AuthApi {
 
     @PostMapping("/signup")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public JwtResponse registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO){
+    public JwtResponse registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO) {
         return authService.registration(employeeRequestDTO);
     }
 
     @PostMapping("/signin")
-    public JwtResponse login(@RequestBody AuthDTO authDto){
+    public JwtResponse login(@RequestBody AuthDTO authDto) {
         return authService.login(authDto);
     }
 
     @PostMapping("/access-token")
-    public JwtResponse getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest){
+    public JwtResponse getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest) {
         return authService.getAccessToken(refreshJwtRequest.getRefreshToken());
     }
 
     @PostMapping("/refresh")
-    public JwtResponse refresh(@RequestBody RefreshJwtRequest refreshJwtRequest){
+    public JwtResponse refresh(@RequestBody RefreshJwtRequest refreshJwtRequest) {
         return authService.refresh(refreshJwtRequest.getRefreshToken());
     }
 }

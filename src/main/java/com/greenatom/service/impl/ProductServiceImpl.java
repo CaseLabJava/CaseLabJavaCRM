@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,16 +25,20 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
+
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProductResponseDTO> findAll() {
         return productMapper.toDto(productRepository.findAll());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductResponseDTO findOne(Long id) {
         log.debug("Order to get Product : {}", id);
         return productMapper.toDto(productRepository
@@ -69,6 +74,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProductResponseDTO> findAll(Integer pagePosition, Integer pageLength, String name, Integer cost) {
         return productMapper.toDto(productRepository.findProductByProductNameContainingAndCostBefore(
                 PageRequest.of(pagePosition, pageLength), name, cost).toList());

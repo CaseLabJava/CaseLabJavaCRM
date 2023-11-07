@@ -33,7 +33,6 @@ import java.util.Date;
 public class JwtCore {
 
     private final SecretKey accessKey;
-
     private final SecretKey refreshKey;
 
     @Autowired

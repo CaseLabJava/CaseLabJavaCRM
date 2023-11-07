@@ -23,8 +23,9 @@ import java.util.Arrays;
  * отладки.
  * <p>Этот код может быть использован для добавления логирования времени выполнения и входа в методы сервисного слоя
  * в приложении Java.
- * @autor Максим Быков
+ *
  * @version 1.0
+ * @autor Максим Быков
  */
 @Aspect
 @Component
@@ -42,7 +43,7 @@ public class LoggingAspect {
         log.info("Execution time of "
                 + methodSignature.getDeclaringType().getSimpleName()
                 + "." + methodSignature.getName() + " "
-                +" with args: "+ Arrays.toString(proceedingJoinPoint.getArgs())
+                + " with args: " + Arrays.toString(proceedingJoinPoint.getArgs())
                 + ":: " + stopWatch.getTime() + " ms");
 
         return result;
@@ -54,7 +55,7 @@ public class LoggingAspect {
         log.debug("Order execution of method"
                 + methodSignature.getDeclaringType().getSimpleName()
                 + "." + methodSignature.getName() + " "
-                +" with args: "+ Arrays.toString(joinPoint.getArgs())
+                + " with args: " + Arrays.toString(joinPoint.getArgs())
         );
     }
 }

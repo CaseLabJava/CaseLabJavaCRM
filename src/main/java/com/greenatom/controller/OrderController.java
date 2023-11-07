@@ -5,7 +5,6 @@ import com.greenatom.controller.api.OrderApi;
 import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
-import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.service.OrderService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -92,12 +90,5 @@ public class OrderController implements OrderApi {
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public void deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
-    }
-
-    @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public void uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
-        UploadDocumentRequestDTO uploadDocumentRequestDTO = new UploadDocumentRequestDTO(file, id);
-        orderService.upload(uploadDocumentRequestDTO);
     }
 }

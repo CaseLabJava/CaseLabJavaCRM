@@ -33,6 +33,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * <p>Создание менеджера аутентификации.
  * <p>Этот код является частью общей системы безопасности и выполняет ряд действий для обеспечения безопасности
  * приложения.
+ *
  * @author Андрей Начевный, Даниил Змаев
  * @version 1.0
  */
@@ -67,7 +68,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(encoder());
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
@@ -75,7 +76,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder encoder(){
+    public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -84,18 +85,18 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-  // @Bean
-  // CorsConfigurationSource corsConfigurationSource() {
-  //     CorsConfiguration configuration = new CorsConfiguration();
-  //     configuration.setAllowedOrigins(Arrays.asList("https://example.com"));
-  //     configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-  //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-  //     source.registerCorsConfiguration("/**", configuration);
-  //     return source;
-  // }
- /* Добавлю после того как подключатся фронты.
- * CORS нужны для ограничений принимаемых запросов(
- * чтобы к нам могли стучаться только наши фронты, а не Вася Иванов из Канады)
- *
- * */
+    // @Bean
+    // CorsConfigurationSource corsConfigurationSource() {
+    //     CorsConfiguration configuration = new CorsConfiguration();
+    //     configuration.setAllowedOrigins(Arrays.asList("https://example.com"));
+    //     configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+    //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    //     source.registerCorsConfiguration("/**", configuration);
+    //     return source;
+    // }
+    /* Добавлю после того как подключатся фронты.
+     * CORS нужны для ограничений принимаемых запросов(
+     * чтобы к нам могли стучаться только наши фронты, а не Вася Иванов из Канады)
+     *
+     * */
 }

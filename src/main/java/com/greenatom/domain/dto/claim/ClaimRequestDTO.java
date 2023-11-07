@@ -24,7 +24,6 @@ public class ClaimRequestDTO {
     @Schema(description = "Id клиента", example = "2")
     private Long clientId;
 
-
     @Schema(description = "Статус претензии", example = "CREATED")
     private ClaimStatus claimStatus;
 

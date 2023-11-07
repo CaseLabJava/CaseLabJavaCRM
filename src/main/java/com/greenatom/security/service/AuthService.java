@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
  * <p>Вход: Метод login принимает объект AuthDto, содержащий имя пользователя и пароль. AuthenticationManager пытается
  * аутентифицировать пользователя, и в случае успешного входа генерируются токены доступа и обновления, как и при
  * регистрации. Затем возвращается объект JwtResponse с токенами.
+ *
  * @author Андрей Начевный
  * @version 1.0
  */
@@ -39,21 +40,18 @@ public class AuthService {
     private final EmployeeServiceImpl employeeService;
     private final EmployeeMapper employeeMapper;
 
-
-    public JwtResponse registration(CreateEmployeeRequestDTO createEmployeeRequestDTO){
+    public JwtResponse registration(CreateEmployeeRequestDTO createEmployeeRequestDTO) {
         Employee employee = employeeMapper.toEntity(employeeService.save(createEmployeeRequestDTO));
         String accessToken = jwtCore.generateAccessToken(employee);
         String refreshToken = jwtCore.generateRefreshToken(employee);
-        return new JwtResponse(accessToken,refreshToken);
+        return new JwtResponse(accessToken, refreshToken);
     }
 
     public JwtResponse login(AuthDTO authDto) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            authDto.getUsername(),authDto.getPassword()
-                    )
-            );
+                            authDto.getUsername(), authDto.getPassword()));
         } catch (BadCredentialsException e) {
             throw AuthException.CODE.NO_SUCH_USERNAME_OR_PWD.get();
         }
@@ -62,19 +60,19 @@ public class AuthService {
                 .orElseThrow(AuthException.CODE.NO_SUCH_USERNAME_OR_PWD::get);
         final String accessToken = jwtCore.generateAccessToken(employee);
         final String refreshToken = jwtCore.generateRefreshToken(employee);
-        return new JwtResponse(accessToken,refreshToken);
+        return new JwtResponse(accessToken, refreshToken);
     }
 
     public JwtResponse getAccessToken(String refreshToken) {
-        return generateAccessTokenOrRefresh(refreshToken,"getAccessToken");
+        return generateAccessTokenOrRefresh(refreshToken, "getAccessToken");
     }
 
-    public JwtResponse refresh(String refreshToken){
-        return generateAccessTokenOrRefresh(refreshToken,"refresh");
+    public JwtResponse refresh(String refreshToken) {
+        return generateAccessTokenOrRefresh(refreshToken, "refresh");
     }
 
     private JwtResponse generateAccessTokenOrRefresh(String refreshToken, String action) {
-        if(jwtCore.validateRefreshToken(refreshToken)){
+        if (jwtCore.validateRefreshToken(refreshToken)) {
             final Claims claims = jwtCore.extractRefreshClaims(refreshToken);
             final String username = claims.getSubject();
             final String roleName = (String) claims.get("role");
@@ -87,14 +85,13 @@ public class AuthService {
             employeeForJwt.setRole(role);
             employeeForJwt.setId(Long.valueOf(id));
             final String accessToken = jwtCore.generateAccessToken(employeeForJwt);
-            if (action.equals("refresh")){
+            if (action.equals("refresh")) {
                 final String newRefreshToken = jwtCore.generateRefreshToken(employeeForJwt);
-                return new JwtResponse(accessToken,newRefreshToken);
+                return new JwtResponse(accessToken, newRefreshToken);
             } else {
-                return new JwtResponse(accessToken,null);
+                return new JwtResponse(accessToken, null);
             }
         }
-        return new JwtResponse(null,null);
+        return new JwtResponse(null, null);
     }
-
 }

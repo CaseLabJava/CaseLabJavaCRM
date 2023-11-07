@@ -4,13 +4,16 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class DateTimeUtils {
+public final class DateTimeUtils {
+
+    private DateTimeUtils() {
+    }
 
     public static Date getTodayDate() {
         return Date.from(
                 LocalDate.now()
                         .atStartOfDay(
-                                ZoneId.of( "Europe/Moscow" )
+                                ZoneId.of("Europe/Moscow")
                         )
                         .toInstant()
         );

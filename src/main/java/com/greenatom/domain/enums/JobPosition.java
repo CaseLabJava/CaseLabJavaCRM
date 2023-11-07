@@ -4,5 +4,7 @@ public enum JobPosition {
     MANAGER,
     DIRECTOR,
     ACCOUNTANT,
-    ADMIN
+    ADMIN,
+    WAREHOUSE_WORKER,
+    COURIER
 }

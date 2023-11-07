@@ -18,6 +18,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            rm .env
             export POSTGRES_DB=${{ secrets.POSTGRES_DB }}  
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }} 
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} 
@@ -41,7 +42,6 @@ jobs:
             echo MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} >> .env 
             echo MINIO_SECRET=${{ secrets.MINIO_SECRET }} >> .env 
             echo MINIO_URL=${{ secrets.MINIO_URL }} >> .env 
-
             export $(cat .env | xargs) && env 
 
   push_compose:

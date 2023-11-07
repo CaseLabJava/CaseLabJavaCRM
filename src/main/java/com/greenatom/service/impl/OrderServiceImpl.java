@@ -12,13 +12,10 @@ import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
 import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,7 +23,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -116,7 +115,6 @@ public class OrderServiceImpl implements OrderService {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
         orderRepository.save(order);
-
         return orderMapper.toDto(order);
     }
 
@@ -127,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
         String senderName = "Green Atom";
         String subject = "Ваш заказ";
         String content = "Дорогой [[name]],<br>"
-                + "Ваш заказ готов, чек в приложенном файле<br"
+                + "Ваш заказ готов, чек в приложенном файле<br>"
                 + "Спасибо за покупку,<br>"
                 + "Ваш Green Atom.";
         content = content.replace("[[name]]", client.getFullName());
@@ -139,7 +137,7 @@ public class OrderServiceImpl implements OrderService {
             helper.setTo(toAddress);
             helper.setSubject(subject);
             File file = new File(order.getId() + ".docx");
-            helper.addAttachment("Заказ", file);
+            helper.addAttachment("Заказ.docx", file);
             helper.setText(content, true);
         } catch (MessagingException | IOException e) {
             throw new MailSendException("Couldn't send email to address: " + toAddress, e);
@@ -204,7 +202,6 @@ public class OrderServiceImpl implements OrderService {
                 .findById(order.getId())
                 .map(existingEvent -> {
                     orderMapper.partialUpdate(existingEvent, order);
-
                     return existingEvent;
                 })
                 .map(orderRepository::save)
@@ -220,21 +217,6 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw OrderException.CODE.CANNOT_DELETE_ORDER.get();
         }
-    }
-
-    //в finishOrder буду конвертировать документ в PDF и отправлять клиенту на почту
-    public File convertToPDF(String linkToFolder, String localPdfPath) {
-        try (InputStream doc = new FileInputStream(linkToFolder);
-             XWPFDocument document = new XWPFDocument(doc)) {
-            PdfOptions options = PdfOptions.create();
-            OutputStream out = new FileOutputStream(localPdfPath);
-            PdfConverter.getInstance().convert(document, out, options);
-            return new File(localPdfPath);
-        } catch (IOException ex) {
-            log.error("Couldn't convert file");
-        }
-
-        return null;
     }
 
     @Override

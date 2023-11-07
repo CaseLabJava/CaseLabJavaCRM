@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface OrderService {
 
+    @Transactional(readOnly = true)
     List<OrderResponseDTO> findAll(Integer pagePosition, Integer pageLength, Long id);
 
     @Transactional(readOnly = true)
@@ -19,13 +20,16 @@ public interface OrderService {
     @Transactional(readOnly = true)
     OrderResponseDTO findOne(Long id);
 
+    @Transactional
     OrderResponseDTO save(OrderResponseDTO orderResponseDTO);
 
     @Transactional
     void generateOrder(GenerateOrderRequestDTO request);
 
+    @Transactional
     OrderResponseDTO updateOrder(OrderResponseDTO orderResponseDTO);
 
+    @Transactional
     void deleteOrder(Long id);
 
     OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO);

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@AccessDeniedResponse
 @RequestMapping(value = "/api/preparing_orders")
 @RequiredArgsConstructor
 public class PreparingOrderController implements PreparingOrderApi {

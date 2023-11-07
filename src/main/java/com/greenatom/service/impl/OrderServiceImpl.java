@@ -187,6 +187,7 @@ public class OrderServiceImpl implements OrderService {
                 .findById(order.getId())
                 .map(existingEvent -> {
                     orderMapper.partialUpdate(existingEvent, order);
+
                     return existingEvent;
                 })
                 .map(orderRepository::save)

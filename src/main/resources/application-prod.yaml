@@ -7,9 +7,6 @@ spring:
   jpa:
     show-sql: true
 
-kafka:
-  url: ${BOOTSTRAP_SERVERS_CONFIG}
-
 minio:
   access-key: ${MINIO_ACCESS}
   secret-key: ${MINIO_SECRET}

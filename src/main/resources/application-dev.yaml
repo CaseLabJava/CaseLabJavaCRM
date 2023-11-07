@@ -11,6 +11,6 @@ kafka:
   url: localhost:9092
 
 minio:
-  access-key: root
-  secret-key: root
-  url: localhost:9000
+  access-key: root12345
+  secret-key: root12345
+  url: http://localhost:9000

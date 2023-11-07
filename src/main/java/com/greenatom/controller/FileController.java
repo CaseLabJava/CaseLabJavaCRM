@@ -18,7 +18,7 @@ public class FileController implements FileApi {
 
     private final FileService fileService;
 
-    @PostMapping
+    @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public void uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
         UploadDocumentRequestDTO uploadDocumentRequestDTO = new UploadDocumentRequestDTO(file, id);

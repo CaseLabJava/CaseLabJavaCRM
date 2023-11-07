@@ -26,8 +26,8 @@ services:
     restart: always
     container_name: case-lab-java-crm
     environment:
-      MINIO_ROOT_USER: ${MINIO_ACCESS}
-      MINIO_ROOT_PASSWORD: ${MINIO_SECRET}
+      MINIO_ACCESS: ${MINIO_ACCESS}
+      MINIO_SECRET: ${MINIO_SECRET}
       MINIO_URL: ${MINIO_URL}
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PORT: ${MAIL_PORT}

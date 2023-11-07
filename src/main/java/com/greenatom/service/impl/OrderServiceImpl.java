@@ -6,6 +6,7 @@ import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
+import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
@@ -41,8 +42,8 @@ import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
-@Service
 @Transactional
+@Service
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -50,6 +51,8 @@ public class OrderServiceImpl implements OrderService {
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
+    private final PreparingOrderRepository preparingOrderRepository;
+
     private final OrderMapper orderMapper;
 
     @Override
@@ -77,10 +80,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO) {
         List<OrderItemRequestDTO> orderItemList = orderRequestDTO.getOrderItemList();
         Order order = createDraftOrder(orderRequestDTO);
-        for (OrderItemRequestDTO orderItem : orderItemList) {
+        for (OrderItemRequestDTO orderItem: orderItemList) {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
@@ -100,6 +104,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO finishOrder(Long id) {
         Order order = orderRepository
                 .findById(id)
@@ -132,6 +137,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void generateOrder(GenerateOrderRequestDTO request) {
         OrderGenerator orderGenerator = new OrderGenerator();
         Order order = orderRepository
@@ -151,6 +157,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
+    public void generatePreparingOrder(Order order) {
+        preparingOrderRepository.save(PreparingOrder.builder()
+                .order(order)
+                .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
+                .startTime(Instant.now())
+                .build());
+    }
+
+    @Override
+    @Transactional
     public OrderResponseDTO save(OrderResponseDTO orderResponseDTO) {
         Order order = orderMapper.toEntity(orderResponseDTO);
         order.setClient(clientRepository.findById(
@@ -164,12 +181,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO updateOrder(OrderResponseDTO order) {
         return orderRepository
                 .findById(order.getId())
                 .map(existingEvent -> {
                     orderMapper.partialUpdate(existingEvent, order);
-
                     return existingEvent;
                 })
                 .map(orderRepository::save)
@@ -178,6 +195,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (Objects.equals(order.getOrderStatus(), OrderStatus.DRAFT)) {

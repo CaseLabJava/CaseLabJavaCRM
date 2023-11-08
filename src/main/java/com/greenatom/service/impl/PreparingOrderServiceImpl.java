@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
     private final EmployeeRepository employeeRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<PreparingOrderResponseDTO> findPreparingOrdersPageByParams(Integer pageNumber, Integer pageSize, String status) {
         return preparingOrderRepository.findPreparingOrdersByPreparingOrderStatus(
                         PageRequest.of(pageNumber, pageSize), PreparingOrderStatus.valueOf(status))
@@ -35,6 +37,7 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
     }
 
     @Override
+    @Transactional
     public Void appointCollector(@Nullable Long employeeId, Long preparingOrderId) {
         PreparingOrder order = preparingOrderRepository.findById(preparingOrderId).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (employeeId != null) {

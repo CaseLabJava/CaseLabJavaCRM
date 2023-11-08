@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +28,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final DeliveryMapper deliveryMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<DeliveryResponseDTO> findAll(Integer pagePosition, Integer pageLength,
                                              DeliveryStatus deliveryStatus) {
         return deliveryMapper.toDto(deliveryRepository.findAllByDeliveryStatus(deliveryStatus,
@@ -34,6 +36,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    @Transactional
     public void changeStatusToInProgress(Long courierId, Long deliveryId) {
         Courier courier = courierRepository
                 .findById(courierId)
@@ -52,6 +55,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
+    @Transactional
     public void changeStatusToDone(Long courierId, Long deliveryId) {
         Courier courier = courierRepository
                 .findById(courierId)

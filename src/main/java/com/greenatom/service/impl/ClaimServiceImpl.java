@@ -6,7 +6,6 @@ import com.greenatom.domain.entity.Claim;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.enums.ClaimStatus;
 import com.greenatom.domain.mapper.ClaimMapper;
-import com.greenatom.domain.mapper.ClientMapper;
 import com.greenatom.repository.ClaimRepository;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.service.ClaimService;
@@ -25,7 +24,6 @@ import java.util.List;
 @Service
 public class ClaimServiceImpl implements ClaimService {
     private final EmployeeRepository employeeRepository;
-    private final ClientMapper clientMapper;
     private final ClaimRepository claimRepository;
     private final ClaimMapper claimMapper;
 
@@ -56,7 +54,6 @@ public class ClaimServiceImpl implements ClaimService {
     @Override
     @Transactional
     public ClaimResponseDTO resolveClaim(ClaimRequestDTO claimDTO, ClaimStatus status) {
-
         if(claimDTO.getClaimStatus().equals(ClaimStatus.IN_WORK)
                 &&(status.equals(ClaimStatus.RESOLVED_FOR_CLIENT)
                 ||status.equals(ClaimStatus.RESOLVED_FOR_COMPANY))){

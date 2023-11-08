@@ -16,6 +16,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -55,6 +56,7 @@ public class OrderServiceImpl implements OrderService {
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
 
+    private final Environment env;
     private final OrderMapper orderMapper;
 
     private final JavaMailSender mailSender;
@@ -109,11 +111,10 @@ public class OrderServiceImpl implements OrderService {
                 .findById(id)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         sendOrderToClient(order);
-        if (Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
-            order.setOrderStatus(OrderStatus.FINISHED);
-        } else {
+        if (!Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
+        order.setOrderStatus(OrderStatus.FINISHED);
         orderRepository.save(order);
         return orderMapper.toDto(order);
     }
@@ -121,7 +122,6 @@ public class OrderServiceImpl implements OrderService {
     private void sendOrderToClient(Order order) {
         Client client = order.getClient();
         String toAddress = client.getEmail();
-        String fromAddress = "city.concert.tickets@gmail.com";
         String senderName = "Green Atom";
         String subject = "Ваш заказ";
         String content = "Дорогой [[name]],<br>"
@@ -132,8 +132,9 @@ public class OrderServiceImpl implements OrderService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
+            String fromAddress = env.getProperty("mail_address");
             helper = new MimeMessageHelper(message, true);
-            helper.setFrom(fromAddress, senderName);
+            helper.setFrom(Objects.requireNonNull(fromAddress), senderName);
             helper.setTo(toAddress);
             helper.setSubject(subject);
             File file = new File(order.getId() + ".docx");
@@ -227,7 +228,6 @@ public class OrderServiceImpl implements OrderService {
                 String projectRoot = System.getProperty("user.dir");
                 String uploadDir = projectRoot + "/Documents/UploadDoc";
                 String fileName = cleanFileName(Objects.requireNonNull(file.getOriginalFilename()));
-
                 File uploadPath = new File(uploadDir);
                 if (!uploadPath.exists()) {
                     if (uploadPath.mkdirs()) {
@@ -236,7 +236,6 @@ public class OrderServiceImpl implements OrderService {
                         log.error("Error with dir creation");
                     }
                 }
-
                 File targetFile = new File(uploadPath, fileName);
                 try (FileOutputStream fos = new FileOutputStream(targetFile)) {
                     fos.write(file.getBytes());
@@ -259,7 +258,6 @@ public class OrderServiceImpl implements OrderService {
                 .findById(uploadDocumentRequestDTO.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE)) {
-
             order.setOrderStatus(OrderStatus.SIGNED_BY_CLIENT);
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
@@ -269,10 +267,8 @@ public class OrderServiceImpl implements OrderService {
 
     private void updatePath(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
         log.debug("Order to update link_to_folder : {}", uploadDocumentRequestDTO);
-
         Long orderId = uploadDocumentRequestDTO.getId();
         String linkToFolder = uploadDocumentRequestDTO.getLinkToFolder();
-
         orderRepository.updateLinkToFolder(orderId, linkToFolder);
     }
 

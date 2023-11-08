@@ -39,4 +39,5 @@ springdoc:
 
 access_token: ${ACCESS_TOKEN}
 refresh_token: ${REFRESH_TOKEN}
+mail_address: "city.concert.tickets@gmail.com"
 

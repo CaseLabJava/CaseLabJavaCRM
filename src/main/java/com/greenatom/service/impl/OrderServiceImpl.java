@@ -4,6 +4,7 @@ import com.greenatom.domain.dto.item.OrderItemRequestDTO;
 import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
+import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.enums.PreparingOrderStatus;
@@ -23,6 +24,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;

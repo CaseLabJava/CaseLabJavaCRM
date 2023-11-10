@@ -26,7 +26,9 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class ClientServiceImpl implements ClientService {
+
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
 
@@ -45,7 +47,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    @Transactional
     public ClientResponseDTO save(ClientRequestDTO clientRequestDTO) {
         Client client = clientMapper.toEntity(clientRequestDTO);
         clientRepository.save(client);
@@ -53,7 +54,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    @Transactional
     public ClientResponseDTO updateClient(Long id, ClientRequestDTO clientRequestDTO) {
         return clientRepository
                 .findById(id)
@@ -67,7 +67,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    @Transactional
     public void deleteClient(Long id) {
         clientRepository
                 .findById(id)

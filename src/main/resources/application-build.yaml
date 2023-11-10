@@ -9,3 +9,8 @@ spring:
 
 access_token: ${{ secrets.ACCESS_TOKEN }}
 refresh_token: ${{ secrets.REFRESH_TOKEN }}
+
+minio:
+  access-key: ${{ secrets.MINIO_ACCESS }}
+  secret-key: ${{ secrets.MINIO_SECRET }}
+  url: ${{ secrets.MINIO_URL }}

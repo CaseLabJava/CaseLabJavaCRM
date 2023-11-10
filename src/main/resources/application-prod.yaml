@@ -6,3 +6,8 @@ spring:
     password: ${POSTGRES_PASSWORD}
   jpa:
     show-sql: true
+
+minio:
+  access-key: ${MINIO_ACCESS}
+  secret-key: ${MINIO_SECRET}
+  url: ${MINIO_URL}

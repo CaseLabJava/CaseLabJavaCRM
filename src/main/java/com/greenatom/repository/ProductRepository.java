@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
     Page<Product> findProductByProductNameContainingAndCostBefore(Pageable pageable, String name, Integer cost);
 }

@@ -30,7 +30,6 @@ public class Delivery {
     @NonNull
     private Courier courier;
 
-
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
@@ -40,4 +39,5 @@ public class Delivery {
 
     @Column(name = "end_time")
     private Instant endTime;
+
 }

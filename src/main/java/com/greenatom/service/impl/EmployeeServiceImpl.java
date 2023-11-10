@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,21 +32,24 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
-
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<EmployeeResponseDTO> findAll(Integer pagePosition, Integer pageLength) {
         return employeeMapper.toDto(employeeRepository.findAll(
                 PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EmployeeResponseDTO findOne(Long id) {
         return employeeMapper.toDto(employeeRepository
                 .findById(id)
@@ -90,6 +94,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Employee> findOne(String username) {
         return employeeRepository.findByUsername(username);
     }

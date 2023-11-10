@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -36,7 +35,6 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtCore jwtCore;
-
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
@@ -53,7 +51,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request,response);
     }
-
 
     private String extractJwt(HttpServletRequest request){
         String bearer = request.getHeader("Authorization");

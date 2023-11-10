@@ -21,7 +21,6 @@ public class OrderGenerator {
     private static final int BOT_MARGIN = 0;
     private static final int LEFT_MARGIN = 100;
     private static final int RIGHT_MARGIN = 100;
-
     private static final int NUMBER_COL_POS = 0;
     private static final int NAME_COL_POS = 1;
     private static final int AMOUNT_COL_POS = 2;

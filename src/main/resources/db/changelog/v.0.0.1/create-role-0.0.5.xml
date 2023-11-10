@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="morgachevstepan" id="1666350061926-12">
+        <insert tableName="role">
+            <column name="role_id" value="5"/>
+            <column name="name" value="ROLE_WAREHOUSE_WORKER"/>
+        </insert>
+        <insert tableName="role">
+            <column name="role_id" value="6"/>
+            <column name="name" value="ROLE_COURIER"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

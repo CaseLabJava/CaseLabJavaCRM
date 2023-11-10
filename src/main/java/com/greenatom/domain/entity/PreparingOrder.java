@@ -12,8 +12,9 @@ import java.time.Instant;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+@Builder
 @Entity
 @Table(name = "preparing_order")
 public class PreparingOrder {
@@ -30,9 +31,7 @@ public class PreparingOrder {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
-    @NonNull
     private Employee employee;
-
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

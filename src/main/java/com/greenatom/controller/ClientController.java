@@ -18,18 +18,19 @@ import java.util.List;
  * <p>– POST /add - добавляет нового клиента, используя данные из запроса тела
  *
  * <p>Эти операции выполняются при помощи сервиса ClientService, реализующего бизнес-логику.
+ *
  * @author Максим Быков
  * @version 1.0
  */
 @RestController
 @RequestMapping(value = "/api/clients")
 public class ClientController implements ClientApi {
+
     private final ClientService clientService;
 
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
     }
-
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR')")
@@ -37,8 +38,7 @@ public class ClientController implements ClientApi {
         return clientService.findOne(id);
     }
 
-
-    @GetMapping (produces = {"application/json"})
+    @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public List<ClientResponseDTO> getClientsResponse(@RequestParam(defaultValue = "0") Integer pageNumber,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
@@ -66,8 +66,8 @@ public class ClientController implements ClientApi {
         return clientService.save(client);
     }
 
-     @DeleteMapping(value = "/{id}", produces = {"application/json"})
-     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @DeleteMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
     }

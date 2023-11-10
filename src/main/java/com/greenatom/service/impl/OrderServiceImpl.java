@@ -4,9 +4,9 @@ import com.greenatom.domain.dto.item.OrderItemRequestDTO;
 import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
-import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
+import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
@@ -22,7 +22,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,6 +47,7 @@ import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -55,6 +56,7 @@ public class OrderServiceImpl implements OrderService {
     private final ClientRepository clientRepository;
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
+    private final PreparingOrderRepository preparingOrderRepository;
 
     private final Environment env;
     private final OrderMapper orderMapper;
@@ -62,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
     private final JavaMailSender mailSender;
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderResponseDTO> findAll(Integer pagePosition, Integer pageLength,
                                           Long id) {
         return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
@@ -69,6 +72,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderResponseDTO> findByPaginationAndFilters(PageRequest pageRequest, String orderStatus, String linkToFolder) {
         return orderRepository
                 .findByOrderStatusAndLinkToFolder(pageRequest, orderStatus, linkToFolder)
@@ -77,12 +81,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public OrderResponseDTO findOne(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         return orderMapper.toDto(order);
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO) {
         List<OrderItemRequestDTO> orderItemList = orderRequestDTO.getOrderItemList();
         Order order = createDraftOrder(orderRequestDTO);
@@ -106,6 +112,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO finishOrder(Long id) {
         Order order = orderRepository
                 .findById(id)
@@ -159,13 +166,13 @@ public class OrderServiceImpl implements OrderService {
         order.setEmployee(employee);
         order.setOrderDate(Instant.now());
         order.setOrderStatus(OrderStatus.DRAFT);
-        // TODO: Поменять, когда будет понятно на что
-        order.setLinkToFolder("LINK_TO_FOLDER_SAMPLE");
         order = orderRepository.save(order);
+        order.setLinkToFolder(String.valueOf(order.getId()));
         return order;
     }
 
     @Override
+    @Transactional
     public void generateOrder(GenerateOrderRequestDTO request) {
         OrderGenerator orderGenerator = new OrderGenerator();
         Order order = orderRepository
@@ -185,6 +192,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
+    public void generatePreparingOrder(Order order) {
+        preparingOrderRepository.save(PreparingOrder.builder()
+                .order(order)
+                .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
+                .startTime(Instant.now())
+                .build());
+    }
+
+    @Override
+    @Transactional
     public OrderResponseDTO save(OrderResponseDTO orderResponseDTO) {
         Order order = orderMapper.toEntity(orderResponseDTO);
         order.setClient(clientRepository.findById(
@@ -198,6 +216,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO updateOrder(OrderResponseDTO order) {
         return orderRepository
                 .findById(order.getId())
@@ -211,6 +230,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (Objects.equals(order.getOrderStatus(), OrderStatus.DRAFT)) {

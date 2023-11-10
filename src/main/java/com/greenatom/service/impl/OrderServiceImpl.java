@@ -4,6 +4,7 @@ import com.greenatom.domain.dto.item.OrderItemRequestDTO;
 import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
+import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.enums.PreparingOrderStatus;
@@ -12,16 +13,22 @@ import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
 import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfConverter;
-import fr.opensagres.poi.xwpf.converter.pdf.PdfOptions;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +60,10 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final PreparingOrderRepository preparingOrderRepository;
 
+    private final Environment env;
     private final OrderMapper orderMapper;
+
+    private final JavaMailSender mailSender;
 
     @Override
     @Transactional(readOnly = true)
@@ -84,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO) {
         List<OrderItemRequestDTO> orderItemList = orderRequestDTO.getOrderItemList();
         Order order = createDraftOrder(orderRequestDTO);
-        for (OrderItemRequestDTO orderItem: orderItemList) {
+        for (OrderItemRequestDTO orderItem : orderItemList) {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
@@ -109,13 +119,40 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository
                 .findById(id)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
-            order.setOrderStatus(OrderStatus.FINISHED);
-        } else {
+        sendOrderToClient(order);
+        if (!Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
+        order.setOrderStatus(OrderStatus.FINISHED);
         orderRepository.save(order);
         return orderMapper.toDto(order);
+    }
+
+    private void sendOrderToClient(Order order) {
+        Client client = order.getClient();
+        String toAddress = client.getEmail();
+        String senderName = "Green Atom";
+        String subject = "Ваш заказ";
+        String content = "Дорогой [[name]],<br>"
+                + "Ваш заказ готов, чек в приложенном файле<br>"
+                + "Спасибо за покупку,<br>"
+                + "Ваш Green Atom.";
+        content = content.replace("[[name]]", client.getFullName());
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper;
+        try {
+            String fromAddress = env.getProperty("mail_address");
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom(Objects.requireNonNull(fromAddress), senderName);
+            helper.setTo(toAddress);
+            helper.setSubject(subject);
+            File file = new File(order.getId() + ".docx");
+            helper.addAttachment("Заказ.docx", file);
+            helper.setText(content, true);
+        } catch (MessagingException | IOException e) {
+            throw new MailSendException("Couldn't send email to address: " + toAddress, e);
+        }
+        mailSender.send(message);
     }
 
 
@@ -187,7 +224,6 @@ public class OrderServiceImpl implements OrderService {
                 .findById(order.getId())
                 .map(existingEvent -> {
                     orderMapper.partialUpdate(existingEvent, order);
-
                     return existingEvent;
                 })
                 .map(orderRepository::save)
@@ -206,15 +242,59 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    //в finishOrder буду конвертировать документ в PDF и отправлять клиенту на почту
-    public void convertToPDF(String linkToFolder, String localPdfPath) {
-        try (InputStream doc = new FileInputStream(linkToFolder);
-             XWPFDocument document = new XWPFDocument(doc)) {
-            PdfOptions options = PdfOptions.create();
-            OutputStream out = new FileOutputStream(localPdfPath);
-            PdfConverter.getInstance().convert(document, out, options);
-        } catch (IOException ex) {
-            log.error("Couldn't convert file");
+    @Override
+    public void upload(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
+        MultipartFile file = uploadDocumentRequestDTO.getFile();
+        if (!file.isEmpty()) {
+            try {
+                String projectRoot = System.getProperty("user.dir");
+                String uploadDir = projectRoot + "/Documents/UploadDoc";
+                String fileName = cleanFileName(Objects.requireNonNull(file.getOriginalFilename()));
+                File uploadPath = new File(uploadDir);
+                if (!uploadPath.exists()) {
+                    if (uploadPath.mkdirs()) {
+                        log.info("Dir created");
+                    } else {
+                        log.error("Error with dir creation");
+                    }
+                }
+                File targetFile = new File(uploadPath, fileName);
+                try (FileOutputStream fos = new FileOutputStream(targetFile)) {
+                    fos.write(file.getBytes());
+                }
+                uploadDocumentRequestDTO.setLinkToFolder(targetFile.getAbsolutePath());
+                log.info("The file has been successfully uploaded. File name: " + fileName + ", Path: "
+                        + targetFile.getAbsolutePath());
+            } catch (IOException e) {
+                log.error("Error uploading file: " + e.getMessage());
+            }
+        } else {
+            log.error("File is empty, download failed.");
         }
+        updateStatus(uploadDocumentRequestDTO);
+    }
+
+    //Обновляем статус в заявке на SIGNED_BY_CLIENT
+    private void updateStatus(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
+        Order order = orderRepository
+                .findById(uploadDocumentRequestDTO.getId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE)) {
+            order.setOrderStatus(OrderStatus.SIGNED_BY_CLIENT);
+        } else {
+            throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
+        }
+        updatePath(uploadDocumentRequestDTO);
+    }
+
+    private void updatePath(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
+        log.debug("Order to update link_to_folder : {}", uploadDocumentRequestDTO);
+        Long orderId = uploadDocumentRequestDTO.getId();
+        String linkToFolder = uploadDocumentRequestDTO.getLinkToFolder();
+        orderRepository.updateLinkToFolder(orderId, linkToFolder);
+    }
+
+    private String cleanFileName(String fileName) {
+        return fileName.replaceAll("[^a-zA-Z0-9_-]", "");
     }
 }

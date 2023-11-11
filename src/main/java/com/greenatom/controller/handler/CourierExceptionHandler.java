@@ -1,7 +1,7 @@
-package com.greenatom.utils.exception.handler;
+package com.greenatom.controller.handler;
 
-import com.greenatom.utils.exception.CourierException;
-import com.greenatom.utils.exception.message.CourierErrorMessage;
+import com.greenatom.exception.CourierException;
+import com.greenatom.exception.message.CourierErrorMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

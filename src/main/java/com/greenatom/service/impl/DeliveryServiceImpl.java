@@ -5,11 +5,11 @@ import com.greenatom.domain.entity.Courier;
 import com.greenatom.domain.entity.Delivery;
 import com.greenatom.domain.enums.DeliveryStatus;
 import com.greenatom.domain.mapper.DeliveryMapper;
+import com.greenatom.exception.CourierException;
+import com.greenatom.exception.DeliveryException;
 import com.greenatom.repository.CourierRepository;
 import com.greenatom.repository.DeliveryRepository;
 import com.greenatom.service.DeliveryService;
-import com.greenatom.utils.exception.CourierException;
-import com.greenatom.utils.exception.DeliveryException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -38,9 +38,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional
     public void changeStatusToInProgress(Long courierId, Long deliveryId) {
-        Courier courier = courierRepository
-                .findById(courierId)
-                .orElseThrow(CourierException.CODE.NO_SUCH_COURIER::get);
         Delivery delivery = deliveryRepository
                 .findById(deliveryId)
                 .orElseThrow(DeliveryException.CODE.NO_SUCH_DELIVERY::get);

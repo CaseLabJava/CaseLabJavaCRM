@@ -7,6 +7,8 @@ import com.greenatom.domain.dto.security.JwtResponse;
 import com.greenatom.domain.dto.security.RefreshJwtRequest;
 import com.greenatom.security.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Андрей Начевный, Максим Быков, Даниил Змаев
  * @version 1.0
  */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/auth")
@@ -37,22 +40,30 @@ public class AuthController implements AuthApi {
 
     @PostMapping("/signup")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public JwtResponse registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO) {
-        return authService.registration(employeeRequestDTO);
+    public ResponseEntity<JwtResponse> registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(authService.registration(employeeRequestDTO));
     }
 
     @PostMapping("/signin")
-    public JwtResponse login(@RequestBody AuthDTO authDto) {
-        return authService.login(authDto);
+    public ResponseEntity<JwtResponse> login(@RequestBody AuthDTO authDto) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(authService.login(authDto));
     }
 
     @PostMapping("/access-token")
-    public JwtResponse getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest) {
-        return authService.getAccessToken(refreshJwtRequest.getRefreshToken());
+    public ResponseEntity<JwtResponse> getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(authService.getAccessToken(refreshJwtRequest.getRefreshToken()));
     }
 
     @PostMapping("/refresh")
-    public JwtResponse refresh(@RequestBody RefreshJwtRequest refreshJwtRequest) {
-        return authService.refresh(refreshJwtRequest.getRefreshToken());
+    public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshJwtRequest refreshJwtRequest) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(authService.refresh(refreshJwtRequest.getRefreshToken()));
     }
 }

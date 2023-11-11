@@ -2,9 +2,9 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.item.OrderItemResponseDTO;
 import com.greenatom.domain.mapper.OrderItemMapper;
+import com.greenatom.exception.OrderItemException;
 import com.greenatom.repository.OrderItemRepository;
 import com.greenatom.service.OrderItemService;
-import com.greenatom.utils.exception.OrderItemException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

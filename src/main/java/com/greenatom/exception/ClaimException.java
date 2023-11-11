@@ -1,4 +1,4 @@
-package com.greenatom.utils.exception;
+package com.greenatom.exception;
 
 import lombok.Getter;
 

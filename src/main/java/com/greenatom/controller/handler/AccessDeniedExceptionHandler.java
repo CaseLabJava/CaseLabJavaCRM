@@ -1,6 +1,6 @@
-package com.greenatom.utils.exception.handler;
+package com.greenatom.controller.handler;
 
-import com.greenatom.utils.exception.message.ErrorMessage;
+import com.greenatom.exception.message.ErrorMessage;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

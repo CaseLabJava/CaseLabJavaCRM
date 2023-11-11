@@ -19,7 +19,6 @@ public class DeliveryController implements DeliveryApi {
         this.deliveryService = deliveryService;
     }
 
-
     @PostMapping(value = "/progress/delivery/{deliveryId}/courier/{courierId}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_COUIRER', 'ROLE_ADMIN')")
     public ResponseEntity<Void> changeToInProcess(@PathVariable Long courierId, @PathVariable Long deliveryId) {
@@ -33,6 +32,4 @@ public class DeliveryController implements DeliveryApi {
         deliveryService.changeStatusToDone(courierId, deliveryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-
 }

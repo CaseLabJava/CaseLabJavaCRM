@@ -3,9 +3,9 @@ package com.greenatom.service.impl;
 import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.enums.OrderStatus;
+import com.greenatom.exception.OrderException;
 import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.FileService;
-import com.greenatom.utils.exception.OrderException;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -44,7 +44,6 @@ public class FileServiceImpl implements FileService {
                                 .contentType(file.getContentType())
                                 .build());
                 uploadDocumentRequestDTO.setLinkToFolder(uploadDocumentRequestDTO.getId() + file.getName());
-
             } catch (MinioException | InvalidKeyException | NoSuchAlgorithmException | IOException e) {
                 throw new RuntimeException(e);
             }

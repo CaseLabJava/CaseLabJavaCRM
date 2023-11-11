@@ -4,7 +4,7 @@ import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
 import com.greenatom.domain.dto.security.AuthDTO;
 import com.greenatom.domain.dto.security.JwtResponse;
 import com.greenatom.domain.dto.security.RefreshJwtRequest;
-import com.greenatom.utils.exception.message.EmployeeErrorMessage;
+import com.greenatom.exception.message.EmployeeErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+
 /**
  * Auth API - это интерфейс, который описывает набор методов для аутентификации пользователей. Он включает методы
  * для регистрации новых пользователей, входа в существующий аккаунт и обновления информации о пользователе.
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @author Даниил Змаев
  * @version 1.0
  */
+
 @Tag(name = "Auth API", description = "API для входа в систему")
 public interface AuthApi {
 
@@ -65,7 +68,7 @@ public interface AuthApi {
             )
     })
     @Operation(summary = "Возвращает jwt и refresh токены")
-    JwtResponse login(
+    ResponseEntity<JwtResponse> login(
             @Parameter(description = "Имя пользователя и пароль")
             AuthDTO authDto
             );
@@ -84,7 +87,7 @@ public interface AuthApi {
             )
     })
     @Operation(summary = "Возвращает jwt и refresh токены")
-    JwtResponse registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO);
+    ResponseEntity<JwtResponse> registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO);
 
 
     @ApiResponses(value = {
@@ -100,7 +103,7 @@ public interface AuthApi {
             )
     })
     @Operation(summary = "Возвращает accessToken и refreshToken = null")
-    JwtResponse getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest);
+    ResponseEntity<JwtResponse> getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest);
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -125,6 +128,6 @@ public interface AuthApi {
             )
     })
     @Operation(summary = "Возвращает обновленные jwt и refresh токены")
-    JwtResponse refresh(@RequestBody RefreshJwtRequest refreshJwtRequest);
+    ResponseEntity<JwtResponse> refresh(@RequestBody RefreshJwtRequest refreshJwtRequest);
 
 }

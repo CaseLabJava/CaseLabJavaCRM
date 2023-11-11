@@ -2,7 +2,6 @@ package com.greenatom.controller;
 
 import com.greenatom.config.swagger.annotation.AccessDeniedResponse;
 import com.greenatom.controller.api.OrderApi;
-import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.service.OrderService;
@@ -80,14 +79,14 @@ public class OrderController implements OrderApi {
                 .body(orderService.createDraft(orderRequestDTO));
     }
 
-    @PostMapping(value = "/generate", produces = {"application/json"})
+    @PostMapping(value = "{id}/generate", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<Void> generateOrder(@RequestBody GenerateOrderRequestDTO request) {
-        orderService.generateOrder(request);
+    public ResponseEntity<Void> generateOrder(@PathVariable Long id) {
+        orderService.generateOrder(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping(value = "/finish-order/{id}", produces = {"application/json"})
+    @PostMapping(value = "{id}/finish-order", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ResponseEntity<OrderResponseDTO> finishOrder(@PathVariable Long id) {
         return ResponseEntity
@@ -95,7 +94,7 @@ public class OrderController implements OrderApi {
                 .body(orderService.finishOrder(id));
     }
 
-    @DeleteMapping(value = "/{id}/empty",
+    @DeleteMapping(value = "/{id}/delete-empty",
             produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {

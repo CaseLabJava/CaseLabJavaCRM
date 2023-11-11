@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +32,28 @@ public class PreparingOrderController implements PreparingOrderApi {
                                                                               @RequestParam(name = "статус заказа", defaultValue = "WAITING_FOR_PREPARING", required = false) String status) {
         return ResponseEntity.ok(preparingOrderService.findPreparingOrdersPageByParams(pageNumber, pageSize, status));
     }
-    @PutMapping
+
+    @GetMapping("/{id}")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
+    @Override
+    public ResponseEntity<PreparingOrderResponseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(preparingOrderService.findOne(id));
+    }
+
+    @PostMapping("/appoint-collector")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
     @Override
     public ResponseEntity<Void> appointCollector(@RequestParam(required = false) Long employeeId,
                                                  @RequestParam Long preparingOrderId) {
         preparingOrderService.appointCollector(employeeId, preparingOrderId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/finish-preparing-order")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_WAREHOUSE_WORKER')")
+    public ResponseEntity<Void> finishPreparingOrder(@RequestParam Long employeeId,
+                                                     @RequestParam Long preparingOrderId) {
+        preparingOrderService.finishPreparingOrder(employeeId, preparingOrderId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -1,6 +1,5 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.exception.message.OrderErrorMessage;
@@ -111,8 +110,8 @@ public interface OrderApi {
             summary = "Генерация докумена заказа"
     )
     ResponseEntity<Void> generateOrder(
-            @Parameter(description = "GenerationOrderRequest")
-            GenerateOrderRequestDTO orderRequest
+            @Parameter(description = "Id заказа", example = "1")
+            Long id
     );
 
     @ApiResponses(value = {

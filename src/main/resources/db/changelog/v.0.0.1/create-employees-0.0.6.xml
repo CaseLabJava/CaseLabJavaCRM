@@ -61,5 +61,10 @@
             <column name="salary" value="100000"/>
             <column name="role_id" value="5"/>
         </insert>
+        <insert tableName="courier">
+            <column name="courier_id" value="1"/>
+            <column name="is_active" value="true"/>
+            <column name="employee_id" value="7"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

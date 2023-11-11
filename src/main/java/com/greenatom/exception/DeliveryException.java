@@ -7,6 +7,8 @@ public class DeliveryException extends RuntimeException{
     @Getter
     public enum CODE {
         NO_SUCH_DELIVERY("No delivery with such id"),
+        NO_SUCH_COURIER("No courier with such id"),
+        FORBIDDEN("You don`t have access to do this"),
         INVALID_STATUS("Delivery status is invalid");
 
         final String codeDescription;

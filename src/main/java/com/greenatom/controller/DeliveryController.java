@@ -20,7 +20,7 @@ public class DeliveryController implements DeliveryApi {
     }
 
     @PostMapping(value = "/take-delivery", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_COUIRER', 'ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_COURIER', 'ROLE_ADMIN')")
     public ResponseEntity<Void> changeToInProcess(@Parameter Long courierId, @Parameter Long deliveryId) {
         deliveryService.changeStatusToInProgress(courierId, deliveryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

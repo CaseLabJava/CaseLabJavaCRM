@@ -121,7 +121,6 @@ public class OrderServiceImpl implements OrderService {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
         order.setOrderStatus(OrderStatus.FINISHED);
-        orderRepository.save(order);
         return orderMapper.toDto(order);
     }
 
@@ -205,7 +204,6 @@ public class OrderServiceImpl implements OrderService {
         order.setEmployee(employeeRepository.findById(
                         orderResponseDTO.getEmployee().getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get));
-        orderRepository.save(order);
         return orderMapper.toDto(order);
     }
 
@@ -218,7 +216,6 @@ public class OrderServiceImpl implements OrderService {
                     orderMapper.partialUpdate(existingEvent, order);
                     return existingEvent;
                 })
-                .map(orderRepository::save)
                 .map(orderMapper::toDto)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
     }

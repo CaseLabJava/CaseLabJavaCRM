@@ -49,6 +49,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
+    @Transactional
     public OrderItemResponseDTO updateCartProduct(OrderItemResponseDTO cartProduct) {
         return orderItemRepository
                 .findById(cartProduct.getId())
@@ -57,12 +58,12 @@ public class OrderItemServiceImpl implements OrderItemService {
 
                     return existingEvent;
                 })
-                .map(orderItemRepository::save)
                 .map(orderItemMapper::toDto)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
+    @Transactional
     public void deleteCartProduct(Long id) {
         orderItemRepository.delete(orderItemRepository
                 .findById(id)

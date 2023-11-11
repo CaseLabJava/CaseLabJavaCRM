@@ -57,6 +57,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeResponseDTO save(CreateEmployeeRequestDTO employeeResponseDTO) {
         List<Employee> existingUsers = employeeRepository.findAll();
         Employee employee = employeeMapper.toEntity(employeeResponseDTO);
@@ -68,11 +69,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw AuthException.CODE.EMAIL_IN_USE.get();
             }
         }
-        employeeRepository.save(employee);
         return employeeMapper.toDto(employee);
     }
 
     @Override
+    @Transactional
     public EmployeeResponseDTO updateEmployee(Long id, EmployeeRequestDTO employee) {
         return employeeRepository
                 .findById(id)
@@ -81,12 +82,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
                     return existingEvent;
                 })
-                .map(employeeRepository::save)
                 .map(employeeMapper::toDto)
                 .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
     }
 
     @Override
+    @Transactional
     public void deleteEmployee(Long id) {
         employeeRepository
                 .findById(id)

@@ -47,13 +47,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public ClientResponseDTO save(ClientRequestDTO clientRequestDTO) {
         Client client = clientMapper.toEntity(clientRequestDTO);
-        clientRepository.save(client);
         return clientMapper.toDto(client);
     }
 
     @Override
+    @Transactional
     public ClientResponseDTO updateClient(Long id, ClientRequestDTO clientRequestDTO) {
         return clientRepository
                 .findById(id)
@@ -61,12 +62,12 @@ public class ClientServiceImpl implements ClientService {
                     clientMapper.partialUpdate(existingEvent, clientMapper.toResponse(clientRequestDTO));
                     return existingEvent;
                 })
-                .map(clientRepository::save)
                 .map(clientMapper::toDto).orElseThrow(
                         ClientException.CODE.NO_SUCH_CLIENT::get);
     }
 
     @Override
+    @Transactional
     public void deleteClient(Long id) {
         clientRepository
                 .findById(id)

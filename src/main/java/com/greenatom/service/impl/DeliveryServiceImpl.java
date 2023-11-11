@@ -51,7 +51,6 @@ public class DeliveryServiceImpl implements DeliveryService {
         } else {
             throw DeliveryException.CODE.INVALID_STATUS.get();
         }
-        deliveryRepository.save(delivery);
     }
 
     @Override
@@ -72,8 +71,6 @@ public class DeliveryServiceImpl implements DeliveryService {
         } else {
             throw DeliveryException.CODE.INVALID_STATUS.get();
         }
-        courierRepository.save(courier);
-        deliveryRepository.save(delivery);
         delivery.getOrder().setOrderStatus(OrderStatus.DELIVERY_FINISHED);
     }
 }

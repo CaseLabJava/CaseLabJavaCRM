@@ -1,10 +1,8 @@
 package com.greenatom.domain.entity;
 
-import com.greenatom.utils.Constants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -78,7 +76,6 @@ public class Client {
     private String phoneNumber;
 
     @Email
-    @Pattern(regexp = Constants.MAIL_REGEX)
     @Size(min = 5, max = 254)
     @Column(name = "email")
     private String email;

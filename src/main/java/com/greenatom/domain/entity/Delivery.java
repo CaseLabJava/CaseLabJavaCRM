@@ -2,9 +2,14 @@ package com.greenatom.domain.entity;
 
 import com.greenatom.domain.enums.DeliveryStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
+
+/**
+ * A Delivery
+ */
 
 @Getter
 @Setter
@@ -33,6 +38,7 @@ public class Delivery {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
+    @NotBlank
     private DeliveryStatus deliveryStatus;
 
     @Column(name = "start_time")

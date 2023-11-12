@@ -3,6 +3,7 @@ package com.greenatom.domain.entity;
 import com.greenatom.domain.enums.DeliveryType;
 import com.greenatom.domain.enums.OrderStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -13,8 +14,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A Order.
+ * An Order
  */
+
 @Getter
 @Setter
 @ToString
@@ -22,12 +24,14 @@ import java.util.Set;
 @Entity
 @Table(name = "client_order")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long id;
 
     @Column(name = "link_to_folder")
+    @NotBlank
     private String linkToFolder;
 
     @Column(name = "date_time")
@@ -35,10 +39,12 @@ public class Order {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
+    @NotBlank
     private OrderStatus orderStatus;
 
     @Column(name = "delivery_type")
     @Enumerated(EnumType.STRING)
+    @NotBlank
     private DeliveryType deliveryType;
 
     @ManyToOne
@@ -59,5 +65,5 @@ public class Order {
     private PreparingOrder preparingOrder;
 
     @OneToMany(mappedBy = "order")
-    private Set<Delivery> deliviries;
+    private Set<Delivery> deliveries;
 }

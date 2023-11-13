@@ -3,7 +3,9 @@ package com.greenatom.service.impl;
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
 import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
+import com.greenatom.domain.entity.Courier;
 import com.greenatom.domain.entity.Employee;
+import com.greenatom.domain.enums.JobPosition;
 import com.greenatom.domain.mapper.EmployeeMapper;
 import com.greenatom.exception.AuthException;
 import com.greenatom.exception.EmployeeException;
@@ -26,8 +28,8 @@ import java.util.Optional;
  * о сотрудниках и ролях, преобразует их в формат DTO и возвращает список сотрудников или конкретного сотрудника
  * по его ID.
  *
- * @version 1.0
  * @author Максим Быков, Андрей Начевный
+ * @version 1.0
  */
 
 @Slf4j
@@ -68,6 +70,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             if ((e.getEmail().equals(employee.getEmail()))) {
                 throw AuthException.CODE.EMAIL_IN_USE.get();
             }
+        }
+        if (employee.getJobPosition().equals(JobPosition.COURIER)) {
+            Courier courier = new Courier();
+            courier.setEmployee(employee);
+            courier.setIsActive(true);
         }
         return employeeMapper.toDto(employee);
     }

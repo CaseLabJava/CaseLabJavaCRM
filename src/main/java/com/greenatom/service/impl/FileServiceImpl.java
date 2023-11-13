@@ -32,6 +32,8 @@ public class FileServiceImpl implements FileService {
     private final MinioClient minioClient;
     private final OrderRepository orderRepository;
 
+    private static final String DOC_DIR_NAME = "documents";
+
     @Override
     public void uploadFile(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
         MultipartFile file = uploadDocumentRequestDTO.getFile();
@@ -39,7 +41,7 @@ public class FileServiceImpl implements FileService {
             try {
                 minioClient.putObject(
                         PutObjectArgs.builder()
-                                .bucket("documents")
+                                .bucket(DOC_DIR_NAME)
                                 .object(uploadDocumentRequestDTO.getId() + "/" + file.getOriginalFilename())
                                 .stream(file.getInputStream(), file.getSize(), -1)
                                 .contentType(file.getContentType())
@@ -62,7 +64,7 @@ public class FileServiceImpl implements FileService {
     public byte[] downloadFile(String pathToFile) {
         try (InputStream stream = minioClient.getObject(
                 GetObjectArgs.builder()
-                        .bucket("documents")
+                        .bucket(DOC_DIR_NAME)
                         .object(pathToFile)
                         .build())) {
             return stream.readAllBytes();
@@ -82,11 +84,17 @@ public class FileServiceImpl implements FileService {
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
-                            .bucket("documents")
+                            .bucket(DOC_DIR_NAME)
                             .object(fileName)
                             .build());
-        } catch (MinioException | InvalidKeyException | NoSuchAlgorithmException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (MinioException e) {
+            throw FileException.CODE.MINIO.get(e.getMessage());
+        } catch (InvalidKeyException e) {
+            throw FileException.CODE.INVALID_KEY.get(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw FileException.CODE.ALGORITHM_NOT_FOUND.get(e.getMessage());
+        } catch (IOException e) {
+            throw FileException.CODE.IO.get(e.getMessage());
         }
     }
 
@@ -103,7 +111,6 @@ public class FileServiceImpl implements FileService {
         }
         updatePath(uploadDocumentRequestDTO);
     }
-
 
     private void updatePath(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
         log.debug("Order to update link_to_folder : {}", uploadDocumentRequestDTO);

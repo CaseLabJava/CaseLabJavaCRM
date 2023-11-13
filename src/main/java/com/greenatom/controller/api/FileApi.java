@@ -22,7 +22,17 @@ public interface FileApi {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Неверный запрос или невозможно загрузить документ",
+                    description = "Неверный запрос",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Невозможно загрузить документ",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -55,6 +65,16 @@ public interface FileApi {
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Невозможно получить документ",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             )
     })
     @Operation(
@@ -71,6 +91,26 @@ public interface FileApi {
             @ApiResponse(
                     responseCode = "400",
                     description = "Неверный запрос или невозможно удалить документ",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Невозможно удалить документ",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Данного документа не существует",
                     content = {
                             @Content(
                                     mediaType = "application/json",

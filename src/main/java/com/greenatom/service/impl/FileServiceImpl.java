@@ -3,6 +3,7 @@ package com.greenatom.service.impl;
 import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.enums.OrderStatus;
+import com.greenatom.exception.FileException;
 import com.greenatom.exception.OrderException;
 import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.FileService;
@@ -44,8 +45,14 @@ public class FileServiceImpl implements FileService {
                                 .contentType(file.getContentType())
                                 .build());
                 uploadDocumentRequestDTO.setLinkToFolder(uploadDocumentRequestDTO.getId() + file.getName());
-            } catch (MinioException | InvalidKeyException | NoSuchAlgorithmException | IOException e) {
-                throw new RuntimeException(e);
+            } catch (MinioException e) {
+                throw FileException.CODE.MINIO.get(e.getMessage());
+            } catch (InvalidKeyException e) {
+                throw FileException.CODE.INVALID_KEY.get(e.getMessage());
+            } catch (NoSuchAlgorithmException e) {
+                throw FileException.CODE.ALGORITHM_NOT_FOUND.get(e.getMessage());
+            } catch (IOException e) {
+                throw FileException.CODE.IO.get(e.getMessage());
             }
         }
         updateStatus(uploadDocumentRequestDTO);
@@ -59,8 +66,14 @@ public class FileServiceImpl implements FileService {
                         .object(pathToFile)
                         .build())) {
             return stream.readAllBytes();
-        } catch (MinioException | InvalidKeyException | NoSuchAlgorithmException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (MinioException e) {
+            throw FileException.CODE.MINIO.get(e.getMessage());
+        } catch (InvalidKeyException e) {
+            throw FileException.CODE.INVALID_KEY.get(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw FileException.CODE.ALGORITHM_NOT_FOUND.get(e.getMessage());
+        } catch (IOException e) {
+            throw FileException.CODE.IO.get(e.getMessage());
         }
     }
 

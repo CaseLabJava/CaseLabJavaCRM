@@ -59,7 +59,7 @@
             <column name="password" value="$2a$10$d0AxWw4jsbndLo5DCsu7duomCQX2zLHCjpmLclO4o6oMK6Pn6cAT2"/>
             <column name="phone_number" value="123213213213"/>
             <column name="salary" value="100000"/>
-            <column name="role_id" value="5"/>
+            <column name="role_id" value="6"/>
         </insert>
         <insert tableName="courier">
             <column name="courier_id" value="1"/>

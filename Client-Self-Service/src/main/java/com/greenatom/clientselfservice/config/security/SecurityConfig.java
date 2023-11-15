@@ -41,7 +41,8 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers("/self_service/auth/signin",
                                         "/self_service/auth/access_token",
-                                        "/self_service/auth/signup").permitAll()
+                                        "/self_service/auth/signup",
+                                        "/actuator/health").permitAll()
                                 .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()
                 )

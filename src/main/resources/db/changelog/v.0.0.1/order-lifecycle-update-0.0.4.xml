@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="79969" id="1698581124788-1">
+        <createTable tableName="claim">
+            <column name="claim_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="claim_pkey"/>
+            </column>
+            <column name="order_id" type="BIGINT"/>
+            <column name="employee_id" type="BIGINT"/>
+            <column name="client_id" type="BIGINT"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="creation_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="resolved_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="79969" id="1698581124788-2">
+        <createTable tableName="courier">
+            <column name="courier_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="courier_pkey"/>
+            </column>
+            <column name="is_active" type="BOOL"/>
+            <column name="employee_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet author="79969" id="1698581124788-3">
+        <createTable tableName="delivery">
+            <column name="delivery_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="delivery_pkey"/>
+            </column>
+            <column name="order_id" type="BIGINT"/>
+            <column name="employee_id" type="BIGINT"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="end_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="79969" id="1698581124788-4">
+        <createTable tableName="preparing_order">
+            <column name="preparing_order_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="preparing_order_pkey"/>
+            </column>
+            <column name="order_id" type="BIGINT"/>
+            <column name="employee_id" type="BIGINT"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="end_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="79969" id="1698581124788-5">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="claim"
+                                 constraintName="fk551losx9j75ss5d6bfsqg5hh1"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="order_id"
+                                 referencedTableName="client_order"/>
+    </changeSet>
+    <changeSet author="79969" id="1698581124788-6">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="claim"
+                                 constraintName="fk551losx9j75ss5d6bfsqs123h"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="employee_id"
+                                 referencedTableName="employee"/>
+    </changeSet>
+    <changeSet author="79969" id="1698581124788-7">
+        <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="claim"
+                                 constraintName="fk551losx9j75ss5d6bfsqmjyd0"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="client_id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet author="79969" id="1698581124788-8">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="courier"
+                                 constraintName="fk551losx9j75ss5d6bfsqhhy57"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="employee_id"
+                                 referencedTableName="employee"/>
+    </changeSet>
+    <changeSet author="79969" id="1698581124788-9">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="delivery"
+                                 constraintName="fk551losx9j75ss5d6bfsq6fa1e"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="order_id"
+                                 referencedTableName="client_order"/>
+    </changeSet>
+    <changeSet author="79969" id="1698581124788-10">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="delivery"
+                                 constraintName="fk551losx9j75ss5d6bfsqghppo"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="employee_id"
+                                 referencedTableName="employee"/>
+    </changeSet>
+    <changeSet author="79969" id="1698581124788-11">
+        <addForeignKeyConstraint baseColumnNames="order_id"
+                                 baseTableName="preparing_order"
+                                 constraintName="fk551losx9j75ss5d6bfsq112fd"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="order_id"
+                                 referencedTableName="client_order"/>
+    </changeSet>
+    <changeSet author="79969" id="1698581124788-12">
+        <addForeignKeyConstraint baseColumnNames="employee_id"
+                                 baseTableName="preparing_order"
+                                 constraintName="fk551losx9j75ss5d6bfsqscuf7"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="employee_id"
+                                 referencedTableName="employee"/>
+    </changeSet>
+    <changeSet id="1698581124788-13" author="79969">
+        <addColumn tableName="client">
+            <column name="email" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1698581124788-14" author="79969">
+        <addColumn tableName="client_order">
+            <column name="delivery_type" type="VARCHAR(50)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="1698581124788-15" author="79969">
+        <dropForeignKeyConstraint baseTableName="delivery"
+                                  constraintName="fk551losx9j75ss5d6bfsqghppo"
+                                  />
+    </changeSet>
+    <changeSet id="1698581124788-16" author="79969">
+        <renameColumn tableName="delivery" oldColumnName="employee_id"
+                      newColumnName="courier_id"/>
+    </changeSet>
+    <changeSet author="79969" id="1698581124788-17">
+        <addForeignKeyConstraint baseColumnNames="courier_id" baseTableName="delivery"
+                                 constraintName="fk551losx9j75ss5d6bfsqgnhngh"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="courier_id"
+                                 referencedTableName="courier"/>
+    </changeSet>
+</databaseChangeLog>

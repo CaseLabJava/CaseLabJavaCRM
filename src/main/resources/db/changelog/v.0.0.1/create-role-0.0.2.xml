@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="sladkkov" id="1666350061925-11">
+        <insert tableName="role">
+            <column name="role_id" value="1"/>
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="role">
+            <column name="role_id" value="2"/>
+            <column name="name" value="ROLE_SUPERVISOR"/>
+        </insert>
+        <insert tableName="role">
+            <column name="role_id" value="3"/>
+            <column name="name" value="ROLE_MANAGER"/>
+        </insert>
+        <insert tableName="role">
+            <column name="role_id" value="4"/>
+            <column name="name" value="ROLE_SPECIALIST"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

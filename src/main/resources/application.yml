@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: @profileActive@
+  application:
+    name: CaseLabJavaCrm
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    port: ${MAIL_PORT}
+    default-encoding: utf-8
+    host: smtp.gmail.com
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+access_token: ${ACCESS_TOKEN}
+refresh_token: ${REFRESH_TOKEN}
+mail_address: "city.concert.tickets@gmail.com"
+
+minio:
+  access-key: ${MINIO_ACCESS}
+  secret-key: ${MINIO_SECRET}
+  url: ${MINIO_URL}

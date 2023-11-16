@@ -2,7 +2,6 @@ package com.greenatom.domain.entity;
 
 import com.greenatom.domain.enums.PreparingOrderStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
@@ -37,7 +36,6 @@ public class PreparingOrder {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    @NotBlank
     private PreparingOrderStatus preparingOrderStatus;
 
     @Column(name = "start_time")

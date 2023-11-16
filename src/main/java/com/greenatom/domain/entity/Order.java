@@ -39,12 +39,10 @@ public class Order {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    @NotBlank
     private OrderStatus orderStatus;
 
     @Column(name = "delivery_type")
     @Enumerated(EnumType.STRING)
-    @NotBlank
     private DeliveryType deliveryType;
 
     @ManyToOne

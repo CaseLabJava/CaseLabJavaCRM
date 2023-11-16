@@ -1,5 +1,6 @@
 package com.greenatom.controller.api;
 
+import com.greenatom.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.domain.enums.ClaimStatus;
@@ -150,7 +151,7 @@ public interface ClaimApi {
     @Operation(summary = "Создает Claim и возвращает ClaimDTO")
     ResponseEntity<ClaimResponseDTO> addClaim(
             @Parameter(description = "Информация о жалобе")
-            ClaimRequestDTO claimRequestDTO
+            ClaimCreationDTO claimRequestDTO
     );
 
     @ApiResponse(
@@ -164,8 +165,8 @@ public interface ClaimApi {
             }
     )
     @Operation(summary = "Назначает жалобу на сотрудника")
-    ClaimResponseDTO appointClaim(ClaimRequestDTO claim,
-                                  Long id);
+    ClaimResponseDTO appointClaim(@RequestParam("claim") Long claim,
+                                  @RequestParam("employee") Long employee);
 
     @ApiResponse(
             responseCode = "200",
@@ -178,6 +179,6 @@ public interface ClaimApi {
             }
     )
     @Operation(summary = "Вынесение вердикта по жалобе")
-    ClaimResponseDTO resolveClaim(ClaimRequestDTO claim,
+    ClaimResponseDTO resolveClaim(@RequestParam("claim") Long claim,
                                   ClaimStatus status);
 }

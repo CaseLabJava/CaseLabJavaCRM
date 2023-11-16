@@ -1,5 +1,6 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.domain.entity.Claim;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 
 @Slf4j
@@ -37,8 +39,10 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     @Transactional
-    public ClaimResponseDTO save(ClaimRequestDTO claimRequestDTO) {
-        Claim claim = claimMapper.toEntity(claimRequestDTO);
+    public ClaimResponseDTO save(ClaimCreationDTO claimRequestDTO) {
+        Claim claim = claimMapper.toClaim(claimRequestDTO);
+        claim.setCreationTime(Instant.now());
+        claim.setClaimStatus(ClaimStatus.CREATED);
         claimRepository.save(claim);
         return claimMapper.toDto(claim);
     }
@@ -53,11 +57,12 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     @Transactional
-    public ClaimResponseDTO resolveClaim(ClaimRequestDTO claimDTO, ClaimStatus status) {
-        if(claimDTO.getClaimStatus().equals(ClaimStatus.IN_WORK)
+    public ClaimResponseDTO resolveClaim(Long claimId, ClaimStatus status) {
+        Claim claim = claimRepository.findById(claimId).orElseThrow(
+                ClaimException.CODE.NO_SUCH_CLAIM::get);
+        if(claim.getClaimStatus().equals(ClaimStatus.IN_WORK)
                 &&(status.equals(ClaimStatus.RESOLVED_FOR_CLIENT)
                 ||status.equals(ClaimStatus.RESOLVED_FOR_COMPANY))){
-            Claim claim =claimMapper.toEntity(claimDTO);
             claim.setClaimStatus(status);
             claimRepository.save(claim);
             return claimMapper.toDto(claim);
@@ -68,9 +73,10 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     @Transactional
-    public ClaimResponseDTO appointClaim(ClaimRequestDTO claimDTO, Long id) {
-        Claim claim = claimMapper.toEntity(claimDTO);
-        Employee employee = employeeRepository.findById(id).orElseThrow(
+    public ClaimResponseDTO appointClaim(Long claimId, Long employeeId) {
+        Claim claim = claimRepository.findById(claimId).orElseThrow(
+                ClaimException.CODE.NO_SUCH_CLAIM::get);
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
                 EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
         claim.setEmployee(employee);
         claimRepository.save(claim);

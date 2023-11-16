@@ -1,7 +1,7 @@
 package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
-import com.greenatom.exception.message.DeliveryErrorMessage;
+import com.greenatom.utils.exception.message.DeliveryErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

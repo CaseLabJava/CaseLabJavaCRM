@@ -9,9 +9,5 @@ public interface PreparingOrderService {
 
     List<PreparingOrderResponseDTO> findPreparingOrdersPageByParams(Integer pageNumber, Integer pageSize, String status);
 
-    PreparingOrderResponseDTO findOne(Long id);
-
-    void appointCollector(@Nullable Long employeeId , Long preparingOrderId);
-
-    void finishPreparingOrder(@Nullable Long employeeId, Long preparingOrderId);
+    Void appointCollector(@Nullable Long employeeId , Long preparingOrderId);
 }

@@ -6,7 +6,6 @@ import com.greenatom.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +20,9 @@ public class FileController implements FileApi {
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<Void> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
+    public void uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
         UploadDocumentRequestDTO uploadDocumentRequestDTO = new UploadDocumentRequestDTO(file, id);
         fileService.uploadFile(uploadDocumentRequestDTO);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping
@@ -40,8 +38,7 @@ public class FileController implements FileApi {
 
     @DeleteMapping
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
-    public ResponseEntity<Void> deleteFile(@RequestParam("fileName") String fileName) {
+    public void deleteFile(@RequestParam("fileName") String fileName) {
         fileService.deleteFile(fileName);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

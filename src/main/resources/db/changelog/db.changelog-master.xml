@@ -9,6 +9,5 @@
     <include file="v.0.0.1/create-data-0.0.3.xml" relativeToChangelogFile="true"/>
     <include file="v.0.0.1/order-lifecycle-update-0.0.4.xml" relativeToChangelogFile="true"/>
     <include file="v.0.0.1/create-role-0.0.5.xml" relativeToChangelogFile="true"/>
-    <include file="v.0.0.1/create-employees-0.0.6.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

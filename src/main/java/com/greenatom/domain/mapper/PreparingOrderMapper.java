@@ -16,4 +16,6 @@ public interface PreparingOrderMapper extends EntityMapper<PreparingOrderRespons
     PreparingOrder toEntity(PreparingOrderResponseDTO s);
 
     PreparingOrder toEntity(PreparingOrderRequestDTO s);
+
+    PreparingOrderResponseDTO toResponse(PreparingOrderRequestDTO s);
 }

@@ -9,6 +9,7 @@ import com.greenatom.domain.enums.JobPosition;
 import com.greenatom.domain.mapper.EmployeeMapper;
 import com.greenatom.exception.AuthException;
 import com.greenatom.exception.EmployeeException;
+import com.greenatom.repository.CourierRepository;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RoleRepository;
 import com.greenatom.service.EmployeeService;
@@ -42,6 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeMapper employeeMapper;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
+    private final CourierRepository courierRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -75,7 +77,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             Courier courier = new Courier();
             courier.setEmployee(employee);
             courier.setIsActive(true);
+            courierRepository.save(courier);
         }
+        employeeRepository.save(employee);
         return employeeMapper.toDto(employee);
     }
 
@@ -89,6 +93,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
                     return existingEvent;
                 })
+                .map(employeeRepository::save)
                 .map(employeeMapper::toDto)
                 .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
     }

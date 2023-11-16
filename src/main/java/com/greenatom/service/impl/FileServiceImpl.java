@@ -103,8 +103,7 @@ public class FileServiceImpl implements FileService {
         Order order = orderRepository
                 .findById(uploadDocumentRequestDTO.getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE)) {
-
+        if (order.getOrderStatus().equals(OrderStatus.DELIVERY_FINISHED)) {
             order.setOrderStatus(OrderStatus.SIGNED_BY_CLIENT);
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();

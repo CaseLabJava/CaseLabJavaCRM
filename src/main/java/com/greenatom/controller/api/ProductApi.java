@@ -2,6 +2,7 @@ package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
+import com.greenatom.exception.message.ErrorMessage;
 import com.greenatom.exception.message.ProductErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,6 +22,7 @@ import java.util.List;
  * @autor Степан Моргачев
  * @version 1.0
  */
+
 @Tag(name = "Product API", description = "API для работы с продуктами")
 public interface ProductApi {
     @ApiResponses(value = {
@@ -144,6 +146,16 @@ public interface ProductApi {
                             @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ProductErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Продукт по переданному id находится в заказе и не может быть удален",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )

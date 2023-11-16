@@ -8,10 +8,14 @@ import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
+import com.greenatom.exception.FileException;
 import com.greenatom.exception.OrderException;
 import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
 import com.greenatom.utils.generator.request.OrderGenerator;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.errors.*;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +28,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -61,6 +68,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     private final JavaMailSender mailSender;
+
+    private final MinioClient minioClient;
 
     @Override
     @Transactional(readOnly = true)
@@ -178,11 +187,27 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (order.getOrderStatus().equals(OrderStatus.DRAFT)) {
             String filename = "Order_" + order.getId();
-            orderGenerator.processGeneration(
+            byte[] doc = orderGenerator.processGeneration(
                     order.getOrderItems(),
                     order.getClient(),
                     order.getEmployee(),
                     filename + ".docx");
+//            try {
+//                minioClient.putObject(
+//                        PutObjectArgs.builder()
+//                                .bucket("document")
+//                                .object(order.getId() + "/" + "assigned_by_employee.docx")
+//                                .stream(new ByteArrayInputStream(doc), doc.length, -1)
+//                                .build());
+//            } catch (MinioException e) {
+//                throw FileException.CODE.MINIO.get(e.getMessage());
+//            } catch (InvalidKeyException e) {
+//                throw FileException.CODE.INVALID_KEY.get(e.getMessage());
+//            } catch (NoSuchAlgorithmException e) {
+//                throw FileException.CODE.ALGORITHM_NOT_FOUND.get(e.getMessage());
+//            } catch (IOException e) {
+//                throw FileException.CODE.IO.get(e.getMessage());
+//            }
             preparingOrderRepository.save(PreparingOrder.builder()
                     .order(order)
                     .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
@@ -216,6 +241,7 @@ public class OrderServiceImpl implements OrderService {
                     orderMapper.partialUpdate(existingEvent, order);
                     return existingEvent;
                 })
+                .map(orderRepository::save)
                 .map(orderMapper::toDto)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
     }
@@ -231,27 +257,10 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    //Обновляем статус в заявке на SIGNED_BY_CLIENT
-    private void updateStatus(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
-        Order order = orderRepository
-                .findById(uploadDocumentRequestDTO.getId())
-                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE)) {
-            order.setOrderStatus(OrderStatus.SIGNED_BY_CLIENT);
-        } else {
-            throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
-        }
-        updatePath(uploadDocumentRequestDTO);
-    }
-
     private void updatePath(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
         log.debug("Order to update link_to_folder : {}", uploadDocumentRequestDTO);
         Long orderId = uploadDocumentRequestDTO.getId();
         String linkToFolder = uploadDocumentRequestDTO.getLinkToFolder();
         orderRepository.updateLinkToFolder(orderId, linkToFolder);
-    }
-
-    private String cleanFileName(String fileName) {
-        return fileName.replaceAll("[^a-zA-Z0-9_-]", "");
     }
 }

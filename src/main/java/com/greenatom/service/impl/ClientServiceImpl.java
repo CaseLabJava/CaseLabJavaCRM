@@ -50,6 +50,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     public ClientResponseDTO save(ClientRequestDTO clientRequestDTO) {
         Client client = clientMapper.toEntity(clientRequestDTO);
+        clientRepository.save(client);
         return clientMapper.toDto(client);
     }
 
@@ -62,6 +63,7 @@ public class ClientServiceImpl implements ClientService {
                     clientMapper.partialUpdate(existingEvent, clientMapper.toResponse(clientRequestDTO));
                     return existingEvent;
                 })
+                .map(clientRepository::save)
                 .map(clientMapper::toDto).orElseThrow(
                         ClientException.CODE.NO_SUCH_CLIENT::get);
     }

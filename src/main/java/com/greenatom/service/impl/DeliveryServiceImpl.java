@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,14 +32,25 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     @Transactional(readOnly = true)
     public List<DeliveryResponseDTO> findAll(Integer pagePosition, Integer pageLength,
-                                             DeliveryStatus deliveryStatus) {
-        return deliveryMapper.toDto(deliveryRepository.findAllByDeliveryStatus(deliveryStatus,
+                                             String deliveryStatus) {
+        return deliveryMapper.toDto(deliveryRepository.findAllByDeliveryStatus(DeliveryStatus.valueOf(deliveryStatus),
                 PageRequest.of(pagePosition, pageLength)));
     }
 
     @Override
     @Transactional
+    public DeliveryResponseDTO findById(Long id) {
+        return deliveryMapper.toDto(deliveryRepository
+                .findById(id)
+                .orElseThrow(DeliveryException.CODE.NO_SUCH_DELIVERY::get));
+    }
+
+    @Override
+    @Transactional
     public void changeStatusToInProgress(Long courierId, Long deliveryId) {
+        Courier courier = courierRepository
+                .findById(courierId)
+                .orElseThrow(CourierException.CODE.NO_SUCH_COURIER::get);
         Delivery delivery = deliveryRepository
                 .findById(deliveryId)
                 .orElseThrow(DeliveryException.CODE.NO_SUCH_DELIVERY::get);
@@ -48,6 +60,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                     .findById(courierId)
                     .orElseThrow(DeliveryException.CODE.NO_SUCH_COURIER::get));
             delivery.setDeliveryStatus(DeliveryStatus.IN_PROCESS);
+            courier.setIsActive(false);
         } else {
             throw DeliveryException.CODE.INVALID_STATUS.get();
         }
@@ -67,7 +80,8 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
         if (Objects.equals(delivery.getDeliveryStatus(), DeliveryStatus.IN_PROCESS)) {
             delivery.setDeliveryStatus(DeliveryStatus.DONE);
-            courier.setIsActive(false);
+            delivery.setEndTime(Instant.now());
+            courier.setIsActive(true);
         } else {
             throw DeliveryException.CODE.INVALID_STATUS.get();
         }

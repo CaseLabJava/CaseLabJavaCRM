@@ -19,20 +19,21 @@ import org.springframework.context.annotation.Configuration;
  *
  * <p>Метод createAPIKeyScheme() создает новую схему безопасности, которая представляет собой механизм для обеспечения
  * безопасности API. В этом случае, она устанавливает тип безопасности как HTTP и формат токена как JWT.
- * @autor Даниил Змаев
+ * @author Даниил Змаев
  * @version 1.0
  */
+
 @RequiredArgsConstructor
 @Configuration
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI OpenAPI() {
+    public OpenAPI openAPI() {
         return new OpenAPI().addSecurityItem(new SecurityRequirement()
                         .addList("Bearer Authentication"))
                 .components(new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
                 .info(new Info()
-                        .title("ERP System for Production Company with Document Workflow and Content Management")
+                        .title("CRM System for marketplace")
                         .version("1.0"));
     }
 

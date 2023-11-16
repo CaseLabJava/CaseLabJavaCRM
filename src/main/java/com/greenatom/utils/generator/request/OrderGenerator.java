@@ -6,7 +6,7 @@ import com.greenatom.domain.entity.OrderItem;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.*;
 
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,8 +33,7 @@ public class OrderGenerator {
         this.document = new XWPFDocument();
     }
 
-    // TODO: Когда появится облако - изменить
-    public void processGeneration(List<OrderItem> products, Client client, Employee employee, String path) {
+    public byte[] processGeneration(List<OrderItem> products, Client client, Employee employee, String path) {
         log.debug("Process request generation");
         createTitle();
         createInfo(Constants.SELLER_LABEL, employee.getFullName(),  Constants.ADDRESS);
@@ -42,7 +41,7 @@ public class OrderGenerator {
         createTable(document, products);
         createTotalCostText(products.stream().mapToLong(OrderItem::getTotalCost).sum());
         createSignatureFields(document, employee);
-        writeToFile(path);
+        return getByteArray();
     }
 
     private void createTitle() {
@@ -133,13 +132,15 @@ public class OrderGenerator {
                 LocalDateTime.now().format(formatter)));
     }
 
-    // TODO: Вот тут надо подумать как будет документ сохраняться
-    public void writeToFile(String path) {
-        log.debug("Writing document to {}", path);
-        try (FileOutputStream outputStream = new FileOutputStream(path)) {
-            document.write(outputStream);
+    private byte[] getByteArray() {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            document.write(out);
+            out.close();
+            document.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("IO");
         }
+        return out.toByteArray();
     }
 }

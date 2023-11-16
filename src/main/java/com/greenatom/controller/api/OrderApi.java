@@ -5,6 +5,7 @@ import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.exception.message.OrderErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -58,7 +59,11 @@ public interface OrderApi {
             String sortField,
             @Parameter(description = "Порядок сортировки", example = "asc")
             String sortOrder,
-            @Parameter(description = "Статус заказа")
+            @Parameter(
+                    description = "Статус заказа",
+                    in = ParameterIn.QUERY,
+                    name = "status",
+                    schema = @Schema(allowableValues = {"DRAFT", "SIGNED_BY_EMPLOYEE", "SIGNED_BY_CLIENT", "IN_PROCESS", "FINISHED", "DELIVERY_FINISHED"}))
             String orderStatus,
             @Parameter(description = "Ссылка на папку")
             String linkToFolder

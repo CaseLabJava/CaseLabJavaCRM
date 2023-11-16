@@ -1,13 +1,13 @@
 package com.greenatom.service;
 
 import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
-import com.greenatom.domain.enums.DeliveryStatus;
 
 import java.util.List;
 
 public interface DeliveryService {
 
-    List<DeliveryResponseDTO> findAll(Integer pagePosition, Integer pageLength, DeliveryStatus deliveryStatus);
+    DeliveryResponseDTO findById(Long id);
+    List<DeliveryResponseDTO> findAll(Integer pagePosition, Integer pageLength, String deliveryStatus);
 
     void changeStatusToInProgress(Long courierId, Long deliveryId);
 

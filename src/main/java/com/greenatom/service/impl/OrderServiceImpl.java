@@ -15,7 +15,7 @@ import com.greenatom.service.OrderService;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import io.minio.errors.*;
+import io.minio.errors.MinioException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -104,17 +104,21 @@ public class OrderServiceImpl implements OrderService {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
-            if (currProduct.getStorageAmount() > orderItem.getOrderAmount()) {
-                currProduct.setStorageAmount(currProduct.getStorageAmount() - orderItem.getOrderAmount());
-                orderItemRepository.save(OrderItem.builder()
-                        .product(currProduct)
-                        .orderAmount(orderItem.getOrderAmount())
-                        .cost(currProduct.getCost())
-                        .unit(currProduct.getUnit())
-                        .name(currProduct.getProductName())
-                        .order(order)
-                        .build());
-            } else throw OrderException.CODE.INVALID_ORDER.get();
+
+            if (currProduct.getStorageAmount() <= orderItem.getOrderAmount()) {
+                throw OrderException.CODE.INVALID_ORDER.get();
+            }
+
+            currProduct.setStorageAmount(currProduct.getStorageAmount() - orderItem.getOrderAmount());
+            orderItemRepository.save(OrderItem.builder()
+                    .product(currProduct)
+                    .orderAmount(orderItem.getOrderAmount())
+                    .cost(currProduct.getCost())
+                    .unit(currProduct.getUnit())
+                    .name(currProduct.getProductName())
+                    .order(order)
+                    .build());
+
         }
         return orderMapper.toDto(order);
     }
@@ -158,6 +162,7 @@ public class OrderServiceImpl implements OrderService {
             throw new MailSendException("Couldn't send email to address: " + toAddress, e);
         }
         mailSender.send(message);
+
     }
 
 
@@ -192,22 +197,24 @@ public class OrderServiceImpl implements OrderService {
                     order.getClient(),
                     order.getEmployee(),
                     filename + ".docx");
-//            try {
-//                minioClient.putObject(
-//                        PutObjectArgs.builder()
-//                                .bucket("document")
-//                                .object(order.getId() + "/" + "assigned_by_employee.docx")
-//                                .stream(new ByteArrayInputStream(doc), doc.length, -1)
-//                                .build());
-//            } catch (MinioException e) {
-//                throw FileException.CODE.MINIO.get(e.getMessage());
-//            } catch (InvalidKeyException e) {
-//                throw FileException.CODE.INVALID_KEY.get(e.getMessage());
-//            } catch (NoSuchAlgorithmException e) {
-//                throw FileException.CODE.ALGORITHM_NOT_FOUND.get(e.getMessage());
-//            } catch (IOException e) {
-//                throw FileException.CODE.IO.get(e.getMessage());
-//            }
+
+            try {
+                minioClient.putObject(
+                        PutObjectArgs.builder()
+                                .bucket("documents")
+                                .object(order.getId() + "/" + "assigned_by_employee.docx")
+                                .stream(new ByteArrayInputStream(doc), doc.length, -1)
+                                .build());
+            } catch (MinioException e) {
+                throw FileException.CODE.MINIO.get(e.getMessage());
+            } catch (InvalidKeyException e) {
+                throw FileException.CODE.INVALID_KEY.get(e.getMessage());
+            } catch (NoSuchAlgorithmException e) {
+                throw FileException.CODE.ALGORITHM_NOT_FOUND.get(e.getMessage());
+            } catch (IOException e) {
+                throw FileException.CODE.IO.get(e.getMessage());
+            }
+
             preparingOrderRepository.save(PreparingOrder.builder()
                     .order(order)
                     .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)

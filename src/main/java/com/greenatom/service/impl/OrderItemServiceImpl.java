@@ -2,9 +2,9 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.item.OrderItemResponseDTO;
 import com.greenatom.domain.mapper.OrderItemMapper;
+import com.greenatom.exception.OrderItemException;
 import com.greenatom.repository.OrderItemRepository;
 import com.greenatom.service.OrderItemService;
-import com.greenatom.utils.exception.OrderItemException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +49,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
+    @Transactional
     public OrderItemResponseDTO updateCartProduct(OrderItemResponseDTO cartProduct) {
         return orderItemRepository
                 .findById(cartProduct.getId())
@@ -57,12 +58,12 @@ public class OrderItemServiceImpl implements OrderItemService {
 
                     return existingEvent;
                 })
-                .map(orderItemRepository::save)
                 .map(orderItemMapper::toDto)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
+    @Transactional
     public void deleteCartProduct(Long id) {
         orderItemRepository.delete(orderItemRepository
                 .findById(id)

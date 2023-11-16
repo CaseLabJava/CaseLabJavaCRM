@@ -19,7 +19,6 @@ public class ClaimController implements ClaimApi {
 
     private final ClaimService claimService;
 
-
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR')")
     public ResponseEntity<ClaimResponseDTO> getClaim(@PathVariable Long id) {

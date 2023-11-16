@@ -6,11 +6,11 @@ import com.greenatom.domain.entity.Claim;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.enums.ClaimStatus;
 import com.greenatom.domain.mapper.ClaimMapper;
+import com.greenatom.exception.ClaimException;
+import com.greenatom.exception.EmployeeException;
 import com.greenatom.repository.ClaimRepository;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.service.ClaimService;
-import com.greenatom.utils.exception.ClaimException;
-import com.greenatom.utils.exception.EmployeeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +39,6 @@ public class ClaimServiceImpl implements ClaimService {
     @Transactional
     public ClaimResponseDTO save(ClaimRequestDTO claimRequestDTO) {
         Claim claim = claimMapper.toEntity(claimRequestDTO);
-        claimRepository.save(claim);
         return claimMapper.toDto(claim);
     }
 
@@ -59,7 +58,6 @@ public class ClaimServiceImpl implements ClaimService {
                 ||status.equals(ClaimStatus.RESOLVED_FOR_COMPANY))){
             Claim claim =claimMapper.toEntity(claimDTO);
             claim.setClaimStatus(status);
-            claimRepository.save(claim);
             return claimMapper.toDto(claim);
         } else{
             throw ClaimException.CODE.INVALID_STATUS.get();
@@ -73,7 +71,6 @@ public class ClaimServiceImpl implements ClaimService {
         Employee employee = employeeRepository.findById(id).orElseThrow(
                 EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
         claim.setEmployee(employee);
-        claimRepository.save(claim);
         return claimMapper.toDto(claim);
     }
 
@@ -87,7 +84,6 @@ public class ClaimServiceImpl implements ClaimService {
                             claimMapper.toResponse(claimRequestDTO));
                     return existingEvent;
                 })
-                .map(claimRepository::save)
                 .map(claimMapper::toDto).orElseThrow(
                         ClaimException.CODE.NO_SUCH_CLAIM::get);
     }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="166635006215-1" author="dany0k">
+        <insert tableName="employee">
+            <column name="employee_id" value="4"/>
+            <column name="address" value="Moscow"/>
+            <column name="lastname" value="Менеджеров"/>
+            <column name="firstname" value="Дмитрий"/>
+            <column name="patronymic" value="Владимирович"/>
+            <column name="email" value="manager@mail.ru"/>
+            <column name="job_position" value="MANAGER"/>
+            <column name="password" value="$2a$10$d0AxWw4jsbndLo5DCsu7duomCQX2zLHCjpmLclO4o6oMK6Pn6cAT2"/>
+            <column name="phone_number" value="895436848"/>
+            <column name="username" value="Manager"/>
+            <column name="salary" value="100000"/>
+            <column name="role_id" value="3"/>
+        </insert>
+        <insert tableName="employee">
+            <column name="employee_id" value="5"/>
+            <column name="address" value="Moscow"/>
+            <column name="lastname" value="Кладовщиков"/>
+            <column name="firstname" value="Артем"/>
+            <column name="patronymic" value="Владимирович"/>
+            <column name="username" value="Warehouse"/>
+            <column name="email" value="werehouse@mail.ru"/>
+            <column name="job_position" value="WAREHOUSE_WORKER"/>
+            <column name="password" value="$2a$10$d0AxWw4jsbndLo5DCsu7duomCQX2zLHCjpmLclO4o6oMK6Pn6cAT2"/>
+            <column name="phone_number" value="21321321321"/>
+            <column name="salary" value="100000"/>
+            <column name="role_id" value="5"/>
+        </insert>
+        <insert tableName="employee">
+            <column name="employee_id" value="6"/>
+            <column name="address" value="Moscow"/>
+            <column name="lastname" value="Курьер"/>
+            <column name="firstname" value="Артем"/>
+            <column name="patronymic" value="Владимирович"/>
+            <column name="username" value="Courier"/>
+            <column name="email" value="courier@mail.ru"/>
+            <column name="job_position" value="COURIER"/>
+            <column name="password" value="$2a$10$d0AxWw4jsbndLo5DCsu7duomCQX2zLHCjpmLclO4o6oMK6Pn6cAT2"/>
+            <column name="phone_number" value="123213213213"/>
+            <column name="salary" value="100000"/>
+            <column name="role_id" value="6"/>
+        </insert>
+        <insert tableName="courier">
+            <column name="courier_id" value="1"/>
+            <column name="is_active" value="true"/>
+            <column name="employee_id" value="6"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

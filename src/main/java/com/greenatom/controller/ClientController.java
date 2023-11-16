@@ -4,6 +4,8 @@ import com.greenatom.controller.api.ClientApi;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.service.ClientService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,7 @@ import java.util.List;
  * @author Максим Быков
  * @version 1.0
  */
+
 @RestController
 @RequestMapping(value = "/api/clients")
 public class ClientController implements ClientApi {
@@ -34,42 +37,51 @@ public class ClientController implements ClientApi {
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR')")
-    public ClientResponseDTO getClient(@PathVariable Long id) {
-        return clientService.findOne(id);
+    public ResponseEntity<ClientResponseDTO> getClient(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clientService.findOne(id));
     }
 
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public List<ClientResponseDTO> getClientsResponse(@RequestParam(defaultValue = "0") Integer pageNumber,
+    public ResponseEntity<List<ClientResponseDTO>> getClientsResponse(@RequestParam(defaultValue = "0") Integer pageNumber,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
                                                       @RequestParam(defaultValue = "", required = false) String company,
                                                       @RequestParam(defaultValue = "", required = false) String firstname,
                                                       @RequestParam(defaultValue = "", required = false) String lastname,
                                                       @RequestParam(defaultValue = "", required = false) String patronymic) {
-        return clientService.findClientPageByParams(pageNumber,
-                pageSize,
-                company,
-                firstname,
-                lastname,
-                patronymic);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clientService.findClientPageByParams(pageNumber,
+                        pageSize,
+                        company,
+                        firstname,
+                        lastname,
+                        patronymic));
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ClientResponseDTO updateClient(@PathVariable Long id, @RequestBody ClientRequestDTO client) {
-        return clientService.updateClient(id, client);
+    public ResponseEntity<ClientResponseDTO> updateClient(@PathVariable Long id, @RequestBody ClientRequestDTO client) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clientService.updateClient(id, client));
     }
 
     @PostMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ClientResponseDTO addClient(@RequestBody ClientRequestDTO client) {
-        return clientService.save(client);
+    public ResponseEntity<ClientResponseDTO> addClient(@RequestBody ClientRequestDTO client) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clientService.save(client));
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public void deleteClient(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

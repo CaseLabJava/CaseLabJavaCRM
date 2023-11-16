@@ -1,7 +1,6 @@
 package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.item.OrderItemRequestDTO;
-import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
@@ -9,9 +8,9 @@ import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
+import com.greenatom.exception.OrderException;
 import com.greenatom.repository.*;
 import com.greenatom.service.OrderService;
-import com.greenatom.utils.exception.OrderException;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -24,10 +23,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -124,7 +121,6 @@ public class OrderServiceImpl implements OrderService {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
         order.setOrderStatus(OrderStatus.FINISHED);
-        orderRepository.save(order);
         return orderMapper.toDto(order);
     }
 
@@ -175,10 +171,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void generateOrder(GenerateOrderRequestDTO request) {
+    public void generateOrder(Long id) {
         OrderGenerator orderGenerator = new OrderGenerator();
         Order order = orderRepository
-                .findById(request.getId())
+                .findById(id)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (order.getOrderStatus().equals(OrderStatus.DRAFT)) {
             String filename = "Order_" + order.getId();
@@ -187,20 +183,15 @@ public class OrderServiceImpl implements OrderService {
                     order.getClient(),
                     order.getEmployee(),
                     filename + ".docx");
-            order.setOrderStatus(OrderStatus.SIGNED_BY_EMPLOYEE);
+            preparingOrderRepository.save(PreparingOrder.builder()
+                    .order(order)
+                    .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
+                    .startTime(Instant.now())
+                    .build());
+            order.setOrderStatus(OrderStatus.IN_PROCESS);
         } else {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
-    }
-
-    @Override
-    @Transactional
-    public void generatePreparingOrder(Order order) {
-        preparingOrderRepository.save(PreparingOrder.builder()
-                .order(order)
-                .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
-                .startTime(Instant.now())
-                .build());
     }
 
     @Override
@@ -213,7 +204,6 @@ public class OrderServiceImpl implements OrderService {
         order.setEmployee(employeeRepository.findById(
                         orderResponseDTO.getEmployee().getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get));
-        orderRepository.save(order);
         return orderMapper.toDto(order);
     }
 
@@ -226,7 +216,6 @@ public class OrderServiceImpl implements OrderService {
                     orderMapper.partialUpdate(existingEvent, order);
                     return existingEvent;
                 })
-                .map(orderRepository::save)
                 .map(orderMapper::toDto)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
     }
@@ -240,38 +229,6 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw OrderException.CODE.CANNOT_DELETE_ORDER.get();
         }
-    }
-
-    @Override
-    public void upload(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
-        MultipartFile file = uploadDocumentRequestDTO.getFile();
-        if (!file.isEmpty()) {
-            try {
-                String projectRoot = System.getProperty("user.dir");
-                String uploadDir = projectRoot + "/Documents/UploadDoc";
-                String fileName = cleanFileName(Objects.requireNonNull(file.getOriginalFilename()));
-                File uploadPath = new File(uploadDir);
-                if (!uploadPath.exists()) {
-                    if (uploadPath.mkdirs()) {
-                        log.info("Dir created");
-                    } else {
-                        log.error("Error with dir creation");
-                    }
-                }
-                File targetFile = new File(uploadPath, fileName);
-                try (FileOutputStream fos = new FileOutputStream(targetFile)) {
-                    fos.write(file.getBytes());
-                }
-                uploadDocumentRequestDTO.setLinkToFolder(targetFile.getAbsolutePath());
-                log.info("The file has been successfully uploaded. File name: " + fileName + ", Path: "
-                        + targetFile.getAbsolutePath());
-            } catch (IOException e) {
-                log.error("Error uploading file: " + e.getMessage());
-            }
-        } else {
-            log.error("File is empty, download failed.");
-        }
-        updateStatus(uploadDocumentRequestDTO);
     }
 
     //Обновляем статус в заявке на SIGNED_BY_CLIENT

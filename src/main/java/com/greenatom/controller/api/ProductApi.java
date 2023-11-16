@@ -2,7 +2,7 @@ package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
-import com.greenatom.utils.exception.message.ProductErrorMessage;
+import com.greenatom.exception.message.ProductErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public interface ProductApi {
     @Operation(
             summary = "Получение продукта по id"
     )
-    ProductResponseDTO getProduct(
+    ResponseEntity<ProductResponseDTO> getProduct(
             @Parameter(description = "Id продукта", example = "5")
             Long id
     );
@@ -68,7 +69,7 @@ public interface ProductApi {
     @Operation(
             summary = "Получение продуктов с фильтрацией по названию и стоимости"
     )
-    List<ProductResponseDTO> getAllProducts(
+    ResponseEntity<List<ProductResponseDTO>> getAllProducts(
             @Parameter(description = "Позиция страницы", example = "0")
             Integer pagePosition,
             @Parameter(description = "Длина страницы", example = "5")
@@ -104,7 +105,7 @@ public interface ProductApi {
     @Operation(
             summary = "Обновление информации о продукте"
     )
-    ProductResponseDTO updateProduct(
+    ResponseEntity<ProductResponseDTO> updateProduct(
             @Parameter(description = "Id продукта")
             Long id,
             @Parameter(description = "Информация о продукте")
@@ -123,11 +124,11 @@ public interface ProductApi {
             )
     })
     @Operation(summary = "Создает Product и возвращает ProductDTO")
-    ProductResponseDTO addProduct(@RequestBody ProductRequestDTO product);
+    ResponseEntity<ProductResponseDTO> addProduct(@RequestBody ProductRequestDTO product);
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "204",
                     description = "Успешное удаление продукта",
                     content = {
                             @Content(
@@ -150,7 +151,7 @@ public interface ProductApi {
     @Operation(
             summary = "Удаление продукта по id"
     )
-    void deleteProduct(
+    ResponseEntity<Void> deleteProduct(
             @Parameter(description = "Удентификатор удаляемого продукта", example = "1")
             Long id
     );

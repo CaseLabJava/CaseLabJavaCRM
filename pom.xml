@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.greenatom</groupId>
     <artifactId>CaseLabJavaCRM</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>CaseLabJavaCRM</name>
     <description>CaseLabJavaCRM</description>
     <properties>
@@ -291,5 +291,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

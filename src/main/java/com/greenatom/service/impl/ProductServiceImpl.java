@@ -4,9 +4,9 @@ import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.mapper.ProductMapper;
+import com.greenatom.exception.ProductException;
 import com.greenatom.repository.ProductRepository;
 import com.greenatom.service.ProductService;
-import com.greenatom.utils.exception.ProductException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -47,13 +47,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResponseDTO save(ProductRequestDTO productRequestDTO) {
         Product product = productMapper.toEntity(productRequestDTO);
-        productRepository.save(product);
         return productMapper.toDto(product);
     }
 
     @Override
+    @Transactional
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO product) {
         return productRepository
                 .findById(id)
@@ -61,12 +62,12 @@ public class ProductServiceImpl implements ProductService {
                     productMapper.partialUpdate(existingEvent, productMapper.toResponse(product));
                     return existingEvent;
                 })
-                .map(productRepository::save)
                 .map(productMapper::toDto)
                 .orElseThrow(ProductException.CODE.NO_SUCH_PRODUCT::get);
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
         productRepository
                 .findById(id)

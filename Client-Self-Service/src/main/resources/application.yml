@@ -3,10 +3,9 @@ spring:
     name: client-self-service
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://178.21.8.3:5432/self-client
     username: postgres
     password: postgres
-    name: client-self-service
   jpa:
     show-sql: true
     hibernate:

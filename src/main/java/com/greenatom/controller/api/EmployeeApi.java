@@ -2,7 +2,7 @@ package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
-import com.greenatom.exception.message.EmployeeErrorMessage;
+import com.greenatom.utils.exception.message.EmployeeErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -42,7 +41,7 @@ public interface EmployeeApi {
     @Operation(
             summary = "Получение сотрудника по id"
     )
-    ResponseEntity<EmployeeResponseDTO> getEmployee(
+    EmployeeResponseDTO getEmployee(
             @Parameter(description = "Id сотрудника", example = "1")
             Long id
     );
@@ -62,7 +61,7 @@ public interface EmployeeApi {
     @Operation(
             summary = "Получение всех сотрудников"
     )
-    ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees(
+    List<EmployeeResponseDTO> getAllEmployees(
             @Parameter(description = "Позиция страницы", example = "0")
             Integer pagePosition,
             @Parameter(description = "Длина страницы", example = "5")
@@ -72,7 +71,7 @@ public interface EmployeeApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "204",
+                    responseCode = "200",
                     description = "Успешное удаление сотрудника",
                     content = {
                             @Content(
@@ -95,7 +94,7 @@ public interface EmployeeApi {
     @Operation(
             summary = "Удаление сотрудника по id"
     )
-    ResponseEntity<Void> deleteEmployee(
+    void deleteEmployee(
             @Parameter
             Long id
     );
@@ -125,7 +124,7 @@ public interface EmployeeApi {
     @Operation(
             summary = "Обновление информации о сотруднике"
     )
-    ResponseEntity<EmployeeResponseDTO> updateEmployee(
+    EmployeeResponseDTO updateEmployee(
             @Parameter(description = "Id сотрудника")
             Long id,
             @Parameter(description = "Информация о сотруднике")

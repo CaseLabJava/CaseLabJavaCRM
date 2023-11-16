@@ -2,6 +2,7 @@ package com.greenatom.controller;
 
 import com.greenatom.config.swagger.annotation.AccessDeniedResponse;
 import com.greenatom.controller.api.OrderApi;
+import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.service.OrderService;
@@ -28,7 +29,6 @@ import java.util.List;
  * @author Максим Быков
  * @version 1.0
  */
-
 @RestController
 @AccessDeniedResponse
 @RequestMapping(value = "/api/orders")
@@ -55,50 +55,40 @@ public class OrderController implements OrderApi {
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(orderService.findOne(id));
+    public OrderResponseDTO getOrder(@PathVariable Long id) {
+        return orderService.findOne(id);
     }
 
     @GetMapping(value = "/employee/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER','ROLE_SUPERVISOR')")
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(@Param("position") Integer pagePosition,
+    public List<OrderResponseDTO> getAllOrders(@Param("position") Integer pagePosition,
                                                @Param("length") Integer pageLength,
                                                @PathVariable("id") Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(orderService.findAll(pagePosition, pageLength, id));
+        return orderService.findAll(pagePosition, pageLength, id);
     }
 
     @PostMapping(value = "/draft")
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<OrderResponseDTO> addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(orderService.createDraft(orderRequestDTO));
+    public OrderResponseDTO addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        return orderService.createDraft(orderRequestDTO);
     }
 
-    @PostMapping(value = "{id}/generate", produces = {"application/json"})
+    @PostMapping(value = "/generate", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<Void> generateOrder(@PathVariable Long id) {
-        orderService.generateOrder(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public void generateOrder(@RequestBody GenerateOrderRequestDTO request) {
+        orderService.generateOrder(request);
     }
 
-    @PostMapping(value = "{id}/finish-order", produces = {"application/json"})
+    @PostMapping(value = "/finish-order/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<OrderResponseDTO> finishOrder(@PathVariable Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(orderService.finishOrder(id));
+    public OrderResponseDTO finishOrder(@PathVariable Long id) {
+        return orderService.finishOrder(id);
     }
 
-    @DeleteMapping(value = "/{id}/delete-empty",
+    @DeleteMapping(value = "/{id}/empty",
             produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+    public void deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -1,7 +1,10 @@
 package com.greenatom.service;
 
+import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
+import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
+import com.greenatom.domain.entity.Order;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -16,7 +19,7 @@ public interface OrderService {
 
     OrderResponseDTO save(OrderResponseDTO orderResponseDTO);
 
-    void generateOrder(Long id);
+    void generateOrder(GenerateOrderRequestDTO request);
 
     OrderResponseDTO updateOrder(OrderResponseDTO orderResponseDTO);
 
@@ -26,4 +29,7 @@ public interface OrderService {
 
     OrderResponseDTO finishOrder(Long id);
 
+    void generatePreparingOrder(Order order);
+
+    void upload(UploadDocumentRequestDTO uploadDocumentRequestDTO);
 }

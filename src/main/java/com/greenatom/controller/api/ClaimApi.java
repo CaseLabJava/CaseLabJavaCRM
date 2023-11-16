@@ -3,7 +3,7 @@ package com.greenatom.controller.api;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.domain.enums.ClaimStatus;
-import com.greenatom.exception.message.ClaimErrorMessage;
+import com.greenatom.utils.exception.message.ClaimErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

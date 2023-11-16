@@ -1,8 +1,9 @@
 package com.greenatom.controller.api;
 
+import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
-import com.greenatom.exception.message.OrderErrorMessage;
+import com.greenatom.utils.exception.message.OrderErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +21,8 @@ import java.util.List;
  * @author Даниил Змаев
  * @version 1.0
  */
-
+//@AccessDeniedResponse
+//@SecurityRequirement(name = "bearer-key")
 @Tag(name = "Order API", description = "API для работы с заказами")
 public interface OrderApi {
     @ApiResponses(value = {
@@ -87,14 +89,14 @@ public interface OrderApi {
             )
     })
     @Operation(summary = "Создает Order и возвращает OrderDTO")
-    ResponseEntity<OrderResponseDTO> addDraftOrder(
+    OrderResponseDTO addDraftOrder(
             @Parameter(description = "Order Request")
             OrderRequestDTO orderRequestDTO
     );
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "204",
+                    responseCode = "200",
                     description = "Успешная генерация документа"
             ),
             @ApiResponse(
@@ -109,9 +111,9 @@ public interface OrderApi {
     @Operation(
             summary = "Генерация докумена заказа"
     )
-    ResponseEntity<Void> generateOrder(
-            @Parameter(description = "Id заказа", example = "1")
-            Long id
+    void generateOrder(
+            @Parameter(description = "GenerationOrderRequest")
+            GenerateOrderRequestDTO orderRequest
     );
 
     @ApiResponses(value = {
@@ -140,7 +142,7 @@ public interface OrderApi {
     @Operation(
             summary = "Получение заказа по id"
     )
-    ResponseEntity<OrderResponseDTO> getOrder(
+    OrderResponseDTO getOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );
@@ -171,7 +173,7 @@ public interface OrderApi {
     @Operation(
             summary = "Завершение заказа"
     )
-    ResponseEntity<OrderResponseDTO> finishOrder(
+    OrderResponseDTO finishOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );
@@ -191,7 +193,7 @@ public interface OrderApi {
     @Operation(
             summary = "Получение заказов по id работника"
     )
-    ResponseEntity<List<OrderResponseDTO>> getAllOrders(
+    List<OrderResponseDTO> getAllOrders(
             @Parameter(description = "Позиция страницы", example = "0")
             Integer pagePosition,
             @Parameter(description = "Длина страницы", example = "5")
@@ -202,7 +204,7 @@ public interface OrderApi {
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "204",
+                    responseCode = "200",
                     description = "Успешный удаление заказа",
                     content = {
                             @Content(
@@ -237,7 +239,7 @@ public interface OrderApi {
     @Operation(
             summary = "Удаление заказа по id, имеющего статус EMPTY"
     )
-    ResponseEntity<Void> deleteOrder(
+    void deleteOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long id
     );

@@ -1,12 +1,15 @@
 package com.greenatom.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;
 
 /**
- * A Client.
+ * A Product
  */
 
 @Getter
@@ -25,15 +28,20 @@ public class Product {
 
     @Column(name = "name")
     @NonNull
+    @Size(min = 10, max = 200)
     private String productName;
 
     @Column(name = "unit")
+    @NotBlank
+    @Size(min = 1, max = 20)
     private String unit;
 
     @Column(name = "storage_amount")
+    @Min(0)
     private Long storageAmount;
 
     @Column(name = "cost")
+    @Min(0)
     private Long cost;
 
     @OneToMany(mappedBy = "product")

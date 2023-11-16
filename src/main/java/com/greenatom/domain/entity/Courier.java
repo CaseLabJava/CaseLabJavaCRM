@@ -8,6 +8,7 @@ import java.util.Set;
 /**
  * A Courier
  */
+
 @Getter
 @Setter
 @ToString
@@ -16,12 +17,14 @@ import java.util.Set;
 @Entity
 @Table(name = "courier")
 public class Courier {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "courier_id")
     private Long id;
 
     @Column(name = "is_active")
+    @NonNull
     private Boolean isActive;
 
     @OneToOne

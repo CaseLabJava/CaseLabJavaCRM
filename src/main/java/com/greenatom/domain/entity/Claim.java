@@ -2,6 +2,7 @@ package com.greenatom.domain.entity;
 
 import com.greenatom.domain.enums.ClaimStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
@@ -9,6 +10,7 @@ import java.time.Instant;
 /**
  * A Claim
  */
+
 @Getter
 @Setter
 @ToString
@@ -40,6 +42,7 @@ public class Claim {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
+    @NotBlank
     private ClaimStatus claimStatus;
 
     @Column(name = "creation_time")

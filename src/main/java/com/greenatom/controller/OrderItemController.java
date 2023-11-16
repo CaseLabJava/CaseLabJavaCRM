@@ -3,8 +3,11 @@ package com.greenatom.controller;
 import com.greenatom.controller.api.OrderItemApi;
 import com.greenatom.domain.dto.item.OrderItemResponseDTO;
 import com.greenatom.service.OrderItemService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 /**
  * Этот код является контроллером, который обрабатывает запросы к API, связанному с управлением продуктами в корзине.
  * Он предоставляет методы GET и PUT для выполнения следующих задач:
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Максим Быков
  * @version 1.0
  */
+
 @RestController
 @RequestMapping(value = "/api/order-items")
 public class OrderItemController implements OrderItemApi {
@@ -30,13 +34,16 @@ public class OrderItemController implements OrderItemApi {
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public OrderItemResponseDTO getOrderItem(@PathVariable Long id) {
-        return orderItemService.findOne(id);
+    public ResponseEntity<OrderItemResponseDTO> getOrderItem(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderItemService.findOne(id));
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public void deleteOrderItem(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOrderItem(@PathVariable Long id) {
         orderItemService.deleteCartProduct(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

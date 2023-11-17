@@ -1,6 +1,8 @@
 package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
+import com.greenatom.domain.dto.delivery.DeliverySearchCriteria;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.entity.Courier;
 import com.greenatom.domain.entity.Delivery;
 import com.greenatom.domain.enums.DeliveryStatus;
@@ -10,10 +12,10 @@ import com.greenatom.exception.CourierException;
 import com.greenatom.exception.DeliveryException;
 import com.greenatom.repository.CourierRepository;
 import com.greenatom.repository.DeliveryRepository;
+import com.greenatom.repository.criteria.DeliveryCriteriaRepository;
 import com.greenatom.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,13 +30,13 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final DeliveryRepository deliveryRepository;
     private final CourierRepository courierRepository;
     private final DeliveryMapper deliveryMapper;
+    private final DeliveryCriteriaRepository deliveryCriteriaRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public List<DeliveryResponseDTO> findAll(Integer pagePosition, Integer pageLength,
-                                             String deliveryStatus) {
-        return deliveryMapper.toDto(deliveryRepository.findAllByDeliveryStatus(DeliveryStatus.valueOf(deliveryStatus),
-                PageRequest.of(pagePosition, pageLength)));
+    public List<DeliveryResponseDTO> findAll(EntityPage entityPage,
+                                             DeliverySearchCriteria deliverySearchCriteria) {
+        return deliveryMapper.toDto(deliveryCriteriaRepository.findAllWithFilters(entityPage,deliverySearchCriteria));
     }
 
     @Override
@@ -44,6 +46,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .findById(id)
                 .orElseThrow(DeliveryException.CODE.NO_SUCH_DELIVERY::get));
     }
+
 
     @Override
     @Transactional

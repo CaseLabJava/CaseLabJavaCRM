@@ -1,13 +1,18 @@
 package com.greenatom.service;
 
 import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
+import com.greenatom.domain.dto.delivery.DeliverySearchCriteria;
+import com.greenatom.domain.dto.employee.EntityPage;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface DeliveryService {
 
+    List<DeliveryResponseDTO> findAll(EntityPage entityPage,
+                                      DeliverySearchCriteria deliverySearchCriteria);
+
     DeliveryResponseDTO findById(Long id);
-    List<DeliveryResponseDTO> findAll(Integer pagePosition, Integer pageLength, String deliveryStatus);
 
     void changeStatusToInProgress(Long courierId, Long deliveryId);
 

@@ -5,6 +5,9 @@ import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
 import com.greenatom.domain.entity.Delivery;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * Mapper for the entity {@link Delivery} and its DTO called {@link DeliveryResponseDTO}.
@@ -21,4 +24,5 @@ public interface DeliveryMapper extends EntityMapper<DeliveryResponseDTO, Delive
 
     Delivery toEntity(DeliveryRequestDTO s);
 
+    List<DeliveryResponseDTO> toDto(Page<Delivery> page);
 }

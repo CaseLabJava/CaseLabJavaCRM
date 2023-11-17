@@ -1,36 +1,30 @@
 package com.greenatom.domain.dto.order;
 
-import com.greenatom.domain.dto.client.ClientResponseDTO;
-import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
-import com.greenatom.domain.enums.DeliveryType;
-import com.greenatom.domain.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.NamedQuery;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
 
-/**
- * A DTO for the Order.
- */
-@SuppressWarnings("common-java:DuplicatedBlocks")
-@Getter
+@Schema(description = "Описание модели запроса \"Заказ\"")
 @Setter
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
-@Schema(description = "Описание класса Order")
-public class OrderResponseDTO {
+@NamedQuery(
+        name = "Order.findEnum",
+        query = "SELECT o FROM Order o WHERE o.orderStatus = :enumValue")
+public class OrderSearchCriteria {
 
     @Schema(description = "Id заказа")
     private Long id;
 
     @Schema(description = "Информация о клиенте")
-    private ClientResponseDTO client;
+    private Long client;
 
     @Schema(description = "Информация о сотруднике")
-    private EmployeeResponseDTO employee;
+    private Long employee;
 
     @Schema(description = "Ссылка на директорию с документами")
     private String linkToFolder;
@@ -39,8 +33,8 @@ public class OrderResponseDTO {
     private Instant orderDate;
 
     @Schema(description = "Статус заказа")
-    private OrderStatus orderStatus;
+    private String orderStatus;
 
     @Schema(description = "Тип доставки")
-    private DeliveryType deliveryType;
+    private String deliveryType;
 }

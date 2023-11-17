@@ -1,8 +1,10 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.item.OrderItemRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
+import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
@@ -11,6 +13,7 @@ import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.exception.FileException;
 import com.greenatom.exception.OrderException;
 import com.greenatom.repository.*;
+import com.greenatom.repository.criteria.OrderCriteriaRepository;
 import com.greenatom.service.OrderService;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import io.minio.MinioClient;
@@ -71,12 +74,14 @@ public class OrderServiceImpl implements OrderService {
 
     private final MinioClient minioClient;
 
+    private final OrderCriteriaRepository orderCriteriaRepository;
+
     @Override
     @Transactional(readOnly = true)
-    public List<OrderResponseDTO> findAll(Integer pagePosition, Integer pageLength,
-                                          Long id) {
-        return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
-                PageRequest.of(pagePosition, pageLength)));
+    public List<OrderResponseDTO> findAll(EntityPage entityPage,
+                                          OrderSearchCriteria employeeSearchCriteria) {
+        return orderMapper.toDto(orderCriteriaRepository.findAllWithFilters(entityPage,
+                employeeSearchCriteria));
     }
 
     @Override
@@ -241,9 +246,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDTO updateOrder(OrderResponseDTO order) {
+    public OrderResponseDTO updateOrder(OrderResponseDTO order, Long id) {
         return orderRepository
-                .findById(order.getId())
+                .findById(id)
                 .map(existingEvent -> {
                     orderMapper.partialUpdate(existingEvent, order);
                     return existingEvent;

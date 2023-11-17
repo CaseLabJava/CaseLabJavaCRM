@@ -2,17 +2,18 @@ package com.greenatom.controller;
 
 import com.greenatom.config.swagger.annotation.AccessDeniedResponse;
 import com.greenatom.controller.api.OrderApi;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
+import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.service.OrderService;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ import java.util.List;
  *
  * <p>Все эти операции выполняются с использованием сервиса OrderService, который реализует бизнес-логику
  * управления заявками.
+ *
  * @author Максим Быков
  * @version 1.0
  */
@@ -39,20 +41,6 @@ public class OrderController implements OrderApi {
         this.orderService = orderService;
     }
 
-    @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER','ROLE_SUPERVISOR')")
-    public ResponseEntity<List<OrderResponseDTO>> getOrders(@RequestParam(required = false, defaultValue = "0") Integer limit,
-                                                            @RequestParam(required = false, defaultValue = "10") Integer offset,
-                                                            @RequestParam(required = false, defaultValue = "orderDate") String sortField,
-                                                            @RequestParam(required = false, defaultValue = "asc") String sortOrder,
-                                                            @RequestParam(required = false) String orderStatus,
-                                                            @RequestParam(required = false) String linkToFolder) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(orderService
-                        .findByPaginationAndFilters(PageRequest.of(limit, offset, sort), orderStatus, linkToFolder));
-    }
-
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long id) {
@@ -61,14 +49,33 @@ public class OrderController implements OrderApi {
                 .body(orderService.findOne(id));
     }
 
-    @GetMapping(value = "/employee/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER','ROLE_SUPERVISOR')")
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(@Param("position") Integer pagePosition,
-                                               @Param("length") Integer pageLength,
-                                               @PathVariable("id") Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(orderService.findAll(pagePosition, pageLength, id));
+
+    @GetMapping(produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(@RequestParam(defaultValue = "0") Integer pagePosition,
+                                                               @RequestParam(defaultValue = "10") Integer pageSize,
+                                                               @RequestParam(required = false) String linkToFolder,
+                                                               @RequestParam(required = false) Instant orderDate,
+                                                               @RequestParam(required = false) String orderStatus,
+                                                               @RequestParam(required = false) String deliveryType,
+                                                               @RequestParam(required =
+                                                                       false) Long client,
+                                                               @RequestParam(required =
+                                                                       false) Long employee,
+                                                               @RequestParam(required = false, defaultValue = "id") String sortBy,
+                                                               @RequestParam(required =
+                                                                       false, defaultValue = "ASC") Sort.Direction sortDirection) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(orderService.findAll(new EntityPage(pagePosition, pageSize, sortDirection, sortBy),
+                            new OrderSearchCriteria(
+                                    0L,
+                                    client,
+                                    employee,
+                                    linkToFolder,
+                                    orderDate,
+                                    orderStatus,
+                                    deliveryType)));
     }
 
     @PostMapping(value = "/draft")
@@ -100,5 +107,14 @@ public class OrderController implements OrderApi {
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PatchMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long id,
+                                                        @RequestBody OrderResponseDTO order) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderService.updateOrder(order, id));
     }
 }

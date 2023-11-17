@@ -3,6 +3,7 @@ package com.greenatom.controller.api;
 import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.exception.message.EmployeeErrorMessage;
+import com.greenatom.exception.message.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -57,6 +58,16 @@ public interface EmployeeApi {
                             @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = EmployeeResponseDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Неверная должность сотрудника",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )

@@ -22,10 +22,13 @@ import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -44,15 +47,10 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PreparingOrderResponseDTO> findAll(EntityPage entityPage,
-                                                   PreparingOrderSearchCriteria preparingOrderSearchCriteria) {
-        Page<PreparingOrder> page = preparingOrderCriteriaRepository.findAllWithFilters(entityPage,preparingOrderSearchCriteria);
-        return page.map(preparingOrder -> new PreparingOrderResponseDTO(preparingOrder.getId(),
-                preparingOrder.getOrder().getId(),
-                preparingOrder.getEmployee().getId(),
-                preparingOrder.getPreparingOrderStatus(),
-                preparingOrder.getStartTime(),
-                preparingOrder.getEndTime()));
+    public List<PreparingOrderResponseDTO> findAll(EntityPage entityPage,
+                                                                  PreparingOrderSearchCriteria preparingOrderSearchCriteria) {
+        return mapper.toDto(preparingOrderCriteriaRepository
+                .findAllWithFilters(entityPage,preparingOrderSearchCriteria));
     }
 
     @Override
@@ -60,10 +58,7 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
     public PreparingOrderResponseDTO findOne(Long id) {
         PreparingOrder preparingOrder = preparingOrderRepository.findById(id)
                 .orElseThrow(PreparingOrderException.CODE.NO_SUCH_PREPARING_ORDER::get);
-        PreparingOrderResponseDTO dto = mapper.toDto(preparingOrder);
-        dto.setOrderId(preparingOrder.getId());
-        dto.setEmployeeId(preparingOrder.getEmployee().getId());
-        return dto;
+        return mapper.toDto(preparingOrder);
     }
 
     @Override

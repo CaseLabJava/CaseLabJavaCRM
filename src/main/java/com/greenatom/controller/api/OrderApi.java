@@ -4,6 +4,7 @@ package com.greenatom.controller.api;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
+import com.greenatom.exception.message.ErrorMessage;
 import com.greenatom.exception.message.OrderErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,6 +41,16 @@ public interface OrderApi {
                                     schema = @Schema(implementation = EmployeeResponseDTO.class)
                             )
                     }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Неверный статус",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             )
     })
     @Operation(
@@ -50,7 +61,8 @@ public interface OrderApi {
                                                         @Parameter(description = "Ссылка на директорию с документами") String linkToFolder,
                                                         @Parameter(description = "Дата заказа") Instant orderDate,
                                                         @Parameter(in = ParameterIn.QUERY,
-                                                                name = "Статус заказа",
+                                                                description = "Статус заказа",
+                                                                name = "orderStatus",
                                                                 schema = @Schema(allowableValues = {
                                                                         "DRAFT",
                                                                         "SIGNED_BY_EMPLOYEE",
@@ -58,13 +70,15 @@ public interface OrderApi {
                                                                         "IN_PROCESS",
                                                                         "FINISHED",
                                                                         "DELIVERY_FINISHED"
-                                                                })) String orderStatus,
+                                                                }))
+                                                        String orderStatus,
                                                         @Parameter(in = ParameterIn.QUERY,
-                                                                name = "Тип доставки",
+                                                                name = "deliveryType",
                                                                 schema = @Schema(allowableValues = {
                                                                         "DELIVERY",
                                                                         "PICKUP"
-                                                                })) String deliveryType,
+                                                                }))
+                                                        String deliveryType,
                                                         @Parameter(description = "Id клиента") Long client,
                                                         @Parameter(description = "Id сотрудника") Long employee,
                                                         @Parameter(description = "Поле для сортировки") String sortBy,

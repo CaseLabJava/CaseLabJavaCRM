@@ -101,7 +101,7 @@ public class PreparingOrderCriteriaRepository {
                 criteriaQuery.orderBy(criteriaBuilder.desc(deliveryRoot.get(entityPage.getSortBy())));
             }
         } catch (Exception e) {
-            throw OrderException.CODE.INCORRECT_ATTRIBUTE_NAME.get();
+            throw OrderException.CODE.INCORRECT_ATTRIBUTE_NAME.get(entityPage.getSortBy());
         }
     }
 

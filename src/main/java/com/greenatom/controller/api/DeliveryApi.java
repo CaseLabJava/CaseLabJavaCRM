@@ -2,6 +2,7 @@ package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
 import com.greenatom.exception.message.DeliveryErrorMessage;
+import com.greenatom.exception.message.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 
 import java.time.Instant;
 import java.util.List;
@@ -59,12 +59,12 @@ public interface DeliveryApi {
                     }
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "Доставка по переданному id не была найдена",
+                    responseCode = "400",
+                    description = "Неверный статус",
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = DeliveryErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )

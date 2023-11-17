@@ -41,6 +41,7 @@ public class OrderController implements OrderApi {
         this.orderService = orderService;
     }
 
+    @Override
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long id) {
@@ -49,7 +50,7 @@ public class OrderController implements OrderApi {
                 .body(orderService.findOne(id));
     }
 
-
+    @Override
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<List<OrderResponseDTO>> getAllOrders(@RequestParam(defaultValue = "0") Integer pagePosition,
@@ -58,13 +59,12 @@ public class OrderController implements OrderApi {
                                                                @RequestParam(required = false) Instant orderDate,
                                                                @RequestParam(required = false) String orderStatus,
                                                                @RequestParam(required = false) String deliveryType,
-                                                               @RequestParam(required =
-                                                                       false) Long client,
-                                                               @RequestParam(required =
-                                                                       false) Long employee,
-                                                               @RequestParam(required = false, defaultValue = "id") String sortBy,
-                                                               @RequestParam(required =
-                                                                       false, defaultValue = "ASC") Sort.Direction sortDirection) {
+                                                               @RequestParam(required = false) Long client,
+                                                               @RequestParam(required = false) Long employee,
+                                                               @RequestParam(required = false, defaultValue = "id")
+                                                                   String sortBy,
+                                                               @RequestParam(required = false, defaultValue = "ASC")
+                                                                   Sort.Direction sortDirection) {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(orderService.findAll(new EntityPage(pagePosition, pageSize, sortDirection, sortBy),
@@ -78,6 +78,7 @@ public class OrderController implements OrderApi {
                                     deliveryType)));
     }
 
+    @Override
     @PostMapping(value = "/draft")
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ResponseEntity<OrderResponseDTO> addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
@@ -86,6 +87,7 @@ public class OrderController implements OrderApi {
                 .body(orderService.createDraft(orderRequestDTO));
     }
 
+    @Override
     @PostMapping(value = "{id}/generate", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ResponseEntity<Void> generateOrder(@PathVariable Long id) {
@@ -93,6 +95,7 @@ public class OrderController implements OrderApi {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Override
     @PostMapping(value = "{id}/finish-order", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ResponseEntity<OrderResponseDTO> finishOrder(@PathVariable Long id) {
@@ -101,6 +104,7 @@ public class OrderController implements OrderApi {
                 .body(orderService.finishOrder(id));
     }
 
+    @Override
     @DeleteMapping(value = "/{id}/delete-empty",
             produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
@@ -109,6 +113,7 @@ public class OrderController implements OrderApi {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Override
     @PatchMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long id,

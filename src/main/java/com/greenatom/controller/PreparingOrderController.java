@@ -25,7 +25,7 @@ public class PreparingOrderController implements PreparingOrderApi {
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
     @Override
-    public ResponseEntity<Page<PreparingOrderResponseDTO>> getPreparingOrders(@RequestParam(defaultValue = "0") Integer pageNumber,
+    public ResponseEntity<List<PreparingOrderResponseDTO>> getPreparingOrders(@RequestParam(defaultValue = "0") Integer pageNumber,
                                                                               @RequestParam(defaultValue = "10") Integer pageSize,
                                                                               @RequestParam(required = false) Long orderId,
                                                                               @RequestParam(required = false) Long employeeId,

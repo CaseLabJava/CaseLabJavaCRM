@@ -65,7 +65,7 @@ public class OrderCriteriaRepository {
         }
         if (Objects.nonNull(orderSearchCriteria.getOrderStatus()) && !orderSearchCriteria.getOrderStatus().isEmpty()) {
             try {
-                DeliveryType.valueOf(orderSearchCriteria.getOrderStatus());
+                OrderStatus.valueOf(orderSearchCriteria.getOrderStatus());
             } catch (IllegalArgumentException e) {
                 throw OrderException.CODE.INVALID_ORDER.get();
             }
@@ -82,7 +82,7 @@ public class OrderCriteriaRepository {
             }
             predicates.add(
                     criteriaBuilder.equal(orderRoot.get("deliveryType"),
-                            OrderStatus.valueOf(orderSearchCriteria.getDeliveryType()))
+                            DeliveryType.valueOf(orderSearchCriteria.getDeliveryType()))
             );
         }
         if (Objects.nonNull(orderSearchCriteria.getEmployee())) {
@@ -110,7 +110,7 @@ public class OrderCriteriaRepository {
                 criteriaQuery.orderBy(criteriaBuilder.desc(orderRoot.get(entityPage.getSortBy())));
             }
         } catch (Exception e) {
-            throw OrderException.CODE.INCORRECT_ATTRIBUTE_NAME.get();
+            throw OrderException.CODE.INCORRECT_ATTRIBUTE_NAME.get(entityPage.getSortBy());
         }
     }
 

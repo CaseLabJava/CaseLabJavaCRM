@@ -6,7 +6,8 @@ import lombok.Getter;
 public class ClientException extends RuntimeException {
     @Getter
     public enum CODE {
-        NO_SUCH_CLIENT("No client with such id");
+        NO_SUCH_CLIENT("No client with such id"),
+        INCORRECT_ATTRIBUTE_NAME("Incorrect attribute name");
 
         final String codeDescription;
 

@@ -88,6 +88,7 @@ public interface EmployeeApi {
             @Parameter(description = "Поле для сортировки") String sortBy,
             @Parameter(
                     in = ParameterIn.QUERY,
+                    description = "Порядок сортировки",
                     name = "sortDirection",
                     schema = @Schema(allowableValues = {
                             "ASC",

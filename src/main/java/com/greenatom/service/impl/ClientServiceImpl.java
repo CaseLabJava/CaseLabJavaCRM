@@ -2,10 +2,13 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
+import com.greenatom.domain.dto.client.ClientSearchCriteria;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.mapper.ClientMapper;
 import com.greenatom.exception.ClientException;
 import com.greenatom.repository.ClientRepository;
+import com.greenatom.repository.criteria.ClientCriteriaRepository;
 import com.greenatom.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +33,13 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final ClientCriteriaRepository clientCriteriaRepository;
     private final ClientMapper clientMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public List<ClientResponseDTO> findAll() {
-        return clientMapper.toDto(clientRepository.findAll());
+    public List<ClientResponseDTO> findAll(EntityPage entityPage, ClientSearchCriteria clientSearchCriteria) {
+        return clientMapper.toDto(clientCriteriaRepository.findAllWithFilters(entityPage, clientSearchCriteria));
     }
 
     @Override

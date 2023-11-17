@@ -16,6 +16,7 @@ public class ClientExceptionHandler {
         ClientException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_CLIENT -> HttpStatus.NOT_FOUND;
+            case INCORRECT_ATTRIBUTE_NAME -> HttpStatus.BAD_REQUEST;
         };
         String codeStr = code.toString();
         log.error(codeStr, e);

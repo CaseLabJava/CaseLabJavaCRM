@@ -165,8 +165,8 @@ public interface ClaimApi {
             }
     )
     @Operation(summary = "Назначает жалобу на сотрудника")
-    ClaimResponseDTO appointClaim(@RequestParam("claim") Long claim,
-                                  @RequestParam("employee") Long employee);
+    ClaimResponseDTO appointClaim(@Parameter(description = "ID жалобы") Long claim,
+                                  @Parameter(description = "ID работника") Long employee);
 
     @ApiResponse(
             responseCode = "200",
@@ -179,6 +179,6 @@ public interface ClaimApi {
             }
     )
     @Operation(summary = "Вынесение вердикта по жалобе")
-    ClaimResponseDTO resolveClaim(@RequestParam("claim") Long claim,
-                                  ClaimStatus status);
+    ClaimResponseDTO resolveClaim(@Parameter(description = "ID жалобы") Long claim,
+                                  @Parameter(description = "статус жалобы") ClaimStatus status);
 }

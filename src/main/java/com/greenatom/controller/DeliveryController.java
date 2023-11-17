@@ -22,14 +22,14 @@ public class DeliveryController implements DeliveryApi {
 
     @PostMapping(value = "/take-delivery", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_COURIER', 'ROLE_ADMIN')")
-    public ResponseEntity<Void> changeToInProcess(@Parameter Long courierId, @Parameter Long deliveryId) {
+    public ResponseEntity<Void> changeToInProcess(@RequestParam Long courierId, @RequestParam Long deliveryId) {
         deliveryService.changeStatusToInProgress(courierId, deliveryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping(value = "/finish-delivery", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_COURIER', 'ROLE_ADMIN')")
-    public ResponseEntity<Void> changeToDone(@Parameter Long courierId, @Parameter Long deliveryId) {
+    public ResponseEntity<Void> changeToDone(@RequestParam Long courierId, @RequestParam Long deliveryId) {
         deliveryService.changeStatusToDone(courierId, deliveryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

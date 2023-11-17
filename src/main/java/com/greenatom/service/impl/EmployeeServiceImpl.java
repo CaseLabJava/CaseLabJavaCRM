@@ -1,8 +1,6 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
-import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
-import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
+import com.greenatom.domain.dto.employee.*;
 import com.greenatom.domain.entity.Courier;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.enums.JobPosition;
@@ -12,11 +10,11 @@ import com.greenatom.exception.EmployeeException;
 import com.greenatom.repository.CourierRepository;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RoleRepository;
+import com.greenatom.repository.criteria.EmployeeCriteriaRepository;
 import com.greenatom.service.EmployeeService;
 import com.greenatom.utils.mapper.TranslateRusToEng;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +38,7 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmployeeCriteriaRepository employeeCriteriaRepository;
     private final EmployeeMapper employeeMapper;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
@@ -47,9 +46,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EmployeeResponseDTO> findAll(Integer pagePosition, Integer pageLength) {
-        return employeeMapper.toDto(employeeRepository.findAll(
-                PageRequest.of(pagePosition, pageLength)));
+    public List<EmployeeResponseDTO> findAll(EntityPage entityPage, EmployeeSearchCriteria employeeSearchCriteria) {
+        return employeeMapper.toDto(employeeCriteriaRepository.findAllWithFilters(entityPage, employeeSearchCriteria));
     }
 
     @Override
@@ -85,7 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public EmployeeResponseDTO updateEmployee(Long id, EmployeeRequestDTO employee) {
+    public EmployeeResponseDTO updateEmployee(Long id, EmployeeSearchCriteria employee) {
         return employeeRepository
                 .findById(id)
                 .map(existingEvent -> {

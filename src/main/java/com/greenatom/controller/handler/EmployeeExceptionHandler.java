@@ -16,6 +16,7 @@ public class EmployeeExceptionHandler {
         EmployeeException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_EMPLOYEE -> HttpStatus.NOT_FOUND;
+            case INCORRECT_JOB_POSITION, INCORRECT_ATTRIBUTE_NAME -> HttpStatus.BAD_REQUEST;
         };
         String codeStr = code.toString();
         log.error(codeStr, e);

@@ -6,7 +6,9 @@ import lombok.Getter;
 public class EmployeeException extends RuntimeException {
     @Getter
     public enum CODE {
-        NO_SUCH_EMPLOYEE("No employee with such id");
+        NO_SUCH_EMPLOYEE("No employee with such id"),
+        INCORRECT_JOB_POSITION("There is no such Job Position"),
+        INCORRECT_ATTRIBUTE_NAME("Incorrect attribute name");
 
         final String codeDescription;
 

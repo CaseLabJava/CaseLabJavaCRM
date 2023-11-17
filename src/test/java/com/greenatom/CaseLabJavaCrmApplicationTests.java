@@ -15,8 +15,5 @@ class CaseLabJavaCrmApplicationTests {
     @ServiceConnection
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:14");
 
-    @Test
-    void contextLoads() {
-    }
 
 }

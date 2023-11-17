@@ -10,8 +10,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 
+import java.time.Instant;
 import java.util.List;
 
 @Tag(name = "Delivery API", description = "API для работы с доставками")
@@ -67,16 +70,37 @@ public interface DeliveryApi {
             )
     })
     @Operation(
-            summary = "Получение доставки по id"
+            summary = "Получение всех доставок"
     )
     ResponseEntity<List<DeliveryResponseDTO>> findAll(@Parameter(description = "Начальный номер страницы", example = "0") Integer pageNumber,
                                                       @Parameter(description = "Размер страницы", example = "10") Integer pageSize,
+                                                      @Parameter(description = "Айди заказа", example = "1") Long orderId,
+                                                      @Parameter(description = "Айди курьера", example = "1") Long courierId,
                                                       @Parameter(
                                                               description = "Статус заказа",
                                                               in = ParameterIn.QUERY,
                                                               name = "status",
-                                                              schema = @Schema(allowableValues = {"WAITING_FOR_DELIVERY", "IN_PROCESS", "DONE"}))
-                                                      String status);
+                                                              schema = @Schema(allowableValues = {
+                                                                      "WAITING_FOR_DELIVERY",
+                                                                      "IN_PROCESS", "DONE"}))
+                                                      String deliveryStatus,
+                                                      @Parameter(description = "Начало доставки",
+                                                              example ="2016-01-06T15:22:53.403Z" )
+                                                      Instant startTime,
+                                                      @Parameter(description = "Конец доставки",
+                                                              example = "2016-01-06T15:23:53.403Z")
+                                                      Instant endTime,
+                                                      @Parameter(description = "Поле для сортировки")
+                                                      String sortBy,
+                                                      @Parameter(
+                                                              in = ParameterIn.QUERY,
+                                                              description = "Порядок сортировки",
+                                                              name = "sortDirection",
+                                                              schema = @Schema(allowableValues = {
+                                                                      "ASC",
+                                                                      "DESC"
+                                                              }))
+                                                      Sort.Direction sortDirection);
 
     @ApiResponses(value = {
             @ApiResponse(

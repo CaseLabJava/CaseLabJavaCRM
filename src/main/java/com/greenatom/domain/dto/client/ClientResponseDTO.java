@@ -34,13 +34,13 @@ public class ClientResponseDTO {
     @Schema(description = "название банка клиента", example = "СберБанк")
     private String bank;
 
-    @Schema(description = "ИНН клиента", example = "7706729736")
+    @Schema(description = "ИНН клиента", example = "1234567890123")
     private String inn;
 
     @Schema(description = "ОГРН клиента", example = "1097746819720")
     private String ogrn;
 
-    @Schema(description = "Корреспондентский счет клиента", example = "123456789")
+    @Schema(description = "Корреспондентский счет клиента", example = "12345678901234567890")
     private String correspondentAccount;
 
     @Schema(description = "Адресс клиента", example = "119017, город Москва, ул. Большая Ордынка, д.24 ")

@@ -2,7 +2,6 @@ package com.greenatom.domain.entity;
 
 import com.greenatom.domain.enums.ClaimStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
@@ -32,17 +31,14 @@ public class Claim {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
-    @NonNull
     private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "client_id")
-    @NonNull
     private Client client;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    @NotBlank
     private ClaimStatus claimStatus;
 
     @Column(name = "creation_time")
@@ -50,5 +46,8 @@ public class Claim {
 
     @Column(name = "resolved_time")
     private Instant resolvedTime;
+
+    @Column(name = "description")
+    private String description;
 
 }

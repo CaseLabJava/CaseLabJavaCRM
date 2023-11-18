@@ -1,15 +1,18 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.exception.message.EmployeeErrorMessage;
+import com.greenatom.exception.message.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -57,18 +60,53 @@ public interface EmployeeApi {
                                     schema = @Schema(implementation = EmployeeResponseDTO.class)
                             )
                     }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Неверная должность сотрудника",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             )
     })
     @Operation(
             summary = "Получение всех сотрудников"
     )
     ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees(
-            @Parameter(description = "Позиция страницы", example = "0")
-            Integer pagePosition,
-            @Parameter(description = "Длина страницы", example = "5")
-            Integer pageLength
+            @Parameter(description = "Начальная страница") Integer pagePosition,
+            @Parameter(description = "Размер страницы") Integer pageSize,
+            @Parameter(description = "Имя сотрудника") String firstname,
+            @Parameter(description = "Фамилия сотрудника") String surname,
+            @Parameter(description = "Отчество сотрудника") String patronymic,
+            @Parameter(description = "Адрес сотрудника") String address,
+            @Parameter(description = "Почта сотрудника") String email,
+            @Parameter(description = "Номер телефона сотрудника") String phoneNumber,
+            @Parameter(description = "Зарплата сотрудника") Long salary,
+            @Parameter(description = "Логин сотрудника") String username,
+            @Parameter(
+                    in = ParameterIn.QUERY,
+                    name = "jobPosition",
+                    schema = @Schema(allowableValues = {
+                            "MANAGER",
+                            "DIRECTOR",
+                            "WAREHOUSE_WORKER",
+                            "COURIER"
+                    }))
+            String jobPosition,
+            @Parameter(description = "Поле для сортировки") String sortBy,
+            @Parameter(
+                    in = ParameterIn.QUERY,
+                    description = "Порядок сортировки",
+                    name = "sortDirection",
+                    schema = @Schema(allowableValues = {
+                            "ASC",
+                            "DESC"
+                    }))
+            Sort.Direction sortDirection
     );
-
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -129,5 +167,5 @@ public interface EmployeeApi {
             @Parameter(description = "Id сотрудника")
             Long id,
             @Parameter(description = "Информация о сотруднике")
-            @RequestBody EmployeeRequestDTO employee);
+            @RequestBody EmployeeSearchCriteria employee);
 }

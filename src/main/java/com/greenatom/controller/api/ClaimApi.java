@@ -1,11 +1,12 @@
 package com.greenatom.controller.api;
 
+import com.greenatom.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
-import com.greenatom.domain.enums.ClaimStatus;
 import com.greenatom.exception.message.ClaimErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -150,7 +151,7 @@ public interface ClaimApi {
     @Operation(summary = "Создает Claim и возвращает ClaimDTO")
     ResponseEntity<ClaimResponseDTO> addClaim(
             @Parameter(description = "Информация о жалобе")
-            ClaimRequestDTO claimRequestDTO
+            ClaimCreationDTO claimRequestDTO
     );
 
     @ApiResponse(
@@ -164,8 +165,8 @@ public interface ClaimApi {
             }
     )
     @Operation(summary = "Назначает жалобу на сотрудника")
-    ClaimResponseDTO appointClaim(ClaimRequestDTO claim,
-                                  Long id);
+    ClaimResponseDTO appointClaim(@Parameter(description = "ID жалобы") Long claim,
+                                  @Parameter(description = "ID работника") Long employee);
 
     @ApiResponse(
             responseCode = "200",
@@ -178,6 +179,12 @@ public interface ClaimApi {
             }
     )
     @Operation(summary = "Вынесение вердикта по жалобе")
-    ClaimResponseDTO resolveClaim(ClaimRequestDTO claim,
-                                  ClaimStatus status);
+    ClaimResponseDTO resolveClaim(@Parameter(description = "ID жалобы") Long claim,
+                                  @Parameter(
+                                          in = ParameterIn.QUERY,
+                                          description = "Статус жалобы",
+                                          schema = @Schema(allowableValues = {
+                                                  "RESOLVED_FOR_CLIENT",
+                                                  "RESOLVED_FOR_COMPANY"
+                                          })) String status);
 }

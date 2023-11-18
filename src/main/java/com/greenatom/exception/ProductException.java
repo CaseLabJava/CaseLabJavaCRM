@@ -6,8 +6,9 @@ import lombok.Getter;
 public class ProductException extends RuntimeException {
     @Getter
     public enum CODE {
-        NO_SUCH_PRODUCT("No product with such id");
-
+        NO_SUCH_PRODUCT("No product with such id"),
+        PRODUCT_IN_ORDER("Cannot delete product that in order"),
+        INCORRECT_ATTRIBUTE_NAME("Incorrec attribute");
         final String codeDescription;
 
         CODE(String codeDescription) {

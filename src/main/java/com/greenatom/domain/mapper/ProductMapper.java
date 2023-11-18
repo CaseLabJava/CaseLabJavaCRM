@@ -4,6 +4,9 @@ import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.domain.entity.Product;
 import org.mapstruct.Mapper;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * Mapper for the entity {@link Product} and its DTO called {@link ProductResponseDTO}.
@@ -19,4 +22,5 @@ public interface ProductMapper extends EntityMapper<ProductResponseDTO, Product>
 
     ProductResponseDTO toResponse(ProductRequestDTO s);
 
+    List<ProductResponseDTO> toDto(Page<Product> all);
 }

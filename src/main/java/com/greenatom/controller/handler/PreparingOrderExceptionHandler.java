@@ -19,6 +19,7 @@ public class PreparingOrderExceptionHandler {
             case INCORRECT_ROLE, NO_PERMISSION-> HttpStatus.FORBIDDEN;
             case CANNOT_FINISH_ORDER -> HttpStatus.CONFLICT;
             case NO_SUCH_PREPARING_ORDER -> HttpStatus.NOT_FOUND;
+            case INVALID_STATUS -> null;
         };
         String codeStr = code.toString();
         log.error(codeStr, e);

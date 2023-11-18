@@ -58,6 +58,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
                     return existingEvent;
                 })
+                .map(orderItemRepository::save)
                 .map(orderItemMapper::toDto)
                 .orElseThrow(EntityNotFoundException::new);
     }

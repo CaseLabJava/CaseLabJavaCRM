@@ -1,13 +1,15 @@
 package com.greenatom.service;
 
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
+import com.greenatom.domain.dto.product.ProductSearchCriteria;
 
 import java.util.List;
 
 public interface ProductService {
 
-    List<ProductResponseDTO> findAll();
+    List<ProductResponseDTO> findAll(EntityPage entityPage, ProductSearchCriteria productSearchCriteria);
 
     ProductResponseDTO findOne(Long id);
 

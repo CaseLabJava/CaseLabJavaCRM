@@ -47,7 +47,7 @@ public class Client {
 
     @Column(name = "bank_details")
     @NotBlank
-    @Size(min = 20, max = 20)
+    @Size(min = 3, max = 20)
     private String bank;
 
     @Column(name = "inn_and_kpp")

@@ -1,7 +1,7 @@
 package com.greenatom.domain.mapper;
 
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
-import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.entity.Employee;
 import org.mapstruct.Mapper;
@@ -21,7 +21,7 @@ public interface EmployeeMapper extends EntityMapper<EmployeeResponseDTO, Employ
 
     Employee toEntity(CreateEmployeeRequestDTO s);
 
-    EmployeeResponseDTO toResponse(EmployeeRequestDTO s);
+    EmployeeResponseDTO toResponse(EmployeeSearchCriteria s);
 
     List<EmployeeResponseDTO> toDto(Page<Employee> all);
 }

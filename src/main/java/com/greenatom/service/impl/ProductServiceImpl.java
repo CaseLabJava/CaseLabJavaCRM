@@ -1,11 +1,15 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
+import com.greenatom.domain.dto.product.ProductSearchCriteria;
 import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.mapper.ProductMapper;
 import com.greenatom.exception.ProductException;
+import com.greenatom.repository.OrderItemRepository;
 import com.greenatom.repository.ProductRepository;
+import com.greenatom.repository.criteria.ProductCriteriaRepository;
 import com.greenatom.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +33,14 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductCriteriaRepository productCriteriaRepository;
     private final ProductMapper productMapper;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductResponseDTO> findAll() {
-        return productMapper.toDto(productRepository.findAll());
+    public List<ProductResponseDTO> findAll(EntityPage entityPage, ProductSearchCriteria productSearchCriteria) {
+        return productMapper.toDto(productCriteriaRepository.findAllWithFilters(entityPage, productSearchCriteria));
     }
 
     @Override
@@ -50,6 +56,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductResponseDTO save(ProductRequestDTO productRequestDTO) {
         Product product = productMapper.toEntity(productRequestDTO);
+        productRepository.save(product);
         return productMapper.toDto(product);
     }
 
@@ -62,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
                     productMapper.partialUpdate(existingEvent, productMapper.toResponse(product));
                     return existingEvent;
                 })
+                .map(productRepository::save)
                 .map(productMapper::toDto)
                 .orElseThrow(ProductException.CODE.NO_SUCH_PRODUCT::get);
     }
@@ -69,6 +77,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void deleteProduct(Long id) {
+        if (!orderItemRepository.findOrderItemsByProductId(id).isEmpty()) {
+            throw ProductException.CODE.PRODUCT_IN_ORDER.get();
+        }
         productRepository
                 .findById(id)
                 .ifPresent(productRepository::delete);

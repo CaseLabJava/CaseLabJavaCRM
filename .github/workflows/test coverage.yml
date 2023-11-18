@@ -26,8 +26,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Run Integration Tests
-          run: |
-            mvn test
+          run: mvn test
       - name: Generate Code Coverage
           # Этот блок оставляем пока пустым, пока не придумаем инструмент для измерения покрытия кода
           run: |

@@ -97,5 +97,4 @@ jobs:
             docker compose up -d
             
       - name: Run Integration Tests
-        run: |
-          mvn test
+        run: mvn test

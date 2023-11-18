@@ -42,6 +42,5 @@ jobs:
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
 
       - name: Run Integration Tests
-         run: |
-               mvn test
+         run: mvn test
         run: mvn -B verify -Dmaven.test.skip org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=CaseLabJava_CaseLabJavaCRM -Dsonar.organization=caselabjava -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN

@@ -15,6 +15,7 @@ import com.greenatom.repository.*;
 import com.greenatom.repository.criteria.OrderCriteriaRepository;
 import com.greenatom.service.OrderService;
 import com.greenatom.utils.generator.request.OrderGenerator;
+import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.errors.MinioException;
@@ -22,6 +23,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.MailSendException;
@@ -31,7 +33,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
@@ -144,6 +148,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void sendOrderToClient(Order order) {
+        File file = new File(order.getId() + ".docx");
         Client client = order.getClient();
         String toAddress = client.getEmail();
         String senderName = "Green Atom";
@@ -156,13 +161,27 @@ public class OrderServiceImpl implements OrderService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
+            InputStream inputStream = minioClient.getObject(GetObjectArgs.builder()
+                    .bucket("documents")
+                    .object(order.getId() + "/" + "assigned_by_employee.docx")
+                    .build());
+            FileUtils.copyInputStreamToFile(inputStream, file);
+        } catch (MinioException e) {
+            throw FileException.CODE.MINIO.get(e.getMessage());
+        } catch (InvalidKeyException e) {
+            throw FileException.CODE.INVALID_KEY.get(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw FileException.CODE.ALGORITHM_NOT_FOUND.get(e.getMessage());
+        } catch (IOException e) {
+            throw FileException.CODE.IO.get(e.getMessage());
+        }
+        try {
             String fromAddress = env.getProperty("mail_address");
             helper = new MimeMessageHelper(message, true);
             helper.setFrom(Objects.requireNonNull(fromAddress), senderName);
             helper.setTo(toAddress);
             helper.setSubject(subject);
-//            File file = new File(order.getId() + ".docx");
-//            helper.addAttachment("Заказ.docx", file);
+            helper.addAttachment("Заказ.docx", file);
             helper.setText(content, true);
         } catch (MessagingException | IOException e) {
             throw new MailSendException("Couldn't send email to address: " + toAddress, e);

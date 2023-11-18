@@ -141,7 +141,9 @@ public interface OrderApi {
     )
     ResponseEntity<Void> generateOrder(
             @Parameter(description = "Id заказа", example = "1")
-            Long id
+            Long orderId,
+            @Parameter(description = "Id клиента", example = "1")
+            Long employeeId
     );
 
     @ApiResponses(value = {
@@ -162,7 +164,29 @@ public interface OrderApi {
                             @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation =
-                                            OrderErrorMessage.class)
+                                            ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Сотрудник по переданному id не был найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "405",
+                    description = "У сотрудника нет доступа к данному заказу",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            ErrorMessage.class)
                             )
                     }
             )
@@ -193,7 +217,29 @@ public interface OrderApi {
                             @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation =
-                                            OrderErrorMessage.class)
+                                            ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Сотрудник по переданному id не был найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "405",
+                    description = "У сотрудника нет доступа к данному заказу",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation =
+                                            ErrorMessage.class)
                             )
                     }
             )
@@ -203,7 +249,9 @@ public interface OrderApi {
     )
     ResponseEntity<OrderResponseDTO> finishOrder(
             @Parameter(description = "Id заказа", example = "1")
-            Long id
+            Long orderId,
+            @Parameter(description = "Id сотрудника", example = "1")
+            Long employeeId
     );
 
 

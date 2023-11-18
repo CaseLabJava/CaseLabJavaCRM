@@ -72,10 +72,10 @@ public interface DeliveryApi {
     @Operation(
             summary = "Получение всех доставок"
     )
-    ResponseEntity<List<DeliveryResponseDTO>> findAll(@Parameter(description = "Начальный номер страницы", example = "0") Integer pageNumber,
-                                                      @Parameter(description = "Размер страницы", example = "10") Integer pageSize,
-                                                      @Parameter(description = "Айди заказа", example = "1") Long orderId,
-                                                      @Parameter(description = "Айди курьера", example = "1") Long courierId,
+    ResponseEntity<List<DeliveryResponseDTO>> findAll(@Parameter(description = "Начальная страницы") Integer pageNumber,
+                                                      @Parameter(description = "Размер страницы") Integer pageSize,
+                                                      @Parameter(description = "Id заказа") Long orderId,
+                                                      @Parameter(description = "Id курьера") Long courierId,
                                                       @Parameter(
                                                               description = "Статус заказа",
                                                               in = ParameterIn.QUERY,
@@ -84,11 +84,9 @@ public interface DeliveryApi {
                                                                       "WAITING_FOR_DELIVERY",
                                                                       "IN_PROCESS", "DONE"}))
                                                       String deliveryStatus,
-                                                      @Parameter(description = "Начало доставки",
-                                                              example ="2016-01-06T15:22:53.403Z" )
+                                                      @Parameter(description = "Начало доставки")
                                                       Instant startTime,
-                                                      @Parameter(description = "Конец доставки",
-                                                              example = "2016-01-06T15:23:53.403Z")
+                                                      @Parameter(description = "Конец доставки")
                                                       Instant endTime,
                                                       @Parameter(description = "Поле для сортировки")
                                                       String sortBy,
@@ -109,18 +107,27 @@ public interface DeliveryApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = DeliveryResponseDTO.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Курьер по переданному id не был найден или " +
-                            "доставка не была найдена",
+                    description = "Доставка/Курьер по переданному id не был найден",
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = DeliveryErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Данный курьер не может взять заказ, пока не завершить предыдущий",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )
@@ -132,7 +139,7 @@ public interface DeliveryApi {
             @Parameter(description = "Id доставки", example = "1")
             Long deliveryId,
             @Parameter(description = "Id курьера", example = "1")
-            Long courierId
+            Long employeeId
     );
 
     @ApiResponses(value = {
@@ -148,12 +155,21 @@ public interface DeliveryApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Курьер по переданному id не был найден или " +
-                            "доставка не была найдена",
+                    description = "Доствка/Курьер по переданному id не был найден",
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = DeliveryErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Данный курьер не может завершить данный заказ",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )
@@ -165,6 +181,6 @@ public interface DeliveryApi {
             @Parameter(description = "Id доставки", example = "1")
             Long deliveryId,
             @Parameter(description = "Id курьера", example = "1")
-            Long courierId
+            Long employeeId
     );
 }

@@ -22,7 +22,7 @@ public interface OrderService {
 
     OrderResponseDTO save(OrderResponseDTO orderResponseDTO);
 
-    void generateOrder(Long id);
+    void generateOrder(Long orderId, Long employeeId);
 
     OrderResponseDTO updateOrder(OrderResponseDTO orderResponseDTO, Long id);
 
@@ -30,6 +30,5 @@ public interface OrderService {
 
     OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO);
 
-    OrderResponseDTO finishOrder(Long id);
-
+    OrderResponseDTO finishOrder(Long orderId, Long employeeId);
 }

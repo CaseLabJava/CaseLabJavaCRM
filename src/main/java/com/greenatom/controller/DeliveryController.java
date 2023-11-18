@@ -5,7 +5,6 @@ import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
 import com.greenatom.domain.dto.delivery.DeliverySearchCriteria;
 import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.service.DeliveryService;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +23,17 @@ public class DeliveryController implements DeliveryApi {
         this.deliveryService = deliveryService;
     }
 
-    @PostMapping(value = "/take-delivery", produces = {"application/json"})
+    @PostMapping(value = "/start-delivery", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_COURIER', 'ROLE_ADMIN')")
-    public ResponseEntity<Void> changeToInProcess(@RequestParam Long courierId, @RequestParam Long deliveryId) {
-        deliveryService.changeStatusToInProgress(courierId, deliveryId);
+    public ResponseEntity<Void> changeToInProcess(@RequestParam Long deliveryId, @RequestParam Long employeeId) {
+        deliveryService.changeStatusToInProgress(employeeId, deliveryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping(value = "/finish-delivery", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_COURIER', 'ROLE_ADMIN')")
-    public ResponseEntity<Void> changeToDone(@RequestParam Long courierId, @RequestParam Long deliveryId) {
-        deliveryService.changeStatusToDone(courierId, deliveryId);
+    public ResponseEntity<Void> changeToDone(@RequestParam Long deliveryId, @RequestParam Long employeeId) {
+        deliveryService.changeStatusToDone(employeeId, deliveryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

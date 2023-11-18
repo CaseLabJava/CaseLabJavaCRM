@@ -16,7 +16,8 @@ public class OrderException extends RuntimeException {
         INVALID_ORDER("Order content are invalid"),
         INVALID_STATUS("Order status are invalid"),
         INCORRECT_DELIVERY_TYPE("Delivery type are invalid"),
-        INCORRECT_ATTRIBUTE_NAME("Incorrect attribute name");
+        INCORRECT_ATTRIBUTE_NAME("Incorrect attribute name"),
+        NOT_PERMIT("You don`t have permission to do this");
 
         final String codeDescription;
 

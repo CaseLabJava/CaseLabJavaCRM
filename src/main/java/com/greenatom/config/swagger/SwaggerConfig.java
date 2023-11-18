@@ -6,8 +6,12 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Comparator;
 
 /**
  * SwaggerConfig класс используется для настройки Swagger, который является инструментом для описания и
@@ -43,5 +47,13 @@ public class SwaggerConfig {
                 .scheme("bearer")
                 .description("Выполните signIn или signUp, чтобы получить accessToken." +
                         " После получения accessToken, введите его в поле \"Value\".");
+    }
+
+    @Bean
+    public OpenApiCustomizer sortTagsAlphabetically() {
+        return openApi -> openApi.setTags(openApi.getTags()
+                .stream()
+                .sorted(Comparator.comparing(tag -> StringUtils.stripAccents(tag.getName())))
+                .toList());
     }
 }

@@ -6,7 +6,6 @@ import com.greenatom.domain.dto.preparing_order.PreparingOrderResponseDTO;
 import com.greenatom.domain.dto.preparing_order.PreparingOrderSearchCriteria;
 import com.greenatom.service.impl.PreparingOrderServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ import java.time.Instant;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/preparing_orders")
+@RequestMapping(value = "/api/preparing-orders")
 @RequiredArgsConstructor
 public class PreparingOrderController implements PreparingOrderApi {
     private final PreparingOrderServiceImpl preparingOrderService;

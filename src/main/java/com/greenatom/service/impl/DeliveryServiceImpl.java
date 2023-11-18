@@ -47,47 +47,44 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .orElseThrow(DeliveryException.CODE.NO_SUCH_DELIVERY::get));
     }
 
-
     @Override
     @Transactional
-    public void changeStatusToInProgress(Long courierId, Long deliveryId) {
+    public void changeStatusToInProgress(Long employeeId, Long deliveryId) {
         Courier courier = courierRepository
-                .findById(courierId)
+                .findCourierByEmployeeId(employeeId)
                 .orElseThrow(CourierException.CODE.NO_SUCH_COURIER::get);
         Delivery delivery = deliveryRepository
                 .findById(deliveryId)
                 .orElseThrow(DeliveryException.CODE.NO_SUCH_DELIVERY::get);
-
-        if (Objects.equals(delivery.getDeliveryStatus(), DeliveryStatus.WAITING_FOR_DELIVERY)) {
-            delivery.setCourier(courierRepository
-                    .findById(courierId)
-                    .orElseThrow(DeliveryException.CODE.NO_SUCH_COURIER::get));
-            delivery.setDeliveryStatus(DeliveryStatus.IN_PROCESS);
-            courier.setIsActive(false);
-        } else {
+        if (!courier.getIsActive()) {
+            throw DeliveryException.CODE.FORBIDDEN.get();
+        }
+        if (!Objects.equals(delivery.getDeliveryStatus(), DeliveryStatus.WAITING_FOR_DELIVERY)) {
             throw DeliveryException.CODE.INVALID_STATUS.get();
         }
+        courier.setIsActive(false);
+        delivery.setCourier(courier);
+        delivery.setDeliveryStatus(DeliveryStatus.IN_PROCESS);
     }
 
     @Override
     @Transactional
-    public void changeStatusToDone(Long courierId, Long deliveryId) {
+    public void changeStatusToDone(Long employeeId, Long deliveryId) {
         Courier courier = courierRepository
-                .findById(courierId)
+                .findCourierByEmployeeId(employeeId)
                 .orElseThrow(CourierException.CODE.NO_SUCH_COURIER::get);
         Delivery delivery = deliveryRepository
                 .findById(deliveryId)
                 .orElseThrow(DeliveryException.CODE.NO_SUCH_DELIVERY::get);
-        if (!delivery.getCourier().equals(courier)) {
+        if (!Objects.equals(delivery.getCourier(), courier)) {
             throw DeliveryException.CODE.FORBIDDEN.get();
         }
-        if (Objects.equals(delivery.getDeliveryStatus(), DeliveryStatus.IN_PROCESS)) {
-            delivery.setDeliveryStatus(DeliveryStatus.DONE);
-            delivery.setEndTime(Instant.now());
-            courier.setIsActive(true);
-        } else {
+        if (!Objects.equals(delivery.getDeliveryStatus(), DeliveryStatus.IN_PROCESS)) {
             throw DeliveryException.CODE.INVALID_STATUS.get();
         }
+        delivery.setDeliveryStatus(DeliveryStatus.DONE);
+        delivery.setEndTime(Instant.now());
+        courier.setIsActive(true);
         delivery.getOrder().setOrderStatus(OrderStatus.DELIVERY_FINISHED);
     }
 }

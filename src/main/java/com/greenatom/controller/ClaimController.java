@@ -58,8 +58,8 @@ public class ClaimController implements ClaimApi {
     @PostMapping(value = "/resolve", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ClaimResponseDTO resolveClaim(@RequestParam("claim") Long claim,
-                                         @RequestParam("status") ClaimStatus status) {
-        return claimService.resolveClaim(claim, status);
+                                         @RequestParam("status") String status) {
+        return claimService.resolveClaim(claim, ClaimStatus.valueOf(status));
     }
 
     @PostMapping(value = "/appoint", produces = {"application/json"})

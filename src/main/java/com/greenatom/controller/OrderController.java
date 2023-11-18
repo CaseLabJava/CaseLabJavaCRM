@@ -88,20 +88,20 @@ public class OrderController implements OrderApi {
     }
 
     @Override
-    @PostMapping(value = "{id}/generate", produces = {"application/json"})
+    @PostMapping(value = "/assign", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<Void> generateOrder(@PathVariable Long id) {
-        orderService.generateOrder(id);
+    public ResponseEntity<Void> generateOrder(@RequestParam Long orderId, @RequestParam Long employeeId) {
+        orderService.generateOrder(orderId, employeeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
-    @PostMapping(value = "{id}/finish-order", produces = {"application/json"})
+    @PostMapping(value = "/finish-order", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<OrderResponseDTO> finishOrder(@PathVariable Long id) {
+    public ResponseEntity<OrderResponseDTO> finishOrder(@RequestParam Long orderId, @RequestParam Long employeeId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(orderService.finishOrder(id));
+                .body(orderService.finishOrder(orderId, employeeId));
     }
 
     @Override

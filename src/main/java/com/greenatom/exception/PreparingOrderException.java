@@ -9,7 +9,8 @@ public class PreparingOrderException extends RuntimeException {
         INCORRECT_ROLE("Only warehouse employee can prepare order"),
         NO_PERMISSION("You don`t have permissions to do this"),
         NO_SUCH_PREPARING_ORDER("No preparing order with such id"),
-        CANNOT_FINISH_ORDER("Only preparing orders with status IN_PROCESS can be finished");
+        CANNOT_FINISH_ORDER("Only preparing orders with status IN_PROCESS can be finished"),
+        INVALID_STATUS("Invalid status of preparing order");
 
         final String codeDescription;
 

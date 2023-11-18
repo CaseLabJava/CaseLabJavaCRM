@@ -1,17 +1,23 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.item.OrderItemRequestDTO;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
-import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
+import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
+import com.greenatom.exception.FileException;
 import com.greenatom.exception.OrderException;
 import com.greenatom.repository.*;
+import com.greenatom.repository.criteria.OrderCriteriaRepository;
 import com.greenatom.service.OrderService;
 import com.greenatom.utils.generator.request.OrderGenerator;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.errors.MinioException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +30,10 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -62,12 +70,16 @@ public class OrderServiceImpl implements OrderService {
 
     private final JavaMailSender mailSender;
 
+    private final MinioClient minioClient;
+
+    private final OrderCriteriaRepository orderCriteriaRepository;
+
     @Override
     @Transactional(readOnly = true)
-    public List<OrderResponseDTO> findAll(Integer pagePosition, Integer pageLength,
-                                          Long id) {
-        return orderMapper.toDto(orderRepository.findAllByEmployeeId(id,
-                PageRequest.of(pagePosition, pageLength)));
+    public List<OrderResponseDTO> findAll(EntityPage entityPage,
+                                          OrderSearchCriteria employeeSearchCriteria) {
+        return orderMapper.toDto(orderCriteriaRepository.findAllWithFilters(entityPage,
+                employeeSearchCriteria));
     }
 
     @Override
@@ -95,31 +107,38 @@ public class OrderServiceImpl implements OrderService {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
-            if (currProduct.getStorageAmount() > orderItem.getOrderAmount()) {
-                currProduct.setStorageAmount(currProduct.getStorageAmount() - orderItem.getOrderAmount());
-                orderItemRepository.save(OrderItem.builder()
-                        .product(currProduct)
-                        .orderAmount(orderItem.getOrderAmount())
-                        .cost(currProduct.getCost())
-                        .unit(currProduct.getUnit())
-                        .name(currProduct.getProductName())
-                        .order(order)
-                        .build());
-            } else throw OrderException.CODE.INVALID_ORDER.get();
+
+            if (currProduct.getStorageAmount() <= orderItem.getOrderAmount()) {
+                throw OrderException.CODE.INVALID_ORDER.get();
+            }
+
+            currProduct.setStorageAmount(currProduct.getStorageAmount() - orderItem.getOrderAmount());
+            orderItemRepository.save(OrderItem.builder()
+                    .product(currProduct)
+                    .orderAmount(orderItem.getOrderAmount())
+                    .cost(currProduct.getCost())
+                    .unit(currProduct.getUnit())
+                    .name(currProduct.getProductName())
+                    .order(order)
+                    .build());
+
         }
         return orderMapper.toDto(order);
     }
 
     @Override
     @Transactional
-    public OrderResponseDTO finishOrder(Long id) {
+    public OrderResponseDTO finishOrder(Long orderId, Long employeeId) {
         Order order = orderRepository
-                .findById(id)
+                .findById(orderId)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        sendOrderToClient(order);
         if (!Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
+        if (!Objects.equals(order.getEmployee().getId(), employeeId)) {
+            throw OrderException.CODE.NOT_PERMIT.get();
+        }
+        sendOrderToClient(order);
         order.setOrderStatus(OrderStatus.FINISHED);
         return orderMapper.toDto(order);
     }
@@ -142,15 +161,15 @@ public class OrderServiceImpl implements OrderService {
             helper.setFrom(Objects.requireNonNull(fromAddress), senderName);
             helper.setTo(toAddress);
             helper.setSubject(subject);
-            File file = new File(order.getId() + ".docx");
-            helper.addAttachment("Заказ.docx", file);
+//            File file = new File(order.getId() + ".docx");
+//            helper.addAttachment("Заказ.docx", file);
             helper.setText(content, true);
         } catch (MessagingException | IOException e) {
             throw new MailSendException("Couldn't send email to address: " + toAddress, e);
         }
         mailSender.send(message);
-    }
 
+    }
 
     private Order createDraftOrder(OrderRequestDTO orderRequestDTO) {
         Order order = new Order();
@@ -171,27 +190,45 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void generateOrder(Long id) {
+    public void generateOrder(Long orderId, Long employeeId) {
         OrderGenerator orderGenerator = new OrderGenerator();
         Order order = orderRepository
-                .findById(id)
+                .findById(orderId)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (order.getOrderStatus().equals(OrderStatus.DRAFT)) {
-            String filename = "Order_" + order.getId();
-            orderGenerator.processGeneration(
-                    order.getOrderItems(),
-                    order.getClient(),
-                    order.getEmployee(),
-                    filename + ".docx");
-            preparingOrderRepository.save(PreparingOrder.builder()
-                    .order(order)
-                    .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
-                    .startTime(Instant.now())
-                    .build());
-            order.setOrderStatus(OrderStatus.IN_PROCESS);
-        } else {
+        if (!order.getEmployee().getId().equals(employeeId)) {
+            throw OrderException.CODE.NOT_PERMIT.get();
+        }
+        if (!order.getOrderStatus().equals(OrderStatus.DRAFT)) {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
+        String filename = "Order_" + order.getId();
+        byte[] doc = orderGenerator.processGeneration(
+                order.getOrderItems(),
+                order.getClient(),
+                order.getEmployee(),
+                filename + ".docx");
+        try {
+            minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket("documents")
+                            .object(order.getId() + "/" + "assigned_by_employee.docx")
+                            .stream(new ByteArrayInputStream(doc), doc.length, -1)
+                            .build());
+        } catch (MinioException e) {
+            throw FileException.CODE.MINIO.get(e.getMessage());
+        } catch (InvalidKeyException e) {
+            throw FileException.CODE.INVALID_KEY.get(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw FileException.CODE.ALGORITHM_NOT_FOUND.get(e.getMessage());
+        } catch (IOException e) {
+            throw FileException.CODE.IO.get(e.getMessage());
+        }
+        preparingOrderRepository.save(PreparingOrder.builder()
+                .order(order)
+                .preparingOrderStatus(PreparingOrderStatus.WAITING_FOR_PREPARING)
+                .startTime(Instant.now())
+                .build());
+        order.setOrderStatus(OrderStatus.IN_PROCESS);
     }
 
     @Override
@@ -209,13 +246,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDTO updateOrder(OrderResponseDTO order) {
+    public OrderResponseDTO updateOrder(OrderResponseDTO order, Long id) {
         return orderRepository
-                .findById(order.getId())
+                .findById(id)
                 .map(existingEvent -> {
                     orderMapper.partialUpdate(existingEvent, order);
                     return existingEvent;
                 })
+                .map(orderRepository::save)
                 .map(orderMapper::toDto)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
     }
@@ -229,29 +267,5 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw OrderException.CODE.CANNOT_DELETE_ORDER.get();
         }
-    }
-
-    //Обновляем статус в заявке на SIGNED_BY_CLIENT
-    private void updateStatus(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
-        Order order = orderRepository
-                .findById(uploadDocumentRequestDTO.getId())
-                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (order.getOrderStatus().equals(OrderStatus.SIGNED_BY_EMPLOYEE)) {
-            order.setOrderStatus(OrderStatus.SIGNED_BY_CLIENT);
-        } else {
-            throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
-        }
-        updatePath(uploadDocumentRequestDTO);
-    }
-
-    private void updatePath(UploadDocumentRequestDTO uploadDocumentRequestDTO) {
-        log.debug("Order to update link_to_folder : {}", uploadDocumentRequestDTO);
-        Long orderId = uploadDocumentRequestDTO.getId();
-        String linkToFolder = uploadDocumentRequestDTO.getLinkToFolder();
-        orderRepository.updateLinkToFolder(orderId, linkToFolder);
-    }
-
-    private String cleanFileName(String fileName) {
-        return fileName.replaceAll("[^a-zA-Z0-9_-]", "");
     }
 }

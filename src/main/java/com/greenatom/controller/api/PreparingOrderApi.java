@@ -1,17 +1,19 @@
 package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.preparing_order.PreparingOrderResponseDTO;
-import com.greenatom.exception.message.EmployeeErrorMessage;
+import com.greenatom.exception.message.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.Instant;
 import java.util.List;
 
 @Tag(name = "PreparingOrder API", description = "API для работы со сборкой заказа")
@@ -26,14 +28,42 @@ public interface PreparingOrderApi {
                                     schema = @Schema(implementation = PreparingOrderResponseDTO.class)
                             )
                     }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Неверный статус",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             )
     })
     @Operation(
             summary = "Получение всех заказов по статусу"
     )
-    ResponseEntity<List<PreparingOrderResponseDTO>> getPreparingOrders(@RequestParam(defaultValue = "0") Integer pageNumber,
-                                                                       @RequestParam(defaultValue = "10") Integer pageSize,
-                                                                       @RequestParam(defaultValue = "WAITING_FOR_PREPARING", required = false) String status);
+    ResponseEntity<List<PreparingOrderResponseDTO>> getPreparingOrders(@Parameter(description = "Начальный номер страницы") Integer pageNumber,
+                                                                       @Parameter(description = "Размер страницы") Integer pageSize,
+                                                                       @Parameter(description = "Id заказа") Long orderId,
+                                                                       @Parameter(description = "Id кладовщика") Long employeeId,
+                                                                       @Parameter(description = "Статус сборки заказа",
+                                                                               in = ParameterIn.QUERY,
+                                                                               name = "status",
+                                                                               schema = @Schema(allowableValues = {
+                                                                                       "WAITING_FOR_PREPARING",
+                                                                                       "IN_PROCESS", "DONE"})) String deliveryStatus,
+                                                                       @Parameter(description = "Начало сборки заказа") Instant startTime,
+                                                                       @Parameter(description = "Конец сборки") Instant endTime,
+                                                                       @Parameter(description = "Поле для сортировки") String sortBy,
+                                                                       @Parameter(
+                                                                               in = ParameterIn.QUERY,
+                                                                               description = "Порядок сортировки",
+                                                                               name = "sortDirection",
+                                                                               schema = @Schema(allowableValues = {
+                                                                                       "ASC",
+                                                                                       "DESC"
+                                                                               })) Sort.Direction sortDirection);
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -41,7 +71,7 @@ public interface PreparingOrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = PreparingOrderResponseDTO.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             ),
@@ -51,7 +81,7 @@ public interface PreparingOrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )
@@ -68,7 +98,7 @@ public interface PreparingOrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             ),
@@ -78,7 +108,7 @@ public interface PreparingOrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )
@@ -86,8 +116,8 @@ public interface PreparingOrderApi {
     @Operation(
             summary = "Назначение сборщика на заказ"
     )
-    ResponseEntity<Void> appointCollector(@RequestParam(required = false) Long employeeId,
-                                          @RequestParam Long preparingOrderId);
+    ResponseEntity<Void> appointCollector(@Parameter(description = "Id сотрудника") Long employeeId,
+                                          @Parameter(description = "Id сборки заказа") Long preparingOrderId);
 
 
     @ApiResponses(value = {
@@ -101,7 +131,7 @@ public interface PreparingOrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             ),
@@ -111,7 +141,7 @@ public interface PreparingOrderApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )

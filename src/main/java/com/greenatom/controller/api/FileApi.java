@@ -78,7 +78,7 @@ public interface FileApi {
             )
     })
     @Operation(
-            summary = "Загрузить документ"
+            summary = "Скачать документ"
     )
     ResponseEntity<ByteArrayResource> downloadFile(@Parameter(description = "Путь к файлу", example = "") String path,
                                                    @Parameter(description = "Типа файла", example = "") String contentType);
@@ -120,7 +120,7 @@ public interface FileApi {
             )
     })
     @Operation(
-            summary = "Загрузить документ"
+            summary = "Удалить документ"
     )
     ResponseEntity<Void> deleteFile(@Parameter(description = "Имя файла") String fileName);
 }

@@ -31,12 +31,10 @@ public class Claim {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
-    @NonNull
     private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "client_id")
-    @NonNull
     private Client client;
 
     @Column(name = "status")
@@ -48,5 +46,8 @@ public class Claim {
 
     @Column(name = "resolved_time")
     private Instant resolvedTime;
+
+    @Column(name = "description")
+    private String description;
 
 }

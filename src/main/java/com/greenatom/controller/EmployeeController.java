@@ -1,10 +1,11 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.EmployeeApi;
-import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.service.EmployeeService;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,16 +48,41 @@ public class EmployeeController implements EmployeeApi {
 
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR')")
-    public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees(@Param("position") Integer pagePosition,
-                                                     @Param("length") Integer pageLength) {
+    public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees(
+            @RequestParam(required = true, defaultValue = "0") Integer pagePosition,
+            @RequestParam(required = true, defaultValue = "10") Integer pageSize,
+            @RequestParam(required = false) String firstname,
+            @RequestParam(required = false) String surname,
+            @RequestParam(required = false) String patronymic,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) Long salary,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String jobPosition,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection)
+    {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(employeeService.findAll(pagePosition, pageLength));
+                .body(employeeService.findAll(
+                        new EntityPage(pagePosition, pageSize, sortDirection, sortBy),
+                        new EmployeeSearchCriteria(
+                                0L,
+                                firstname,
+                                surname,
+                                patronymic,
+                                username,
+                                jobPosition,
+                                salary,
+                                email,
+                                phoneNumber,
+                                address)));
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRequestDTO employee) {
+    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeSearchCriteria employee) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(employeeService.updateEmployee(id, employee));

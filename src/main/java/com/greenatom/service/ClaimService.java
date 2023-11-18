@@ -1,5 +1,6 @@
 package com.greenatom.service;
 
+import com.greenatom.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.domain.enums.ClaimStatus;
@@ -13,11 +14,11 @@ public interface ClaimService {
 
     ClaimResponseDTO updateClaim(Long id, ClaimRequestDTO claim);
 
-    ClaimResponseDTO save(ClaimRequestDTO claim);
+    ClaimResponseDTO save(ClaimCreationDTO claim);
 
     List<ClaimResponseDTO> findUnassignedClaims(Integer pageNumber, Integer pageSize);
 
-    ClaimResponseDTO resolveClaim(ClaimRequestDTO claim, ClaimStatus status);
+    ClaimResponseDTO resolveClaim(Long claim, Long employeeId, ClaimStatus status);
 
-    ClaimResponseDTO appointClaim(ClaimRequestDTO claim, Long id);
+    ClaimResponseDTO appointClaim(Long claim, Long id);
 }

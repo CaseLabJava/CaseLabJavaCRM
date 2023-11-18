@@ -14,7 +14,10 @@ public class OrderException extends RuntimeException {
         CANNOT_ASSIGN_ORDER("Only order with DRAFT status can be assigned"),
         CANNOT_DELETE_ORDER("Assigned order can not be deleted"),
         INVALID_ORDER("Order content are invalid"),
-        INVALID_STATUS("Order status are invalid");
+        INVALID_STATUS("Order status are invalid"),
+        INCORRECT_DELIVERY_TYPE("Delivery type are invalid"),
+        INCORRECT_ATTRIBUTE_NAME("Incorrect attribute name"),
+        NOT_PERMIT("You don`t have permission to do this");
 
         final String codeDescription;
 

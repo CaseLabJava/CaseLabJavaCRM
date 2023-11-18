@@ -1,6 +1,8 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.preparing_order.PreparingOrderResponseDTO;
+import com.greenatom.domain.dto.preparing_order.PreparingOrderSearchCriteria;
 import com.greenatom.domain.entity.Delivery;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.entity.PreparingOrder;
@@ -14,11 +16,14 @@ import com.greenatom.exception.PreparingOrderException;
 import com.greenatom.repository.DeliveryRepository;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.PreparingOrderRepository;
+import com.greenatom.repository.criteria.PreparingOrderCriteriaRepository;
 import com.greenatom.service.PreparingOrderService;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,19 +37,20 @@ import java.util.Objects;
 public class PreparingOrderServiceImpl implements PreparingOrderService {
 
     private final PreparingOrderRepository preparingOrderRepository;
+
     private final PreparingOrderMapper mapper;
 
     private final EmployeeRepository employeeRepository;
 
     private final DeliveryRepository deliveryRepository;
+    private final PreparingOrderCriteriaRepository preparingOrderCriteriaRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public List<PreparingOrderResponseDTO> findPreparingOrdersPageByParams(Integer pageNumber, Integer pageSize, String status) {
-        return preparingOrderRepository.findPreparingOrdersByPreparingOrderStatus(
-                        PageRequest.of(pageNumber, pageSize), PreparingOrderStatus.valueOf(status))
-                .map(mapper::toDto)
-                .toList();
+    public List<PreparingOrderResponseDTO> findAll(EntityPage entityPage,
+                                                                  PreparingOrderSearchCriteria preparingOrderSearchCriteria) {
+        return mapper.toDto(preparingOrderCriteriaRepository
+                .findAllWithFilters(entityPage,preparingOrderSearchCriteria));
     }
 
     @Override
@@ -52,10 +58,7 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
     public PreparingOrderResponseDTO findOne(Long id) {
         PreparingOrder preparingOrder = preparingOrderRepository.findById(id)
                 .orElseThrow(PreparingOrderException.CODE.NO_SUCH_PREPARING_ORDER::get);
-        PreparingOrderResponseDTO dto = mapper.toDto(preparingOrder);
-        dto.setOrderId(preparingOrder.getId());
-        dto.setEmployeeId(preparingOrder.getEmployee().getId());
-        return dto;
+        return mapper.toDto(preparingOrder);
     }
 
     @Override

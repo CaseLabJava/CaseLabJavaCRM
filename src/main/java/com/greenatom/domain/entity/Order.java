@@ -3,7 +3,6 @@ package com.greenatom.domain.entity;
 import com.greenatom.domain.enums.DeliveryType;
 import com.greenatom.domain.enums.OrderStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -31,7 +30,6 @@ public class Order {
     private Long id;
 
     @Column(name = "link_to_folder")
-    @NotBlank
     private String linkToFolder;
 
     @Column(name = "date_time")

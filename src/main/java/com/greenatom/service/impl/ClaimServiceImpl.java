@@ -1,15 +1,19 @@
 package com.greenatom.service.impl;
 
+import com.greenatom.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.domain.entity.Claim;
 import com.greenatom.domain.entity.Employee;
+import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.enums.ClaimStatus;
 import com.greenatom.domain.mapper.ClaimMapper;
 import com.greenatom.exception.ClaimException;
 import com.greenatom.exception.EmployeeException;
+import com.greenatom.exception.OrderException;
 import com.greenatom.repository.ClaimRepository;
 import com.greenatom.repository.EmployeeRepository;
+import com.greenatom.repository.OrderRepository;
 import com.greenatom.service.ClaimService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +21,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +31,7 @@ import java.util.List;
 public class ClaimServiceImpl implements ClaimService {
     private final EmployeeRepository employeeRepository;
     private final ClaimRepository claimRepository;
+    private final OrderRepository orderRepository;
     private final ClaimMapper claimMapper;
 
     @Override
@@ -37,9 +44,16 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     @Transactional
-    public ClaimResponseDTO save(ClaimRequestDTO claimRequestDTO) {
-        Claim claim = claimMapper.toEntity(claimRequestDTO);
-        return claimMapper.toDto(claim);
+    public ClaimResponseDTO save(ClaimCreationDTO claimRequestDTO) {
+        Order order = orderRepository.findById(claimRequestDTO
+                .getOrderId())
+                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        Claim claim = claimMapper.toClaim(claimRequestDTO);
+        claim.setOrder(order);
+        claim.setClient(order.getClient());
+        claim.setCreationTime(Instant.now());
+        claim.setClaimStatus(ClaimStatus.CREATED);
+        return claimMapper.toDto(claimRepository.save(claim));
     }
 
     @Override
@@ -52,25 +66,29 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     @Transactional
-    public ClaimResponseDTO resolveClaim(ClaimRequestDTO claimDTO, ClaimStatus status) {
-        if(claimDTO.getClaimStatus().equals(ClaimStatus.IN_WORK)
-                &&(status.equals(ClaimStatus.RESOLVED_FOR_CLIENT)
-                ||status.equals(ClaimStatus.RESOLVED_FOR_COMPANY))){
-            Claim claim =claimMapper.toEntity(claimDTO);
-            claim.setClaimStatus(status);
-            return claimMapper.toDto(claim);
-        } else{
+    public ClaimResponseDTO resolveClaim(Long claimId, Long employeeId, ClaimStatus status) {
+        Claim claim = claimRepository.findById(claimId).orElseThrow(
+                ClaimException.CODE.NO_SUCH_CLAIM::get);
+        if (!Objects.equals(claim.getEmployee().getId(), employeeId)) {
+            throw ClaimException.CODE.NO_PERMISSION.get();
+        }
+        if(!claim.getClaimStatus().equals(ClaimStatus.IN_WORK)) {
             throw ClaimException.CODE.INVALID_STATUS.get();
         }
+        claim.setClaimStatus(status);
+        claim.setResolvedTime(Instant.now());
+        return claimMapper.toDto(claim);
     }
 
     @Override
     @Transactional
-    public ClaimResponseDTO appointClaim(ClaimRequestDTO claimDTO, Long id) {
-        Claim claim = claimMapper.toEntity(claimDTO);
-        Employee employee = employeeRepository.findById(id).orElseThrow(
+    public ClaimResponseDTO appointClaim(Long claimId, Long employeeId) {
+        Claim claim = claimRepository.findById(claimId).orElseThrow(
+                ClaimException.CODE.NO_SUCH_CLAIM::get);
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
                 EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
         claim.setEmployee(employee);
+        claim.setClaimStatus(ClaimStatus.IN_WORK);
         return claimMapper.toDto(claim);
     }
 
@@ -83,7 +101,7 @@ public class ClaimServiceImpl implements ClaimService {
                     claimMapper.partialUpdate(existingEvent,
                             claimMapper.toResponse(claimRequestDTO));
                     return existingEvent;
-                })
+                }).map(claimRepository::save)
                 .map(claimMapper::toDto).orElseThrow(
                         ClaimException.CODE.NO_SUCH_CLAIM::get);
     }

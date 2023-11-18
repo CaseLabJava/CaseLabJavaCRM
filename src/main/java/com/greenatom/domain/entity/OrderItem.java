@@ -26,7 +26,7 @@ public class OrderItem {
 
     @Column(name = "name")
     @NotBlank
-    @Size(min = 10, max = 200)
+    @Size(min = 1, max = 200)
     private String name;
 
     @Column(name = "unit")

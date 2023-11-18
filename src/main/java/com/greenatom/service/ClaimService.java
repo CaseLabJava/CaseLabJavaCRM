@@ -18,7 +18,7 @@ public interface ClaimService {
 
     List<ClaimResponseDTO> findUnassignedClaims(Integer pageNumber, Integer pageSize);
 
-    ClaimResponseDTO resolveClaim(Long claim, ClaimStatus status);
+    ClaimResponseDTO resolveClaim(Long claim, Long employeeId, ClaimStatus status);
 
     ClaimResponseDTO appointClaim(Long claim, Long id);
 }

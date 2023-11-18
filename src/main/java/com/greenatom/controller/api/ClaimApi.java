@@ -4,6 +4,7 @@ import com.greenatom.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.exception.message.ClaimErrorMessage;
+import com.greenatom.exception.message.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -138,48 +139,95 @@ public interface ClaimApi {
             ClaimRequestDTO claimRequestDTO
     );
 
-    @ApiResponse(
-            responseCode = "200",
-            description = "Жалоба была успешно создана",
-            content = {
-                    @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ClaimResponseDTO.class)
-                    )
-            }
-    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Жалоба была успешно создана",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Нет заказа по переданному id",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+    })
     @Operation(summary = "Создает Claim и возвращает ClaimDTO")
     ResponseEntity<ClaimResponseDTO> addClaim(
             @Parameter(description = "Информация о жалобе")
             ClaimCreationDTO claimRequestDTO
     );
 
-    @ApiResponse(
-            responseCode = "200",
-            description = "Жалоба была успешно назначена",
-            content = {
-                    @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ClaimResponseDTO.class)
-                    )
-            }
-    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Жалоба была успешно назначена",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Нет заказа по переданному id",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            )
+    })
     @Operation(summary = "Назначает жалобу на сотрудника")
     ClaimResponseDTO appointClaim(@Parameter(description = "ID жалобы") Long claim,
                                   @Parameter(description = "ID работника") Long employee);
 
-    @ApiResponse(
-            responseCode = "200",
-            description = "Вердикт успешно вынесен",
-            content = {
-                    @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ClaimResponseDTO.class)
-                    )
-            }
-    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Вердикт успешно вынесен",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Нет заказа по переданному id",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Сотрудник не имеет прав разрешить данную жалобу",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            )
+    })
     @Operation(summary = "Вынесение вердикта по жалобе")
-    ClaimResponseDTO resolveClaim(@Parameter(description = "ID жалобы") Long claim,
+    ClaimResponseDTO resolveClaim(@Parameter(description = "Id жалобы") Long claimId,
+                                  @Parameter(description = "Id сотрудника") Long employeeId,
                                   @Parameter(
                                           in = ParameterIn.QUERY,
                                           description = "Статус жалобы",

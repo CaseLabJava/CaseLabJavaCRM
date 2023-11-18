@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -162,8 +161,8 @@ public class OrderServiceImpl implements OrderService {
             helper.setFrom(Objects.requireNonNull(fromAddress), senderName);
             helper.setTo(toAddress);
             helper.setSubject(subject);
-            File file = new File(order.getId() + ".docx");
-            helper.addAttachment("Заказ.docx", file);
+//            File file = new File(order.getId() + ".docx");
+//            helper.addAttachment("Заказ.docx", file);
             helper.setText(content, true);
         } catch (MessagingException | IOException e) {
             throw new MailSendException("Couldn't send email to address: " + toAddress, e);

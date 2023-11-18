@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -65,18 +66,18 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     @Transactional
-    public ClaimResponseDTO resolveClaim(Long claimId, ClaimStatus status) {
+    public ClaimResponseDTO resolveClaim(Long claimId, Long employeeId, ClaimStatus status) {
         Claim claim = claimRepository.findById(claimId).orElseThrow(
                 ClaimException.CODE.NO_SUCH_CLAIM::get);
-        if(claim.getClaimStatus().equals(ClaimStatus.IN_WORK)
-                &&(status.equals(ClaimStatus.RESOLVED_FOR_CLIENT)
-                ||status.equals(ClaimStatus.RESOLVED_FOR_COMPANY))){
-            claim.setClaimStatus(status);
-            claimRepository.save(claim);
-            return claimMapper.toDto(claim);
-        } else{
+        if (!Objects.equals(claim.getEmployee().getId(), employeeId)) {
+            throw ClaimException.CODE.NO_PERMISSION.get();
+        }
+        if(!claim.getClaimStatus().equals(ClaimStatus.IN_WORK)) {
             throw ClaimException.CODE.INVALID_STATUS.get();
         }
+        claim.setClaimStatus(status);
+        claim.setResolvedTime(Instant.now());
+        return claimMapper.toDto(claim);
     }
 
     @Override

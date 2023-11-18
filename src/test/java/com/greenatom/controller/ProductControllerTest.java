@@ -31,10 +31,19 @@ public class ProductControllerTest {
     @WithMockUser(roles = "MANAGER")
     public void testGetProductWithManagerRole() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/products/get/{id}", 1L)
+                        .get("/api/products/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+    @Test
+    @WithMockUser(roles = "COURIER")
+    public void testGetProductWithAdminRole() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/products/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
 }
 
 

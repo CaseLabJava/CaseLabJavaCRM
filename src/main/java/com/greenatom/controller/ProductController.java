@@ -1,9 +1,12 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.ProductApi;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
+import com.greenatom.domain.dto.product.ProductSearchCriteria;
 import com.greenatom.service.ProductService;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,21 +37,27 @@ public class ProductController implements ProductApi {
         this.productService = productService;
     }
 
-    @GetMapping(value = "/get/{id}", produces = {"application/json"})
+    @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
     public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.findOne(id));
     }
 
-    @GetMapping(value = "/get", produces = {"application/json"})
+    @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts(@RequestParam(defaultValue = "0") Integer pagePosition,
-                                                   @RequestParam(defaultValue = "20") Integer pageLength,
-                                                   @RequestParam(defaultValue = "", required = false) String name,
-                                                   @RequestParam(defaultValue = "0x7fffffff", required = false) Integer cost) {
+                                                   @RequestParam(defaultValue = "10") Integer pageLength,
+                                                   @RequestParam(required = false) String productName,
+                                                   @RequestParam(required = false) String unit,
+                                                   @RequestParam(required = false) Long storageAmount,
+                                                   @RequestParam(required = false) Long cost,
+                                                   @RequestParam(required = false, defaultValue = "id") String sortBy,
+                                                   @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(productService.findAll(pagePosition, pageLength, name, cost));
+                .body(productService.findAll(
+                        new EntityPage(pagePosition, pageLength, sortDirection, sortBy),
+                        new ProductSearchCriteria(0L, productName, unit, storageAmount, cost)));
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})

@@ -16,7 +16,7 @@ public class ProductExceptionHandler {
         ProductException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_PRODUCT -> HttpStatus.NOT_FOUND;
-            case PRODUCT_IN_ORDER -> HttpStatus.BAD_REQUEST;
+            case PRODUCT_IN_ORDER, INCORRECT_ATTRIBUTE_NAME -> HttpStatus.BAD_REQUEST;
         };
         String codeStr = code.toString();
         log.error(codeStr, e);

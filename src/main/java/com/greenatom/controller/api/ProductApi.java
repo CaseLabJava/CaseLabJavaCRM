@@ -6,11 +6,13 @@ import com.greenatom.exception.message.ErrorMessage;
 import com.greenatom.exception.message.ProductErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -66,21 +68,38 @@ public interface ProductApi {
                                     schema = @Schema(implementation = ProductResponseDTO.class)
                             )
                     }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Неверный порядок сортировки",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             )
     })
     @Operation(
             summary = "Получение продуктов с фильтрацией по названию и стоимости"
     )
     ResponseEntity<List<ProductResponseDTO>> getAllProducts(
-            @Parameter(description = "Позиция страницы", example = "0")
-            Integer pagePosition,
-            @Parameter(description = "Длина страницы", example = "5")
-            Integer pageLength,
-            @Parameter(description = "Подстрока в названии продукта", example = "s")
-            String name,
-            @Parameter(description = "Стоимость продукта должна быть меньше указанного", example = "2147483647")
-            Integer cost
-    );
+            @Parameter(description = "Позиция страницы") Integer pagePosition,
+            @Parameter(description = "Длина страницы") Integer pageLength,
+            @Parameter(description = "Название продукта") String productName,
+            @Parameter(description = "Единица измерения") String unit,
+            @Parameter(description = "Количество продукта на складе") Long storageAmount,
+            @Parameter(description = "Стоимость продукта") Long cost,
+            @Parameter(description = "Поле для сортировки") String sortBy,
+            @Parameter(
+                    in = ParameterIn.QUERY,
+                    description = "Порядок сортировки",
+                    name = "sortDirection",
+                    schema = @Schema(allowableValues = {
+                            "ASC",
+                            "DESC"
+                    }))
+            Sort.Direction sortDirection);
 
     @ApiResponses(value = {
             @ApiResponse(

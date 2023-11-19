@@ -142,7 +142,7 @@ public interface OrderApi {
     ResponseEntity<Void> generateOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long orderId,
-            @Parameter(description = "Id клиента", example = "1")
+            @Parameter(description = "Id сотрудника", example = "1")
             Long employeeId
     );
 

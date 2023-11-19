@@ -163,7 +163,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             InputStream inputStream = minioClient.getObject(GetObjectArgs.builder()
                     .bucket("documents")
-                    .object(order.getId() + "/" + "assigned_by_employee.docx")
+                    .object(order.getId() + "/" + "signed_by_client.docx")
                     .build());
             FileUtils.copyInputStreamToFile(inputStream, file);
         } catch (MinioException e) {

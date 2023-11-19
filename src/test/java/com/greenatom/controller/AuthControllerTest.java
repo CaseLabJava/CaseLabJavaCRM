@@ -94,7 +94,7 @@ public class AuthControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.accessToken").isNotEmpty()); // Проверка, что в ответе есть токен
     }
 
-    private String asJsonString(Object obj) throws JsonProcessingException {
+    public static String asJsonString(Object obj) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(obj);
     }

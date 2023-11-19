@@ -28,7 +28,7 @@ jobs:
       - name: Run Integration Tests
           run: mvn test
       - name: Generate Code Coverage
-          # Этот блок оставляем пока пустым, пока не придумаем инструмент для измерения покрытия кода
+          #Todo Выбрать инструмент для измерения покрытий кода
           run: |
     
 

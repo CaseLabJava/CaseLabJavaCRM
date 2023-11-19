@@ -56,7 +56,7 @@ public class OrderControllerTest {
             mockMvc.perform(MockMvcRequestBuilders
                             .post("/api/orders/draft")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(asJsonString(orderRequestDTO)))
+                            .content(AuthControllerTest.asJsonString(orderRequestDTO)))
                     .andExpect(result -> {
                         if (result.getResponse().getStatus() == 401) {
                             retryCount.getAndIncrement();
@@ -70,12 +70,6 @@ public class OrderControllerTest {
             throw new AssertionError("Failed to get a successful response after maximum retries");
         }
     }
-    private static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 }

@@ -32,13 +32,13 @@ public class ProductController implements ProductApi {
     }
 
     @GetMapping(value = "/get/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR','ROLE_CLIENT_INTERMEDIARY')")
     public ProductResponseDTO getProduct(@PathVariable Long id) {
         return productService.findOne(id);
     }
 
     @GetMapping(value = "/get", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR','ROLE_CLIENT_INTERMEDIARY')")
     public List<ProductResponseDTO> getAllProducts(@RequestParam(defaultValue = "0") Integer pagePosition,
                                                    @RequestParam(defaultValue = "20") Integer pageLength,
                                                    @RequestParam(defaultValue = "", required = false) String name,

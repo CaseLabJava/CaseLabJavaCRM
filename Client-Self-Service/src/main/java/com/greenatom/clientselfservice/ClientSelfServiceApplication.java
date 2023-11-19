@@ -1,5 +1,7 @@
 package com.greenatom.clientselfservice;
 
+import com.greenatom.clientselfservice.utils.interceptor.BearerAuthInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -10,6 +12,13 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class ClientSelfServiceApplication {
 
+    private final BearerAuthInterceptor bearerAuthInterceptor;
+
+    @Autowired
+    public ClientSelfServiceApplication(BearerAuthInterceptor bearerAuthInterceptor) {
+        this.bearerAuthInterceptor = bearerAuthInterceptor;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(ClientSelfServiceApplication.class, args);
     }
@@ -17,6 +26,8 @@ public class ClientSelfServiceApplication {
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.build();
+        RestTemplate restTemplate = builder.build();
+        restTemplate.getInterceptors().add(bearerAuthInterceptor);
+        return restTemplate;
     }
 }

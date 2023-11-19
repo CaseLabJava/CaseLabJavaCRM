@@ -17,4 +17,5 @@ server:
 
 client_access_token: ${CLIENT_ACCESS_TOKEN}
 client_refresh_token: ${CLIENT_REFRESH_TOKEN}
+jwt_technical_user: ${JWT_TECHNICAL_USER}
 

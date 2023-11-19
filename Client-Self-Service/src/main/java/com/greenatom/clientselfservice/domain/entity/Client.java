@@ -27,11 +27,9 @@ public class Client {
     private String name;
 
     @Column(name = "lastname", length = 50)
-    @NonNull
     private String surname;
 
     @Column(name = "patronymic", length = 50)
-    @NonNull
     private String patronymic;
 
     @Column(name = "bank_details")

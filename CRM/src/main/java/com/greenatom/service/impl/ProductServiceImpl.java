@@ -1,6 +1,6 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.domain.dto.product.ProductSearchCriteria;

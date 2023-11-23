@@ -1,8 +1,12 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.OrderItemApi;
-import com.greenatom.domain.dto.item.OrderItemResponseDTO;
+import com.greenatom.domain.dto.EntityPage;
+import com.greenatom.domain.dto.orderitem.OrderItemResponseDTO;
+import com.greenatom.domain.dto.orderitem.OrderItemSearchCriteria;
 import com.greenatom.service.OrderItemService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +34,25 @@ public class OrderItemController implements OrderItemApi {
 
     public OrderItemController(OrderItemService orderItemService) {
         this.orderItemService = orderItemService;
+    }
+
+    @GetMapping(produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
+    public ResponseEntity<Page<OrderItemResponseDTO>> getAllOrderItems(
+            @RequestParam(defaultValue = "0") Integer pagePosition,
+            @RequestParam(defaultValue = "10") Integer pageLength,
+            @RequestParam(required = false) Long orderId,
+            @RequestParam(required = false) Long productId,
+            @RequestParam(required = false) String productName,
+            @RequestParam(required = false) String unit,
+            @RequestParam(required = false) Long storageAmount,
+            @RequestParam(required = false) Long cost,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(orderItemService.findAll(
+                new EntityPage(pagePosition, pageLength, sortDirection, sortBy),
+                new OrderItemSearchCriteria(0L, orderId, productId, productName, unit, storageAmount, cost)));
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})

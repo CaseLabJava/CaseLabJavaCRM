@@ -1,7 +1,7 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.PreparingOrderApi;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.preparing_order.PreparingOrderResponseDTO;
 import com.greenatom.domain.dto.preparing_order.PreparingOrderSearchCriteria;
 import com.greenatom.service.impl.PreparingOrderServiceImpl;

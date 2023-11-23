@@ -3,7 +3,7 @@ package com.greenatom.service;
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.entity.Employee;
 import org.springframework.data.domain.Page;
 

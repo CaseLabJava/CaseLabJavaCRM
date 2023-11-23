@@ -2,7 +2,7 @@ package com.greenatom.controller;
 
 import com.greenatom.config.swagger.annotation.AccessDeniedResponse;
 import com.greenatom.controller.api.OrderApi;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.dto.order.OrderSearchCriteria;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.Instant;
-import java.util.List;
 
 /**
  * Этот код представляет собой контроллер API для управления заявками. Он предоставляет набор методов

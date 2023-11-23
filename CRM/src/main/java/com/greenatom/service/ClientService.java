@@ -3,7 +3,7 @@ package com.greenatom.service;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.dto.client.ClientSearchCriteria;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.greenatom.repository.criteria;
 
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.domain.entity.Order;
 import com.greenatom.domain.enums.DeliveryType;

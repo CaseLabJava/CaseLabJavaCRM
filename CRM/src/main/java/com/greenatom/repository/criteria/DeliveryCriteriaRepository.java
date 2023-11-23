@@ -1,7 +1,7 @@
 package com.greenatom.repository.criteria;
 
 import com.greenatom.domain.dto.delivery.DeliverySearchCriteria;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.entity.Delivery;
 import com.greenatom.domain.enums.DeliveryStatus;
 import com.greenatom.domain.enums.OrderStatus;

@@ -3,7 +3,7 @@ package com.greenatom.service.impl;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.dto.client.ClientSearchCriteria;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.mapper.ClientMapper;
 import com.greenatom.exception.ClientException;

@@ -1,7 +1,7 @@
 package com.greenatom.repository.criteria;
 
 import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.enums.JobPosition;
 import com.greenatom.exception.EmployeeException;

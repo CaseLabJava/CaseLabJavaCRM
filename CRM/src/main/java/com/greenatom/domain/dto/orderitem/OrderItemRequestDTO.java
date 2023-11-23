@@ -1,4 +1,4 @@
-package com.greenatom.domain.dto.item;
+package com.greenatom.domain.dto.orderitem;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

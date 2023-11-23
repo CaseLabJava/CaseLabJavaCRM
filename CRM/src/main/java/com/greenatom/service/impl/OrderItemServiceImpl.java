@@ -1,17 +1,20 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.item.OrderItemResponseDTO;
+import com.greenatom.domain.dto.EntityPage;
+import com.greenatom.domain.dto.orderitem.OrderItemResponseDTO;
+import com.greenatom.domain.dto.orderitem.OrderItemSearchCriteria;
 import com.greenatom.domain.mapper.OrderItemMapper;
 import com.greenatom.exception.OrderItemException;
 import com.greenatom.repository.OrderItemRepository;
+import com.greenatom.repository.criteria.OrderItemCriteriaRepository;
 import com.greenatom.service.OrderItemService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 /**
  * CartProductServiceImpl является сервисом для работы со списком покупок. Он использует различные репозитории для
  * доступа к данным и преобразует их с помощью mapper в формат DTO (Data Transfer Object).
@@ -32,12 +35,15 @@ import java.util.List;
 public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
+    private final OrderItemCriteriaRepository orderItemCriteriaRepository;
     private final OrderItemMapper orderItemMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrderItemResponseDTO> findAll() {
-        return orderItemMapper.toDto(orderItemRepository.findAll());
+    public Page<OrderItemResponseDTO> findAll(EntityPage entityPage, OrderItemSearchCriteria orderItemSearchCriteria) {
+        return orderItemCriteriaRepository
+                .findAllWithFilters(entityPage, orderItemSearchCriteria)
+                .map(orderItemMapper::toDto);
     }
 
     @Override

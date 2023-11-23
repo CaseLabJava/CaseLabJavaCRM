@@ -1,4 +1,4 @@
-package com.greenatom.domain.dto.item;
+package com.greenatom.domain.dto.orderitem;
 
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;

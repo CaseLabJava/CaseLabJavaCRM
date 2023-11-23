@@ -1,6 +1,6 @@
 package com.greenatom.domain.dto.order;
 
-import com.greenatom.domain.dto.item.OrderItemRequestDTO;
+import com.greenatom.domain.dto.orderitem.OrderItemRequestDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.greenatom.domain.dto.employee;
+package com.greenatom.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;

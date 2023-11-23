@@ -3,7 +3,7 @@ package com.greenatom.controller;
 import com.greenatom.controller.api.DeliveryApi;
 import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
 import com.greenatom.domain.dto.delivery.DeliverySearchCriteria;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.service.DeliveryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;

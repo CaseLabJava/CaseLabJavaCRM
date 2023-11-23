@@ -3,7 +3,7 @@ package com.greenatom.service.impl;
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.entity.Courier;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.enums.JobPosition;

@@ -1,7 +1,7 @@
 package com.greenatom.domain.mapper;
 
-import com.greenatom.domain.dto.item.OrderItemRequestDTO;
-import com.greenatom.domain.dto.item.OrderItemResponseDTO;
+import com.greenatom.domain.dto.orderitem.OrderItemRequestDTO;
+import com.greenatom.domain.dto.orderitem.OrderItemResponseDTO;
 import com.greenatom.domain.entity.OrderItem;
 import org.mapstruct.Mapper;
 

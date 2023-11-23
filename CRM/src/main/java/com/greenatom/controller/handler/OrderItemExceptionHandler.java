@@ -17,6 +17,7 @@ public class OrderItemExceptionHandler {
         OrderItemException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_PRODUCT, NO_SUCH_ORDER, NO_SUCH_ORDER_ITEM -> HttpStatus.NOT_FOUND;
+            case INCORRECT_ATTRIBUTE_NAME -> HttpStatus.BAD_REQUEST;
         };
         String codeStr = code.toString();
         log.error(codeStr, e);

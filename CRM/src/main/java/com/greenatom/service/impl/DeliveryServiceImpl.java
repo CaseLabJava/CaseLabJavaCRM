@@ -2,7 +2,7 @@ package com.greenatom.service.impl;
 
 import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
 import com.greenatom.domain.dto.delivery.DeliverySearchCriteria;
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.entity.Courier;
 import com.greenatom.domain.entity.Delivery;
 import com.greenatom.domain.enums.DeliveryStatus;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j

@@ -1,6 +1,6 @@
 package com.greenatom.repository.criteria;
 
-import com.greenatom.domain.dto.employee.EntityPage;
+import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.product.ProductSearchCriteria;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.entity.Product;

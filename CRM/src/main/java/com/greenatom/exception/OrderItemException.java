@@ -8,6 +8,7 @@ public class OrderItemException extends RuntimeException {
     public enum CODE {
         NO_SUCH_PRODUCT("No product with such id"),
         NO_SUCH_ORDER("No order with such id"),
+        INCORRECT_ATTRIBUTE_NAME("Incorrect attribute name"),
         NO_SUCH_ORDER_ITEM("No order item with such id");
 
         final String codeDescription;

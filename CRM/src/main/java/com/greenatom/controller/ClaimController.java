@@ -1,6 +1,7 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.ClaimApi;
+import com.greenatom.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.domain.enums.ClaimStatus;
@@ -18,7 +19,6 @@ import java.util.List;
 public class ClaimController implements ClaimApi {
 
     private final ClaimService claimService;
-
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR')")
@@ -44,7 +44,7 @@ public class ClaimController implements ClaimApi {
 
     @PostMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<ClaimResponseDTO> addClaim(@RequestBody ClaimRequestDTO claim) {
+    public ResponseEntity<ClaimResponseDTO> addClaim(@RequestBody ClaimCreationDTO claim) {
         return ResponseEntity.ok(claimService.save(claim));
     }
 
@@ -57,15 +57,16 @@ public class ClaimController implements ClaimApi {
 
     @PostMapping(value = "/resolve", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ClaimResponseDTO resolveClaim(@RequestBody ClaimRequestDTO claim,
-                                         @RequestParam("status") ClaimStatus status) {
-        return claimService.resolveClaim(claim, status);
+    public ClaimResponseDTO resolveClaim(@RequestParam("claimId") Long claimId,
+                                         @RequestParam("employeeId") Long employeeId,
+                                         @RequestParam("status") String status) {
+        return claimService.resolveClaim(claimId, employeeId, ClaimStatus.valueOf(status));
     }
 
     @PostMapping(value = "/appoint", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ClaimResponseDTO appointClaim(@RequestBody ClaimRequestDTO claim,
-                                         @RequestParam("employee") Long id) {
-        return claimService.appointClaim(claim, id);
+    public ClaimResponseDTO appointClaim(@RequestParam("claim") Long claim,
+                                         @RequestParam("employee") Long employee) {
+        return claimService.appointClaim(claim, employee);
     }
 }

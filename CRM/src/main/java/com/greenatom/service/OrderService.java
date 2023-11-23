@@ -1,17 +1,20 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
-import com.greenatom.domain.dto.order.UploadDocumentRequestDTO;
-import com.greenatom.domain.entity.Order;
+import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface OrderService {
 
-    List<OrderResponseDTO> findAll(Integer pagePosition, Integer pageLength, Long id);
+
+    @Transactional(readOnly = true)
+    List<OrderResponseDTO> findAll(EntityPage entityPage,
+                                   OrderSearchCriteria employeeSearchCriteria);
 
     List<OrderResponseDTO> findByPaginationAndFilters(PageRequest pageRequest, String orderStatus, String linkToFolder);
 
@@ -19,17 +22,13 @@ public interface OrderService {
 
     OrderResponseDTO save(OrderResponseDTO orderResponseDTO);
 
-    void generateOrder(GenerateOrderRequestDTO request);
+    void generateOrder(Long orderId, Long employeeId);
 
-    OrderResponseDTO updateOrder(OrderResponseDTO orderResponseDTO);
+    OrderResponseDTO updateOrder(OrderResponseDTO orderResponseDTO, Long id);
 
     void deleteOrder(Long id);
 
     OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO);
 
-    OrderResponseDTO finishOrder(Long id);
-
-    void generatePreparingOrder(Order order);
-
-    void upload(UploadDocumentRequestDTO uploadDocumentRequestDTO);
+    OrderResponseDTO finishOrder(Long orderId, Long employeeId);
 }

@@ -1,6 +1,6 @@
 package com.greenatom.config.swagger.annotation;
 
-import com.greenatom.utils.exception.message.EmployeeErrorMessage;
+import com.greenatom.exception.message.EmployeeErrorMessage;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

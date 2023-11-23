@@ -33,4 +33,7 @@ public class ClaimRequestDTO {
     @Schema(description = "Время разрешения претензии", example = "2016-01-06T15:23:53" +
             ".403Z")
     private Instant resolvedTime;
+
+    @Schema(description = "Описание жалобы", example = "Товар разбит")
+    private String description;
 }

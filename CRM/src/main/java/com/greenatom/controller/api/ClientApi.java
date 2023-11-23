@@ -2,15 +2,17 @@ package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
-import com.greenatom.utils.exception.message.ClientErrorMessage;
+import com.greenatom.exception.message.ClientErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -41,7 +43,7 @@ public interface ClientApi {
     @Operation(
             summary = "Получение клиента по id"
     )
-    ClientResponseDTO getClient(
+    ResponseEntity<ClientResponseDTO> findOne(
             @Parameter(description = "Id клиента", example = "1")
             Long id
     );
@@ -61,19 +63,34 @@ public interface ClientApi {
     @Operation(
             summary = "Получение всех клиентов"
     )
-    List<ClientResponseDTO> getClientsResponse(
-            @RequestParam(defaultValue = "0") Integer pageNumber,
-            @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(defaultValue = "", required = false) String company,
-            @RequestParam(defaultValue = "", required = false) String firstname,
-            @RequestParam(defaultValue = "", required = false) String lastname,
-            @RequestParam(defaultValue = "", required = false) String patronymic
-    );
-
+    ResponseEntity<List<ClientResponseDTO>> findAll(
+            @Parameter(description = "Начальная страница") Integer pagePosition,
+            @Parameter(description = "Размер страницы") Integer pageSize,
+            @Parameter(description = "Имя клиента") String firstname,
+            @Parameter(description = "Фамилия клиента") String lastname,
+            @Parameter(description = "Отчество клиента") String patronymic,
+            @Parameter(description = "Адресс клиента") String address,
+            @Parameter(description = "Название банка клиента") String bank,
+            @Parameter(description = "Название компании клиента") String company,
+            @Parameter(description = "Корреспондентский счет клиента") String correspondentAccount,
+            @Parameter(description = "ИНН клиента") String inn,
+            @Parameter(description = "ОГРН клиента") String ogrn,
+            @Parameter(description = "Номер телефона клиента") String phoneNumber,
+            @Parameter(description = "Электронная почта клиента") String email,
+            @Parameter(description = "Поле для сортировки") String sortBy,
+            @Parameter(
+                    in = ParameterIn.QUERY,
+                    description = "Порядок сортировки",
+                    name = "sortDirection",
+                    schema = @Schema(allowableValues = {
+                            "ASC",
+                            "DESC"
+                    }))
+            Sort.Direction sortDirection);
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "204",
                     description = "Успешное удаление клиента",
                     content = {
                             @Content(
@@ -96,7 +113,7 @@ public interface ClientApi {
     @Operation(
             summary = "Удаление клиента по id"
     )
-    void deleteClient(
+    ResponseEntity<Void> deleteClient(
             @Parameter (description = "Id клиента", example = "1")
             Long id
     );
@@ -126,7 +143,7 @@ public interface ClientApi {
     @Operation(
             summary = "Обновление информации о клиенте"
     )
-    ClientResponseDTO updateClient(
+    ResponseEntity<ClientResponseDTO> updateClient(
             @Parameter(description = "Id клиента")
             Long id,
             @Parameter(description = "Инфомрация о клиенте")
@@ -144,7 +161,7 @@ public interface ClientApi {
             }
     )
     @Operation(summary = "Создает Client и возвращает ClientDTO")
-    ClientResponseDTO addClient(
+    ResponseEntity<ClientResponseDTO> addClient(
             @Parameter(description = "Инфомрация о клиенте")
             ClientRequestDTO clientRequestDTO
     );

@@ -1,19 +1,20 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
-import com.greenatom.domain.dto.employee.EmployeeRequestDTO;
-import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
+import com.greenatom.domain.dto.employee.*;
+import com.greenatom.domain.entity.Courier;
 import com.greenatom.domain.entity.Employee;
+import com.greenatom.domain.enums.JobPosition;
 import com.greenatom.domain.mapper.EmployeeMapper;
+import com.greenatom.exception.AuthException;
+import com.greenatom.exception.EmployeeException;
+import com.greenatom.repository.CourierRepository;
 import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.RoleRepository;
+import com.greenatom.repository.criteria.EmployeeCriteriaRepository;
 import com.greenatom.service.EmployeeService;
-import com.greenatom.utils.exception.AuthException;
-import com.greenatom.utils.exception.EmployeeException;
 import com.greenatom.utils.mapper.TranslateRusToEng;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +27,8 @@ import java.util.Optional;
  * о сотрудниках и ролях, преобразует их в формат DTO и возвращает список сотрудников или конкретного сотрудника
  * по его ID.
  *
- * @version 1.0
  * @author Максим Быков, Андрей Начевный
+ * @version 1.0
  */
 
 @Slf4j
@@ -37,15 +38,16 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final EmployeeCriteriaRepository employeeCriteriaRepository;
     private final EmployeeMapper employeeMapper;
     private final PasswordEncoder encoder;
     private final RoleRepository roleRepository;
+    private final CourierRepository courierRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public List<EmployeeResponseDTO> findAll(Integer pagePosition, Integer pageLength) {
-        return employeeMapper.toDto(employeeRepository.findAll(
-                PageRequest.of(pagePosition, pageLength)));
+    public List<EmployeeResponseDTO> findAll(EntityPage entityPage, EmployeeSearchCriteria employeeSearchCriteria) {
+        return employeeMapper.toDto(employeeCriteriaRepository.findAllWithFilters(entityPage, employeeSearchCriteria));
     }
 
     @Override
@@ -57,6 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeResponseDTO save(CreateEmployeeRequestDTO employeeResponseDTO) {
         List<Employee> existingUsers = employeeRepository.findAll();
         Employee employee = employeeMapper.toEntity(employeeResponseDTO);
@@ -68,12 +71,19 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw AuthException.CODE.EMAIL_IN_USE.get();
             }
         }
+        if (employee.getJobPosition().equals(JobPosition.COURIER)) {
+            Courier courier = new Courier();
+            courier.setEmployee(employee);
+            courier.setIsActive(true);
+            courierRepository.save(courier);
+        }
         employeeRepository.save(employee);
         return employeeMapper.toDto(employee);
     }
 
     @Override
-    public EmployeeResponseDTO updateEmployee(Long id, EmployeeRequestDTO employee) {
+    @Transactional
+    public EmployeeResponseDTO updateEmployee(Long id, EmployeeSearchCriteria employee) {
         return employeeRepository
                 .findById(id)
                 .map(existingEvent -> {
@@ -87,6 +97,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public void deleteEmployee(Long id) {
         employeeRepository
                 .findById(id)

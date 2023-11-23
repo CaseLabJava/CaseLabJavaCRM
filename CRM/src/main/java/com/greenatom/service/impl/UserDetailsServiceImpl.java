@@ -1,8 +1,8 @@
 package com.greenatom.service.impl;
 
 import com.greenatom.domain.entity.Employee;
+import com.greenatom.exception.AuthException;
 import com.greenatom.repository.EmployeeRepository;
-import com.greenatom.utils.exception.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

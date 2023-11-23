@@ -2,14 +2,18 @@ package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
-import com.greenatom.utils.exception.message.ProductErrorMessage;
+import com.greenatom.exception.message.ErrorMessage;
+import com.greenatom.exception.message.ProductErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -20,6 +24,7 @@ import java.util.List;
  * @autor Степан Моргачев
  * @version 1.0
  */
+
 @Tag(name = "Product API", description = "API для работы с продуктами")
 public interface ProductApi {
     @ApiResponses(value = {
@@ -48,7 +53,7 @@ public interface ProductApi {
     @Operation(
             summary = "Получение продукта по id"
     )
-    ProductResponseDTO getProduct(
+    ResponseEntity<ProductResponseDTO> getProduct(
             @Parameter(description = "Id продукта", example = "5")
             Long id
     );
@@ -63,21 +68,38 @@ public interface ProductApi {
                                     schema = @Schema(implementation = ProductResponseDTO.class)
                             )
                     }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Неверный порядок сортировки",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             )
     })
     @Operation(
             summary = "Получение продуктов с фильтрацией по названию и стоимости"
     )
-    List<ProductResponseDTO> getAllProducts(
-            @Parameter(description = "Позиция страницы", example = "0")
-            Integer pagePosition,
-            @Parameter(description = "Длина страницы", example = "5")
-            Integer pageLength,
-            @Parameter(description = "Подстрока в названии продукта", example = "s")
-            String name,
-            @Parameter(description = "Стоимость продукта должна быть меньше указанного", example = "2147483647")
-            Integer cost
-    );
+    ResponseEntity<List<ProductResponseDTO>> getAllProducts(
+            @Parameter(description = "Позиция страницы") Integer pagePosition,
+            @Parameter(description = "Длина страницы") Integer pageLength,
+            @Parameter(description = "Название продукта") String productName,
+            @Parameter(description = "Единица измерения") String unit,
+            @Parameter(description = "Количество продукта на складе") Long storageAmount,
+            @Parameter(description = "Стоимость продукта") Long cost,
+            @Parameter(description = "Поле для сортировки") String sortBy,
+            @Parameter(
+                    in = ParameterIn.QUERY,
+                    description = "Порядок сортировки",
+                    name = "sortDirection",
+                    schema = @Schema(allowableValues = {
+                            "ASC",
+                            "DESC"
+                    }))
+            Sort.Direction sortDirection);
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -104,7 +126,7 @@ public interface ProductApi {
     @Operation(
             summary = "Обновление информации о продукте"
     )
-    ProductResponseDTO updateProduct(
+    ResponseEntity<ProductResponseDTO> updateProduct(
             @Parameter(description = "Id продукта")
             Long id,
             @Parameter(description = "Информация о продукте")
@@ -123,11 +145,11 @@ public interface ProductApi {
             )
     })
     @Operation(summary = "Создает Product и возвращает ProductDTO")
-    ProductResponseDTO addProduct(@RequestBody ProductRequestDTO product);
+    ResponseEntity<ProductResponseDTO> addProduct(@RequestBody ProductRequestDTO product);
 
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "204",
                     description = "Успешное удаление продукта",
                     content = {
                             @Content(
@@ -145,12 +167,22 @@ public interface ProductApi {
                                     schema = @Schema(implementation = ProductErrorMessage.class)
                             )
                     }
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Продукт по переданному id находится в заказе и не может быть удален",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             )
     })
     @Operation(
             summary = "Удаление продукта по id"
     )
-    void deleteProduct(
+    ResponseEntity<Void> deleteProduct(
             @Parameter(description = "Удентификатор удаляемого продукта", example = "1")
             Long id
     );

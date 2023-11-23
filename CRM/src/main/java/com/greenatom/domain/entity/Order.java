@@ -13,8 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A Order.
+ * An Order
  */
+
 @Getter
 @Setter
 @ToString
@@ -22,6 +23,7 @@ import java.util.Set;
 @Entity
 @Table(name = "client_order")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
@@ -59,5 +61,5 @@ public class Order {
     private PreparingOrder preparingOrder;
 
     @OneToMany(mappedBy = "order")
-    private Set<Delivery> deliviries;
+    private Set<Delivery> deliveries;
 }

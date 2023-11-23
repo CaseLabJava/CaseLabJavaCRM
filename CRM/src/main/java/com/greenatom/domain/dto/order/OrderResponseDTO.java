@@ -2,6 +2,7 @@ package com.greenatom.domain.dto.order;
 
 import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
+import com.greenatom.domain.enums.DeliveryType;
 import com.greenatom.domain.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -39,4 +40,7 @@ public class OrderResponseDTO {
 
     @Schema(description = "Статус заказа")
     private OrderStatus orderStatus;
+
+    @Schema(description = "Тип доставки")
+    private DeliveryType deliveryType;
 }

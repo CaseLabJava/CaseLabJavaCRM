@@ -6,11 +6,17 @@ import lombok.*;
 
 import java.time.Instant;
 
+/**
+ * A Delivery
+ */
+
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "delivery")
 public class Delivery {
@@ -27,7 +33,6 @@ public class Delivery {
 
     @ManyToOne
     @JoinColumn(name = "courier_id", referencedColumnName = "courier_id")
-    @NonNull
     private Courier courier;
 
     @Column(name = "status")

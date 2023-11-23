@@ -2,18 +2,18 @@ package com.greenatom.controller;
 
 import com.greenatom.config.swagger.annotation.AccessDeniedResponse;
 import com.greenatom.controller.api.OrderApi;
-import com.greenatom.domain.dto.order.GenerateOrderRequestDTO;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
+import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.service.OrderService;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -26,9 +26,11 @@ import java.util.List;
  *
  * <p>Все эти операции выполняются с использованием сервиса OrderService, который реализует бизнес-логику
  * управления заявками.
+ *
  * @author Максим Быков
  * @version 1.0
  */
+
 @RestController
 @AccessDeniedResponse
 @RequestMapping(value = "/api/orders")
@@ -39,56 +41,85 @@ public class OrderController implements OrderApi {
         this.orderService = orderService;
     }
 
-    @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER','ROLE_SUPERVISOR')")
-    public ResponseEntity<List<OrderResponseDTO>> getOrders(@RequestParam(required = false, defaultValue = "0") Integer limit,
-                                                            @RequestParam(required = false, defaultValue = "10") Integer offset,
-                                                            @RequestParam(required = false, defaultValue = "orderDate") String sortField,
-                                                            @RequestParam(required = false, defaultValue = "asc") String sortOrder,
-                                                            @RequestParam(required = false) String orderStatus,
-                                                            @RequestParam(required = false) String linkToFolder) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(orderService
-                        .findByPaginationAndFilters(PageRequest.of(limit, offset, sort), orderStatus, linkToFolder));
-    }
-
+    @Override
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public OrderResponseDTO getOrder(@PathVariable Long id) {
-        return orderService.findOne(id);
+    public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderService.findOne(id));
     }
 
-    @GetMapping(value = "/employee/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER','ROLE_SUPERVISOR')")
-    public List<OrderResponseDTO> getAllOrders(@Param("position") Integer pagePosition,
-                                               @Param("length") Integer pageLength,
-                                               @PathVariable("id") Long id) {
-        return orderService.findAll(pagePosition, pageLength, id);
+    @Override
+    @GetMapping(produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(@RequestParam(defaultValue = "0") Integer pagePosition,
+                                                               @RequestParam(defaultValue = "10") Integer pageSize,
+                                                               @RequestParam(required = false) String linkToFolder,
+                                                               @RequestParam(required = false) Instant orderDate,
+                                                               @RequestParam(required = false) String orderStatus,
+                                                               @RequestParam(required = false) String deliveryType,
+                                                               @RequestParam(required = false) Long client,
+                                                               @RequestParam(required = false) Long employee,
+                                                               @RequestParam(required = false, defaultValue = "id")
+                                                                   String sortBy,
+                                                               @RequestParam(required = false, defaultValue = "ASC")
+                                                                   Sort.Direction sortDirection) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(orderService.findAll(new EntityPage(pagePosition, pageSize, sortDirection, sortBy),
+                            new OrderSearchCriteria(
+                                    0L,
+                                    client,
+                                    employee,
+                                    linkToFolder,
+                                    orderDate,
+                                    orderStatus,
+                                    deliveryType)));
     }
 
+    @Override
     @PostMapping(value = "/draft")
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public OrderResponseDTO addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
-        return orderService.createDraft(orderRequestDTO);
+    public ResponseEntity<OrderResponseDTO> addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderService.createDraft(orderRequestDTO));
     }
 
-    @PostMapping(value = "/generate", produces = {"application/json"})
+    @Override
+    @PostMapping(value = "/assign", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public void generateOrder(@RequestBody GenerateOrderRequestDTO request) {
-        orderService.generateOrder(request);
+    public ResponseEntity<Void> generateOrder(@RequestParam Long orderId, @RequestParam Long employeeId) {
+        orderService.generateOrder(orderId, employeeId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping(value = "/finish-order/{id}", produces = {"application/json"})
+    @Override
+    @PostMapping(value = "/finish-order", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public OrderResponseDTO finishOrder(@PathVariable Long id) {
-        return orderService.finishOrder(id);
+    public ResponseEntity<OrderResponseDTO> finishOrder(@RequestParam Long orderId, @RequestParam Long employeeId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderService.finishOrder(orderId, employeeId));
     }
 
-    @DeleteMapping(value = "/{id}/empty",
+    @Override
+    @DeleteMapping(value = "/{id}/delete-empty",
             produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public void deleteOrder(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Override
+    @PatchMapping(value = "/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long id,
+                                                        @RequestBody OrderResponseDTO order) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderService.updateOrder(order, id));
     }
 }

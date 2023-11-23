@@ -7,8 +7,9 @@ import lombok.*;
 import java.time.Instant;
 
 /**
- * A Claim
+ * A Preparing Order
  */
+
 @Getter
 @Setter
 @ToString

@@ -23,6 +23,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -76,10 +77,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrderResponseDTO> findAll(EntityPage entityPage,
+    public Page<OrderResponseDTO> findAll(EntityPage entityPage,
                                           OrderSearchCriteria employeeSearchCriteria) {
-        return orderMapper.toDto(orderCriteriaRepository.findAllWithFilters(entityPage,
-                employeeSearchCriteria));
+        return orderCriteriaRepository.findAllWithFilters(entityPage,
+                employeeSearchCriteria).map(orderMapper::toDto);
     }
 
     @Override

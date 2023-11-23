@@ -14,12 +14,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
 import java.security.Principal;
 import java.time.Instant;
-import java.util.List;
 
 /**
  * Order API - это интерфейс, который описывает набор методов для работы с заявками. Он включает методы
@@ -57,7 +57,7 @@ public interface OrderApi {
     @Operation(
             summary = "Получение всех заказов"
     )
-    ResponseEntity<List<OrderResponseDTO>> getAllOrders(@Parameter(description = "Начальная страница") Integer pagePosition,
+    ResponseEntity<Page<OrderResponseDTO>> getAllOrders(@Parameter(description = "Начальная страница") Integer pagePosition,
                                                         @Parameter(description = "Размер страницы") Integer pageSize,
                                                         @Parameter(description = "Ссылка на директорию с документами") String linkToFolder,
                                                         @Parameter(description = "Дата заказа") Instant orderDate,

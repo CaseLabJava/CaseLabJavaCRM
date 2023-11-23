@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,7 +84,7 @@ public interface ProductApi {
     @Operation(
             summary = "Получение продуктов с фильтрацией по названию и стоимости"
     )
-    ResponseEntity<List<ProductResponseDTO>> getAllProducts(
+    ResponseEntity<Page<ProductResponseDTO>> getAllProducts(
             @Parameter(description = "Позиция страницы") Integer pagePosition,
             @Parameter(description = "Длина страницы") Integer pageLength,
             @Parameter(description = "Название продукта") String productName,

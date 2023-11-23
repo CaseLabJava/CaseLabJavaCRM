@@ -6,6 +6,7 @@ import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.dto.client.ClientSearchCriteria;
 import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.service.ClientService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class ClientController implements ClientApi {
 
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<List<ClientResponseDTO>> findAll(
+    public ResponseEntity<Page<ClientResponseDTO>> findAll(
             @RequestParam(defaultValue = "0") Integer pagePosition,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String firstname,
@@ -69,8 +70,7 @@ public class ClientController implements ClientApi {
                 .body(clientService.findAll(
                         new EntityPage(pagePosition, pageSize, sortDirection, sortBy),
                         new ClientSearchCriteria(
-                                0L,
-                                firstname,
+                                0L, firstname,
                                 lastname,
                                 patronymic,
                                 company,
@@ -80,10 +80,7 @@ public class ClientController implements ClientApi {
                                 correspondentAccount,
                                 address,
                                 email,
-                                phoneNumber
-
-                        )
-                ));
+                                phoneNumber)));
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})

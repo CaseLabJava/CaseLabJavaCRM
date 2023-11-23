@@ -4,12 +4,13 @@ import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.domain.dto.product.ProductSearchCriteria;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ProductService {
 
-    List<ProductResponseDTO> findAll(EntityPage entityPage, ProductSearchCriteria productSearchCriteria);
+    Page<ProductResponseDTO> findAll(EntityPage entityPage, ProductSearchCriteria productSearchCriteria);
 
     ProductResponseDTO findOne(Long id);
 

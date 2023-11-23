@@ -16,6 +16,7 @@ import com.greenatom.repository.criteria.DeliveryCriteriaRepository;
 import com.greenatom.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +35,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DeliveryResponseDTO> findAll(EntityPage entityPage,
+    public Page<DeliveryResponseDTO> findAll(EntityPage entityPage,
                                              DeliverySearchCriteria deliverySearchCriteria) {
-        return deliveryMapper.toDto(deliveryCriteriaRepository.findAllWithFilters(entityPage,deliverySearchCriteria));
+        return deliveryCriteriaRepository.findAllWithFilters(entityPage,deliverySearchCriteria).map(deliveryMapper::toDto);
     }
 
     @Override

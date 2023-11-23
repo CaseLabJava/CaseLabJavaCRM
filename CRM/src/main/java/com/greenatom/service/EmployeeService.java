@@ -1,14 +1,17 @@
 package com.greenatom.service;
 
-import com.greenatom.domain.dto.employee.*;
+import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
+import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.entity.Employee;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeService {
 
-    List<EmployeeResponseDTO> findAll(EntityPage entityPage, EmployeeSearchCriteria employeeSearchCriteria);
+    Page<EmployeeResponseDTO> findAll(EntityPage entityPage, EmployeeSearchCriteria employeeSearchCriteria);
 
     EmployeeResponseDTO findOne(Long id);
 

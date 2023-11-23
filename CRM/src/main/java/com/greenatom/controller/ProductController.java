@@ -6,6 +6,7 @@ import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.domain.dto.product.ProductSearchCriteria;
 import com.greenatom.service.ProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,14 +46,15 @@ public class ProductController implements ProductApi {
 
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
-    public ResponseEntity<List<ProductResponseDTO>> getAllProducts(@RequestParam(defaultValue = "0") Integer pagePosition,
-                                                   @RequestParam(defaultValue = "10") Integer pageLength,
-                                                   @RequestParam(required = false) String productName,
-                                                   @RequestParam(required = false) String unit,
-                                                   @RequestParam(required = false) Long storageAmount,
-                                                   @RequestParam(required = false) Long cost,
-                                                   @RequestParam(required = false, defaultValue = "id") String sortBy,
-                                                   @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection) {
+    public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(
+            @RequestParam(defaultValue = "0") Integer pagePosition,
+            @RequestParam(defaultValue = "10") Integer pageLength,
+            @RequestParam(required = false) String productName,
+            @RequestParam(required = false) String unit,
+            @RequestParam(required = false) Long storageAmount,
+            @RequestParam(required = false) Long cost,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(productService.findAll(

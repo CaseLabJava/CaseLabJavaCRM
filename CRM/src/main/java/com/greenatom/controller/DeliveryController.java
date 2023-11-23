@@ -5,6 +5,7 @@ import com.greenatom.domain.dto.delivery.DeliveryResponseDTO;
 import com.greenatom.domain.dto.delivery.DeliverySearchCriteria;
 import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.service.DeliveryService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.Instant;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/deliveries")
@@ -40,7 +40,7 @@ public class DeliveryController implements DeliveryApi {
 
     @GetMapping()
     @PreAuthorize(value = "hasAnyRole('ROLE_COURIER', 'ROLE_ADMIN')")
-    public ResponseEntity<List<DeliveryResponseDTO>> findAll
+    public ResponseEntity<Page<DeliveryResponseDTO>> findAll
             (@RequestParam(defaultValue = "0") Integer pageNumber,
              @RequestParam(defaultValue = "10") Integer pageSize,
              @RequestParam(required = false) Long orderId,

@@ -12,6 +12,7 @@ import com.greenatom.repository.criteria.ClientCriteriaRepository;
 import com.greenatom.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,8 +39,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ClientResponseDTO> findAll(EntityPage entityPage, ClientSearchCriteria clientSearchCriteria) {
-        return clientMapper.toDto(clientCriteriaRepository.findAllWithFilters(entityPage, clientSearchCriteria));
+    public Page<ClientResponseDTO> findAll(EntityPage entityPage, ClientSearchCriteria clientSearchCriteria) {
+        return clientCriteriaRepository.findAllWithFilters(entityPage, clientSearchCriteria).map(clientMapper::toDto);
     }
 
     @Override

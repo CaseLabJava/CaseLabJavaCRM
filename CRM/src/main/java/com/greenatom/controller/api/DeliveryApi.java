@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
@@ -73,7 +74,7 @@ public interface DeliveryApi {
     @Operation(
             summary = "Получение всех доставок"
     )
-    ResponseEntity<List<DeliveryResponseDTO>> findAll(@Parameter(description = "Начальная страницы") Integer pageNumber,
+    ResponseEntity<Page<DeliveryResponseDTO>> findAll(@Parameter(description = "Начальная страницы") Integer pageNumber,
                                                       @Parameter(description = "Размер страницы") Integer pageSize,
                                                       @Parameter(description = "Id заказа") Long orderId,
                                                       @Parameter(description = "Id курьера") Long courierId,

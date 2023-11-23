@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
@@ -44,20 +45,20 @@ public interface PreparingOrderApi {
     @Operation(
             summary = "Получение всех заказов по статусу"
     )
-    ResponseEntity<List<PreparingOrderResponseDTO>> getPreparingOrders(@Parameter(description = "Начальный номер страницы") Integer pageNumber,
-                                                                       @Parameter(description = "Размер страницы") Integer pageSize,
-                                                                       @Parameter(description = "Id заказа") Long orderId,
-                                                                       @Parameter(description = "Id кладовщика") Long employeeId,
-                                                                       @Parameter(description = "Статус сборки заказа",
+    ResponseEntity<Page<PreparingOrderResponseDTO>> getAllPreparingOrders(@Parameter(description = "Начальный номер страницы") Integer pageNumber,
+                                                                          @Parameter(description = "Размер страницы") Integer pageSize,
+                                                                          @Parameter(description = "Id заказа") Long orderId,
+                                                                          @Parameter(description = "Id кладовщика") Long employeeId,
+                                                                          @Parameter(description = "Статус сборки заказа",
                                                                                in = ParameterIn.QUERY,
                                                                                name = "status",
                                                                                schema = @Schema(allowableValues = {
                                                                                        "WAITING_FOR_PREPARING",
                                                                                        "IN_PROCESS", "DONE"})) String deliveryStatus,
-                                                                       @Parameter(description = "Начало сборки заказа") Instant startTime,
-                                                                       @Parameter(description = "Конец сборки") Instant endTime,
-                                                                       @Parameter(description = "Поле для сортировки") String sortBy,
-                                                                       @Parameter(
+                                                                          @Parameter(description = "Начало сборки заказа") Instant startTime,
+                                                                          @Parameter(description = "Конец сборки") Instant endTime,
+                                                                          @Parameter(description = "Поле для сортировки") String sortBy,
+                                                                          @Parameter(
                                                                                in = ParameterIn.QUERY,
                                                                                description = "Порядок сортировки",
                                                                                name = "sortDirection",

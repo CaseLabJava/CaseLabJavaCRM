@@ -1,6 +1,9 @@
 package com.greenatom.service.impl;
 
-import com.greenatom.domain.dto.employee.*;
+import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
+import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
+import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.entity.Courier;
 import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.enums.JobPosition;
@@ -15,6 +18,7 @@ import com.greenatom.service.EmployeeService;
 import com.greenatom.utils.mapper.TranslateRusToEng;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,8 +50,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EmployeeResponseDTO> findAll(EntityPage entityPage, EmployeeSearchCriteria employeeSearchCriteria) {
-        return employeeMapper.toDto(employeeCriteriaRepository.findAllWithFilters(entityPage, employeeSearchCriteria));
+    public Page<EmployeeResponseDTO> findAll(EntityPage entityPage, EmployeeSearchCriteria employeeSearchCriteria) {
+        return employeeCriteriaRepository.findAllWithFilters(entityPage, employeeSearchCriteria).map(employeeMapper::toDto);
     }
 
     @Override

@@ -11,10 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 @Tag(name = "Client API", description = "API для работы с клиентами")
 public interface ClientApi {
@@ -55,7 +54,7 @@ public interface ClientApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = ClientResponseDTO.class)
+                                    contentSchema = @Schema(implementation = ClientResponseDTO.class)
                             )
                     }
             )
@@ -63,7 +62,7 @@ public interface ClientApi {
     @Operation(
             summary = "Получение всех клиентов"
     )
-    ResponseEntity<List<ClientResponseDTO>> findAll(
+    ResponseEntity<Page<ClientResponseDTO>> findAll(
             @Parameter(description = "Начальная страница") Integer pagePosition,
             @Parameter(description = "Размер страницы") Integer pageSize,
             @Parameter(description = "Имя клиента") String firstname,

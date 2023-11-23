@@ -3,12 +3,11 @@ package com.greenatom.service;
 import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.domain.dto.preparing_order.PreparingOrderResponseDTO;
 import com.greenatom.domain.dto.preparing_order.PreparingOrderSearchCriteria;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface PreparingOrderService {
 
-    List<PreparingOrderResponseDTO> findAll(EntityPage entityPage,
+    Page<PreparingOrderResponseDTO> findAll(EntityPage entityPage,
                                             PreparingOrderSearchCriteria preparingOrderSearchCriteria);
 
     PreparingOrderResponseDTO findOne(Long id);

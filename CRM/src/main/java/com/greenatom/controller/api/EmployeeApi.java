@@ -1,7 +1,7 @@
 package com.greenatom.controller.api;
 
-import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
+import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.exception.message.EmployeeErrorMessage;
 import com.greenatom.exception.message.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,11 +12,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 @Tag(name = "Employee API", description = "API для работы с сотрудниками")
 public interface EmployeeApi {
@@ -75,7 +74,7 @@ public interface EmployeeApi {
     @Operation(
             summary = "Получение всех сотрудников"
     )
-    ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees(
+    ResponseEntity<Page<EmployeeResponseDTO>> getAllEmployees(
             @Parameter(description = "Начальная страница") Integer pagePosition,
             @Parameter(description = "Размер страницы") Integer pageSize,
             @Parameter(description = "Имя сотрудника") String firstname,

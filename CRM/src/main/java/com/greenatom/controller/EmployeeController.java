@@ -1,17 +1,16 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.EmployeeApi;
-import com.greenatom.domain.dto.employee.EntityPage;
-import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
+import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
+import com.greenatom.domain.dto.employee.EntityPage;
 import com.greenatom.service.EmployeeService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Этот код является контроллером API для управления сотрудниками. Он содержит GET и PUT методы, которые
@@ -48,9 +47,9 @@ public class EmployeeController implements EmployeeApi {
 
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR')")
-    public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees(
-            @RequestParam(required = true, defaultValue = "0") Integer pagePosition,
-            @RequestParam(required = true, defaultValue = "10") Integer pageSize,
+    public ResponseEntity<Page<EmployeeResponseDTO>> getAllEmployees(
+            @RequestParam(defaultValue = "0") Integer pagePosition,
+            @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String firstname,
             @RequestParam(required = false) String surname,
             @RequestParam(required = false) String patronymic,

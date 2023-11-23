@@ -8,6 +8,7 @@ import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class OrderController implements OrderApi {
     @Override
     @GetMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(@RequestParam(defaultValue = "0") Integer pagePosition,
+    public ResponseEntity<Page<OrderResponseDTO>> getAllOrders(@RequestParam(defaultValue = "0") Integer pagePosition,
                                                                @RequestParam(defaultValue = "10") Integer pageSize,
                                                                @RequestParam(required = false) String linkToFolder,
                                                                @RequestParam(required = false) Instant orderDate,

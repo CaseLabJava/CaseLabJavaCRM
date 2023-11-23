@@ -20,11 +20,11 @@ import com.greenatom.repository.criteria.PreparingOrderCriteriaRepository;
 import com.greenatom.service.PreparingOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -34,7 +34,7 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
 
     private final PreparingOrderRepository preparingOrderRepository;
 
-    private final PreparingOrderMapper mapper;
+    private final PreparingOrderMapper preparingOrderMapper;
 
     private final EmployeeRepository employeeRepository;
 
@@ -43,10 +43,11 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PreparingOrderResponseDTO> findAll(EntityPage entityPage,
-                                                                  PreparingOrderSearchCriteria preparingOrderSearchCriteria) {
-        return mapper.toDto(preparingOrderCriteriaRepository
-                .findAllWithFilters(entityPage,preparingOrderSearchCriteria));
+    public Page<PreparingOrderResponseDTO> findAll(EntityPage entityPage,
+                                                   PreparingOrderSearchCriteria preparingOrderSearchCriteria) {
+        return preparingOrderCriteriaRepository
+                .findAllWithFilters(entityPage,preparingOrderSearchCriteria)
+                .map(preparingOrderMapper::toDto);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
     public PreparingOrderResponseDTO findOne(Long id) {
         PreparingOrder preparingOrder = preparingOrderRepository.findById(id)
                 .orElseThrow(PreparingOrderException.CODE.NO_SUCH_PREPARING_ORDER::get);
-        return mapper.toDto(preparingOrder);
+        return preparingOrderMapper.toDto(preparingOrder);
     }
 
     @Override

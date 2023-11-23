@@ -13,6 +13,7 @@ import com.greenatom.repository.criteria.ProductCriteriaRepository;
 import com.greenatom.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +40,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductResponseDTO> findAll(EntityPage entityPage, ProductSearchCriteria productSearchCriteria) {
-        return productMapper.toDto(productCriteriaRepository.findAllWithFilters(entityPage, productSearchCriteria));
+    public Page<ProductResponseDTO> findAll(EntityPage entityPage, ProductSearchCriteria productSearchCriteria) {
+        return productCriteriaRepository.findAllWithFilters(entityPage, productSearchCriteria).map(productMapper::toDto);
     }
 
     @Override

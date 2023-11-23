@@ -18,12 +18,8 @@ import com.greenatom.repository.EmployeeRepository;
 import com.greenatom.repository.PreparingOrderRepository;
 import com.greenatom.repository.criteria.PreparingOrderCriteriaRepository;
 import com.greenatom.service.PreparingOrderService;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,31 +59,27 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
 
     @Override
     @Transactional
-    public void appointCollector(@Nullable Long employeeId, Long preparingOrderId) {
+    public void appointCollector(String username, Long preparingOrderId) {
         PreparingOrder preparingOrder = preparingOrderRepository
                 .findById(preparingOrderId)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (employeeId != null) {
-            Employee employee = employeeRepository
-                    .findById(employeeId)
-                    .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
-            if (!employee.getJobPosition().equals(JobPosition.WAREHOUSE_WORKER)) {
-                throw PreparingOrderException.CODE.INCORRECT_ROLE.get();
-            }
-            preparingOrder.setEmployee(employee);
-            preparingOrder.setPreparingOrderStatus(PreparingOrderStatus.IN_PROCESS);
-        } else {
-            autoAppoint(preparingOrder);
+        Employee employee = employeeRepository
+                .findByUsername(username)
+                .orElseThrow(EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
+        if (!employee.getJobPosition().equals(JobPosition.WAREHOUSE_WORKER)) {
+            throw PreparingOrderException.CODE.INCORRECT_ROLE.get();
         }
+        preparingOrder.setEmployee(employee);
+        preparingOrder.setPreparingOrderStatus(PreparingOrderStatus.IN_PROCESS);
     }
 
     @Override
     @Transactional
-    public void finishPreparingOrder(Long employeeId, Long preparingOrderId) {
+    public void finishPreparingOrder(String username, Long preparingOrderId) {
         PreparingOrder preparingOrder = preparingOrderRepository
                 .findById(preparingOrderId)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (!Objects.equals(employeeId, preparingOrder.getEmployee().getId())) {
+        if (!Objects.equals(username, preparingOrder.getEmployee().getUsername())) {
             throw PreparingOrderException.CODE.NO_PERMISSION.get();
         }
         if (!preparingOrder.getPreparingOrderStatus().equals(PreparingOrderStatus.IN_PROCESS)) {
@@ -95,14 +87,11 @@ public class PreparingOrderServiceImpl implements PreparingOrderService {
         }
         preparingOrder.setEndTime(Instant.now());
         preparingOrder.setPreparingOrderStatus(PreparingOrderStatus.DONE);
-        deliveryRepository.save(Delivery.builder().
+        Delivery delivery = Delivery.builder().
                 order(preparingOrder.getOrder())
                 .deliveryStatus(DeliveryStatus.WAITING_FOR_DELIVERY)
                 .startTime(Instant.now())
-                .build());
-    }
-
-    private void autoAppoint(PreparingOrder order) {
-        //код для автоматического назначения сборщика
+                .build();
+        deliveryRepository.save(delivery);
     }
 }

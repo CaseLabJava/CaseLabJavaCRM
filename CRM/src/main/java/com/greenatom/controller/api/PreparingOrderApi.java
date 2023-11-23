@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 
@@ -116,8 +117,9 @@ public interface PreparingOrderApi {
     @Operation(
             summary = "Назначение сборщика на заказ"
     )
-    ResponseEntity<Void> appointCollector(@Parameter(description = "Id сотрудника") Long employeeId,
-                                          @Parameter(description = "Id сборки заказа") Long preparingOrderId);
+    ResponseEntity<Void> appointCollector(
+            @Parameter(description = "Username сотрудника") Principal principal,
+            @Parameter(description = "Id соборки заказа") Long preparingOrderId);
 
 
     @ApiResponses(value = {
@@ -149,6 +151,7 @@ public interface PreparingOrderApi {
     @Operation(
             summary = "Назначение сборщика на заказ"
     )
-    ResponseEntity<Void> finishPreparingOrder(@Parameter(description = "Id сотрудника сборки заказов") Long employeeId,
-                                              @Parameter(description = "Id сборки заказа") Long preparingOrderId);
+    ResponseEntity<Void> finishPreparingOrder(
+            @Parameter(description = "Username сборки заказа") Principal principal,
+            @Parameter(description = "Id сборки заказа") Long preparingOrderId);
 }

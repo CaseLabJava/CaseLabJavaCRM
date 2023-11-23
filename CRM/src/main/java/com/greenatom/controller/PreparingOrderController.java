@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 
@@ -57,17 +58,17 @@ public class PreparingOrderController implements PreparingOrderApi {
     @PostMapping("/appoint-collector")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
     @Override
-    public ResponseEntity<Void> appointCollector(@RequestParam(required = false) Long employeeId,
+    public ResponseEntity<Void> appointCollector(Principal principal,
                                                  @RequestParam Long preparingOrderId) {
-        preparingOrderService.appointCollector(employeeId, preparingOrderId);
+        preparingOrderService.appointCollector(principal.getName(), preparingOrderId);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/finish-preparing-order")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_WAREHOUSE_WORKER')")
-    public ResponseEntity<Void> finishPreparingOrder(@RequestParam Long employeeId,
+    public ResponseEntity<Void> finishPreparingOrder(Principal principal,
                                                      @RequestParam Long preparingOrderId) {
-        preparingOrderService.finishPreparingOrder(employeeId, preparingOrderId);
+        preparingOrderService.finishPreparingOrder(principal.getName(), preparingOrderId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -58,15 +59,14 @@ public class ClaimController implements ClaimApi {
     @PostMapping(value = "/resolve", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
     public ClaimResponseDTO resolveClaim(@RequestParam("claimId") Long claimId,
-                                         @RequestParam("employeeId") Long employeeId,
+                                         Principal principal,
                                          @RequestParam("status") String status) {
-        return claimService.resolveClaim(claimId, employeeId, ClaimStatus.valueOf(status));
+        return claimService.resolveClaim(principal.getName(), claimId, ClaimStatus.valueOf(status));
     }
 
     @PostMapping(value = "/appoint", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ClaimResponseDTO appointClaim(@RequestParam("claim") Long claim,
-                                         @RequestParam("employee") Long employee) {
-        return claimService.appointClaim(claim, employee);
+    public ClaimResponseDTO appointClaim(@RequestParam("claim") Long claimId, Principal principal) {
+        return claimService.appointClaim(principal.getName(), claimId);
     }
 }

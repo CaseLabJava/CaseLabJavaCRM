@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 
@@ -136,10 +137,10 @@ public interface DeliveryApi {
             summary = "Изменение статуса доставки на IN PROCESS"
     )
     ResponseEntity<Void> changeToInProcess(
+            @Parameter(description = "Username курьера", example = "1")
+            Principal principal,
             @Parameter(description = "Id доставки", example = "1")
-            Long deliveryId,
-            @Parameter(description = "Id курьера", example = "1")
-            Long employeeId
+            Long deliveryId
     );
 
     @ApiResponses(value = {
@@ -178,9 +179,9 @@ public interface DeliveryApi {
             summary = "Изменение статуса доставки на DONE"
     )
     ResponseEntity<Void> changeToDone(
+            @Parameter(description = "Username курьера", example = "1")
+            Principal principal,
             @Parameter(description = "Id доставки", example = "1")
-            Long deliveryId,
-            @Parameter(description = "Id курьера", example = "1")
-            Long employeeId
+            Long deliveryId
     );
 }

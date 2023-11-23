@@ -22,7 +22,7 @@ public interface OrderService {
 
     OrderResponseDTO save(OrderResponseDTO orderResponseDTO);
 
-    void generateOrder(Long orderId, Long employeeId);
+    void generateOrder(String username, Long orderId);
 
     OrderResponseDTO updateOrder(OrderResponseDTO orderResponseDTO, Long id);
 
@@ -30,5 +30,5 @@ public interface OrderService {
 
     OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO);
 
-    OrderResponseDTO finishOrder(Long orderId, Long employeeId);
+    OrderResponseDTO finishOrder(String username, Long orderId);
 }

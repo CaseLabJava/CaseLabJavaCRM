@@ -128,15 +128,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDTO finishOrder(Long orderId, Long employeeId) {
+    public OrderResponseDTO finishOrder(String username, Long orderId) {
         Order order = orderRepository
                 .findById(orderId)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         if (!Objects.equals(order.getOrderStatus(), OrderStatus.SIGNED_BY_CLIENT)) {
             throw OrderException.CODE.INVALID_STATUS.get();
         }
-        if (!Objects.equals(order.getEmployee().getId(), employeeId)) {
-            throw OrderException.CODE.NOT_PERMIT.get();
+        if (!Objects.equals(order.getEmployee().getUsername(), username)) {
+            throw OrderException.CODE.NOT_PERMIT.get(username);
         }
         sendOrderToClient(order);
         order.setOrderStatus(OrderStatus.FINISHED);
@@ -190,16 +190,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void generateOrder(Long orderId, Long employeeId) {
+    public void generateOrder(String username, Long orderId) {
         OrderGenerator orderGenerator = new OrderGenerator();
         Order order = orderRepository
                 .findById(orderId)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
-        if (!order.getEmployee().getId().equals(employeeId)) {
-            throw OrderException.CODE.NOT_PERMIT.get();
-        }
         if (!order.getOrderStatus().equals(OrderStatus.DRAFT)) {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
+        }
+        if (!Objects.equals(order.getEmployee().getUsername(), username)) {
+            throw OrderException.CODE.NOT_PERMIT.get(username);
         }
         String filename = "Order_" + order.getId();
         byte[] doc = orderGenerator.processGeneration(

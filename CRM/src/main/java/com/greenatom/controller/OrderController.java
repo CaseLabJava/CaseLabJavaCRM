@@ -7,12 +7,14 @@ import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 
@@ -33,13 +35,10 @@ import java.util.List;
 
 @RestController
 @AccessDeniedResponse
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/orders")
 public class OrderController implements OrderApi {
     private final OrderService orderService;
-
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
 
     @Override
     @GetMapping(value = "/{id}", produces = {"application/json"})
@@ -90,18 +89,18 @@ public class OrderController implements OrderApi {
     @Override
     @PostMapping(value = "/assign", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<Void> generateOrder(@RequestParam Long orderId, @RequestParam Long employeeId) {
-        orderService.generateOrder(orderId, employeeId);
+    public ResponseEntity<Void> generateOrder(@RequestParam Long orderId, Principal principal) {
+        orderService.generateOrder(principal.getName(), orderId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
     @PostMapping(value = "/finish-order", produces = {"application/json"})
     @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<OrderResponseDTO> finishOrder(@RequestParam Long orderId, @RequestParam Long employeeId) {
+    public ResponseEntity<OrderResponseDTO> finishOrder(Principal principal, @RequestParam Long orderId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(orderService.finishOrder(orderId, employeeId));
+                .body(orderService.finishOrder(principal.getName(), orderId));
     }
 
     @Override

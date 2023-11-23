@@ -8,7 +8,8 @@ public class ClaimException extends RuntimeException {
     public enum CODE {
         NO_SUCH_CLAIM("No claim with such id"),
         INVALID_STATUS("Order status are invalid"),
-        NO_PERMISSION("You don`t have permissions to do this");
+        NO_PERMISSION("You don`t have permissions to do this"),
+        CLAIM_PROCESSING("Claim already in process");
 
         final String codeDescription;
 

@@ -16,8 +16,7 @@ public class DeliveryExceptionHandler {
         DeliveryException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_DELIVERY, NO_SUCH_COURIER -> HttpStatus.NOT_FOUND;
-            case INVALID_STATUS -> HttpStatus.CONFLICT;
-            case FORBIDDEN -> HttpStatus.FORBIDDEN;
+            case FORBIDDEN, INVALID_STATUS -> HttpStatus.FORBIDDEN;
         };
         String codeStr = code.toString();
         log.error(codeStr, e);

@@ -16,7 +16,7 @@ public class ClaimExceptionHandler {
         ClaimException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_CLAIM -> HttpStatus.NOT_FOUND;
-            case INVALID_STATUS, NO_PERMISSION -> HttpStatus.BAD_REQUEST;
+            case INVALID_STATUS, NO_PERMISSION, CLAIM_PROCESSING -> HttpStatus.BAD_REQUEST;
         };
         String codeStr = code.toString();
         log.error(codeStr, e);

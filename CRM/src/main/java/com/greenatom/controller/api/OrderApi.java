@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 
@@ -142,8 +143,8 @@ public interface OrderApi {
     ResponseEntity<Void> generateOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long orderId,
-            @Parameter(description = "Id клиента", example = "1")
-            Long employeeId
+            @Parameter(description = "Логин сотрудника", example = "1")
+            Principal principal
     );
 
     @ApiResponses(value = {
@@ -248,10 +249,10 @@ public interface OrderApi {
             summary = "Завершение заказа"
     )
     ResponseEntity<OrderResponseDTO> finishOrder(
+            @Parameter(description = "Логин сотрудника", example = "1")
+            Principal principal,
             @Parameter(description = "Id заказа", example = "1")
-            Long orderId,
-            @Parameter(description = "Id сотрудника", example = "1")
-            Long employeeId
+            Long orderId
     );
 
 

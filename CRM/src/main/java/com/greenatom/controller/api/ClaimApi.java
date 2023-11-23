@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 
 @Tag(name = "Claim API", description = "API для работы с жалобами")
@@ -191,7 +192,7 @@ public interface ClaimApi {
     })
     @Operation(summary = "Назначает жалобу на сотрудника")
     ClaimResponseDTO appointClaim(@Parameter(description = "ID жалобы") Long claim,
-                                  @Parameter(description = "ID работника") Long employee);
+                                  @Parameter(description = "ID работника") Principal principal);
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -227,7 +228,7 @@ public interface ClaimApi {
     })
     @Operation(summary = "Вынесение вердикта по жалобе")
     ClaimResponseDTO resolveClaim(@Parameter(description = "Id жалобы") Long claimId,
-                                  @Parameter(description = "Id сотрудника") Long employeeId,
+                                  @Parameter(description = "Id сотрудника") Principal principal,
                                   @Parameter(
                                           in = ParameterIn.QUERY,
                                           description = "Статус жалобы",

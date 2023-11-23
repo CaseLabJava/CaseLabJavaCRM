@@ -66,11 +66,11 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     @Transactional
-    public ClaimResponseDTO resolveClaim(Long claimId, Long employeeId, ClaimStatus status) {
+    public ClaimResponseDTO resolveClaim(String username, Long claimId, ClaimStatus status) {
         Claim claim = claimRepository.findById(claimId).orElseThrow(
                 ClaimException.CODE.NO_SUCH_CLAIM::get);
-        if (!Objects.equals(claim.getEmployee().getId(), employeeId)) {
-            throw ClaimException.CODE.NO_PERMISSION.get();
+        if (!Objects.equals(claim.getEmployee().getUsername(), username)) {
+            throw ClaimException.CODE.NO_PERMISSION.get(username);
         }
         if(!claim.getClaimStatus().equals(ClaimStatus.IN_WORK)) {
             throw ClaimException.CODE.INVALID_STATUS.get();
@@ -82,11 +82,14 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     @Transactional
-    public ClaimResponseDTO appointClaim(Long claimId, Long employeeId) {
+    public ClaimResponseDTO appointClaim(String username, Long claimId) {
         Claim claim = claimRepository.findById(claimId).orElseThrow(
                 ClaimException.CODE.NO_SUCH_CLAIM::get);
-        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+        Employee employee = employeeRepository.findByUsername(username).orElseThrow(
                 EmployeeException.CODE.NO_SUCH_EMPLOYEE::get);
+        if (!claim.getClaimStatus().equals(ClaimStatus.CREATED)) {
+            throw ClaimException.CODE.CLAIM_PROCESSING.get();
+        }
         claim.setEmployee(employee);
         claim.setClaimStatus(ClaimStatus.IN_WORK);
         return claimMapper.toDto(claim);

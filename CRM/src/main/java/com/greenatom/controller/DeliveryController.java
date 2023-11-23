@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 
@@ -25,15 +26,15 @@ public class DeliveryController implements DeliveryApi {
 
     @PostMapping(value = "/start-delivery", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_COURIER', 'ROLE_ADMIN')")
-    public ResponseEntity<Void> changeToInProcess(@RequestParam Long deliveryId, @RequestParam Long employeeId) {
-        deliveryService.changeStatusToInProgress(employeeId, deliveryId);
+    public ResponseEntity<Void> changeToInProcess(Principal principal, @RequestParam Long deliveryId) {
+        deliveryService.changeStatusToInProgress(principal.getName(), deliveryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping(value = "/finish-delivery", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_COURIER', 'ROLE_ADMIN')")
-    public ResponseEntity<Void> changeToDone(@RequestParam Long deliveryId, @RequestParam Long employeeId) {
-        deliveryService.changeStatusToDone(employeeId, deliveryId);
+    public ResponseEntity<Void> changeToDone(Principal principal, @RequestParam Long deliveryId) {
+        deliveryService.changeStatusToDone(principal.getName(), deliveryId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

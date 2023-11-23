@@ -49,9 +49,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void changeStatusToInProgress(Long employeeId, Long deliveryId) {
+    public void changeStatusToInProgress(String username, Long deliveryId) {
         Courier courier = courierRepository
-                .findCourierByEmployeeId(employeeId)
+                .findCourierByEmployeeUsername(username)
                 .orElseThrow(CourierException.CODE.NO_SUCH_COURIER::get);
         Delivery delivery = deliveryRepository
                 .findById(deliveryId)
@@ -69,14 +69,14 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     @Transactional
-    public void changeStatusToDone(Long employeeId, Long deliveryId) {
+    public void changeStatusToDone(String username, Long deliveryId) {
         Courier courier = courierRepository
-                .findCourierByEmployeeId(employeeId)
+                .findCourierByEmployeeUsername(username)
                 .orElseThrow(CourierException.CODE.NO_SUCH_COURIER::get);
         Delivery delivery = deliveryRepository
                 .findById(deliveryId)
                 .orElseThrow(DeliveryException.CODE.NO_SUCH_DELIVERY::get);
-        if (!Objects.equals(delivery.getCourier(), courier)) {
+        if (!Objects.equals(delivery.getCourier().getEmployee().getUsername(), username)) {
             throw DeliveryException.CODE.FORBIDDEN.get();
         }
         if (!Objects.equals(delivery.getDeliveryStatus(), DeliveryStatus.IN_PROCESS)) {

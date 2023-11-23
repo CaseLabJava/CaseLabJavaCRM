@@ -52,14 +52,14 @@ public class OrderItemCriteriaRepository {
         List<Predicate> predicates = new ArrayList<>();
         if(Objects.nonNull(orderItemSearchCriteria.getOrderId())){
             predicates.add(
-                    criteriaBuilder.like(orderItemRoot.get("orderId"),
-                            "%" + orderItemSearchCriteria.getOrderId() + "%")
+                    criteriaBuilder.equal(orderItemRoot.get("order").get("id"),
+                            orderItemSearchCriteria.getOrderId())
             );
         }
         if(Objects.nonNull(orderItemSearchCriteria.getProductId())){
             predicates.add(
-                    criteriaBuilder.like(orderItemRoot.get("productId"),
-                            "%" + orderItemSearchCriteria.getProductId() + "%")
+                    criteriaBuilder.equal(orderItemRoot.get("product").get("id"),
+                            orderItemSearchCriteria.getProductId())
             );
         }
         if(Objects.nonNull(orderItemSearchCriteria.getName())){

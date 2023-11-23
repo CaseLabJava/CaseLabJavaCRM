@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/
+    name: postgres
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+
+minio:
+  access-key: root12345
+  secret-key: root12345
+  url: http://localhost:9000

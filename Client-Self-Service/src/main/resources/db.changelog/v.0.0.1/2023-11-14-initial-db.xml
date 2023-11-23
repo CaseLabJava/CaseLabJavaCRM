@@ -1,0 +1,32 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="andreynachevny" id="2023-11-14-initial-client-table">
+        <createTable tableName="client">
+            <column name="client_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="client_pkey"/>
+            </column>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="bank_details" type="VARCHAR(255)"/>
+            <column name="company" type="VARCHAR(255)"/>
+            <column name="correspondent_account" type="VARCHAR(255)"/>
+            <column name="inn_and_kpp" type="VARCHAR(255)"/>
+            <column name="firstname" type="VARCHAR(50)"/>
+            <column name="ogrn" type="VARCHAR(255)"/>
+            <column name="patronymic" type="VARCHAR(50)"/>
+            <column name="phone_number" type="VARCHAR(255)"/>
+            <column name="lastname" type="VARCHAR(50)"/>
+            <column name="email" type="VARCHAR(255)" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="legal_entity" type="BOOLEAN">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

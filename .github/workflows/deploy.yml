@@ -68,7 +68,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [ push_project, build_images, export_env ]
+    needs: [ push_project, export_env ]
     runs-on: ubuntu-latest
     steps:
       - name: Connect with SSH and Deploy

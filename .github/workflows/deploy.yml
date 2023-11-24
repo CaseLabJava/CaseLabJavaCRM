@@ -14,7 +14,7 @@ jobs:
       - name: Connect with SSH and export
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 178.21.8.3
+          host: 79.174.80.230
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
@@ -52,7 +52,7 @@ jobs:
       - name: Copy docker-compose.yaml via SSH
         uses: appleboy/scp-action@master
         with:
-          host: 178.21.8.3
+          host: 79.174.80.230
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
@@ -87,7 +87,7 @@ jobs:
       - name: Connect with SSH and Deploy
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 178.21.8.3
+          host: 79.174.80.230
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |

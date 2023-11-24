@@ -62,7 +62,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd "/home/${{ secrets.SSH_USER }}"
+            cd /home/${{ secrets.SSH_USER }}
             git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git
             git checkout develop
             

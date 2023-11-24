@@ -49,10 +49,10 @@ jobs:
             echo MINIO_SECRET=${{ secrets.MINIO_SECRET }} >> .env 
             echo MINIO_URL=${{ secrets.MINIO_URL }} >> .env 
             export $(cat .env | xargs) && env 
-            
+
   deploy:
     name: Deploy
-    needs: [ push_project, export_env ]
+    needs: [ export_env ]
     runs-on: ubuntu-latest
     steps:
       - name: Connect with SSH and Deploy

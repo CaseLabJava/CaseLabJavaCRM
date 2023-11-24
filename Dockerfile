@@ -1,6 +1,6 @@
 FROM maven:eclipse-temurin AS builder
-ADD . /src
-WORKDIR /src
+ADD . /CRM/src
+WORKDIR /CRM/src
 RUN  mvn clean package -Pprod -Dmaven.test.skip
 
 FROM amazoncorretto:17.0.8

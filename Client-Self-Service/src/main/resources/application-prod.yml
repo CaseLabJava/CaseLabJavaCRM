@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: @profileActive@
   application:
     name: client-self-service
   datasource:

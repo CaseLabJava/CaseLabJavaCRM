@@ -6,6 +6,7 @@
         <groupId>com.greenatom</groupId>
         <artifactId>CaseLabJavaCRM</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>com.greenatom</groupId>
     <artifactId>Discovery-Service</artifactId>

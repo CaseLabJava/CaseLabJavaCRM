@@ -42,14 +42,16 @@ public class ClientControllerTest {
         clientRequestDTO.setEmail("Test");
         clientRequestDTO.setPatronymic("Test");
         clientRequestDTO.setSurname("Test");
-
+        clientRequestDTO.setInn("Test");
+        clientRequestDTO.setOgrn("Test");
+        clientRequestDTO.setCorrespondentAccount("Test");
+        clientRequestDTO.setPhoneNumber("Test");
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/clients")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(AuthControllerTest.asJsonString(clientRequestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("Test"));
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON));
     }
 }

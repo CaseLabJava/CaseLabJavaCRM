@@ -16,6 +16,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 /**
  * AuthService является компонентом Spring и использует другие компоненты, такие как JwtCore и AuthenticationManager.
  *
@@ -41,6 +43,9 @@ public class AuthService {
     private final EmployeeMapper employeeMapper;
 
     public JwtResponse registration(CreateEmployeeRequestDTO createEmployeeRequestDTO) {
+        if (!Objects.equals(createEmployeeRequestDTO.getPassword(), createEmployeeRequestDTO.getRepeatPassword())) {
+            throw AuthException.CODE.INVALID_REPEAT_PASSWORD.get();
+        }
         Employee employee = employeeMapper.toEntity(employeeService.save(createEmployeeRequestDTO));
         String accessToken = jwtCore.generateAccessToken(employee);
         String refreshToken = jwtCore.generateRefreshToken(employee);

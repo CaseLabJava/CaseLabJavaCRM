@@ -7,6 +7,7 @@ import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.service.OrderService;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -42,7 +43,7 @@ public class OrderController implements OrderApi {
 
     @Override
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<OrderResponseDTO> getOrder(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -51,9 +52,11 @@ public class OrderController implements OrderApi {
 
     @Override
     @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
-    public ResponseEntity<Page<OrderResponseDTO>> getAllOrders(@RequestParam(defaultValue = "0") Integer pagePosition,
-                                                               @RequestParam(defaultValue = "10") Integer pageSize,
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    public ResponseEntity<Page<OrderResponseDTO>> getAllOrders(@RequestParam(defaultValue = "0")
+                                                               @Min(value = 0) Integer pagePosition,
+                                                               @RequestParam(defaultValue = "10")
+                                                               @Min(value = 1L) Integer pageSize,
                                                                @RequestParam(required = false) String linkToFolder,
                                                                @RequestParam(required = false) Instant orderDate,
                                                                @RequestParam(required = false) String orderStatus,
@@ -79,16 +82,16 @@ public class OrderController implements OrderApi {
 
     @Override
     @PostMapping(value = "/draft")
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
-    public ResponseEntity<OrderResponseDTO> addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    public ResponseEntity<OrderResponseDTO> addDraftOrder(Principal principal, @RequestBody OrderRequestDTO orderRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(orderService.createDraft(orderRequestDTO));
+                .body(orderService.createDraft(principal.getName(), orderRequestDTO));
     }
 
     @Override
     @PostMapping(value = "/assign", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> generateOrder(@RequestParam Long orderId, Principal principal) {
         orderService.generateOrder(principal.getName(), orderId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -96,7 +99,7 @@ public class OrderController implements OrderApi {
 
     @Override
     @PostMapping(value = "/finish-order", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<OrderResponseDTO> finishOrder(Principal principal, @RequestParam Long orderId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -106,7 +109,7 @@ public class OrderController implements OrderApi {
     @Override
     @DeleteMapping(value = "/{id}/delete-empty",
             produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -114,7 +117,7 @@ public class OrderController implements OrderApi {
 
     @Override
     @PatchMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long id,
                                                         @RequestBody OrderResponseDTO order) {
         return ResponseEntity

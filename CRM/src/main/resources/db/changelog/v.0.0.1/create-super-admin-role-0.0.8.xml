@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="5698231121717-1" author="dany0k">
+        <insert tableName="role">
+            <column name="role_id" value="7"/>
+            <column name="name" value="ROLE_SUPER_ADMIN"/>
+        </insert>
+        <insert tableName="employee">
+            <column name="employee_id" value="7"/>
+            <column name="address" value="Moscow"/>
+            <column name="lastname" value="superadmin"/>
+            <column name="firstname" value="superadmin"/>
+            <column name="patronymic" value="superadmin"/>
+            <column name="email" value="superadmin@crm.ru"/>
+            <column name="job_position" value="SUPER_ADMIN"/>
+            <column name="password" value="$2a$10$d0AxWw4jsbndLo5DCsu7duomCQX2zLHCjpmLclO4o6oMK6Pn6cAT2"/>
+            <column name="phone_number" value="895436848"/>
+            <column name="username" value="Superadmin"/>
+            <column name="salary" value="100000"/>
+            <column name="role_id" value="7"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

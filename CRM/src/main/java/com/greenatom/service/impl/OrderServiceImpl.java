@@ -9,6 +9,7 @@ import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.enums.PreparingOrderStatus;
 import com.greenatom.domain.mapper.OrderMapper;
+import com.greenatom.exception.EmployeeException;
 import com.greenatom.exception.FileException;
 import com.greenatom.exception.OrderException;
 import com.greenatom.repository.*;
@@ -101,15 +102,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO) {
+    public OrderResponseDTO createDraft(String username, OrderRequestDTO orderRequestDTO) {
         List<OrderItemRequestDTO> orderItemList = orderRequestDTO.getOrderItemList();
-        Order order = createDraftOrder(orderRequestDTO);
+        Order order = createDraftOrder(username, orderRequestDTO);
         for (OrderItemRequestDTO orderItem : orderItemList) {
             Product currProduct = productRepository
                     .findById(orderItem.getProductId())
                     .orElseThrow(OrderException.CODE.NO_SUCH_PRODUCT::get);
 
-            if (currProduct.getStorageAmount() <= orderItem.getOrderAmount()) {
+            if (currProduct.getStorageAmount() <= orderItem.getOrderAmount() ||
+            orderItem.getOrderAmount() < 1) {
                 throw OrderException.CODE.INVALID_ORDER.get();
             }
 
@@ -172,14 +174,14 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    private Order createDraftOrder(OrderRequestDTO orderRequestDTO) {
+    private Order createDraftOrder(String username, OrderRequestDTO orderRequestDTO) {
         Order order = new Order();
         Client client = clientRepository
                 .findById(orderRequestDTO.getClientId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_CLIENT::get);
         Employee employee = employeeRepository
-                .findById(orderRequestDTO.getEmployeeId())
-                .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get);
+                .findByUsername(username)
+                .orElseThrow(() -> OrderException.CODE.NO_SUCH_EMPLOYEE.get(username));
         order.setClient(client);
         order.setEmployee(employee);
         order.setOrderDate(Instant.now());

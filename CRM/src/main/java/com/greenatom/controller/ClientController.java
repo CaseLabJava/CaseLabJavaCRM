@@ -6,6 +6,7 @@ import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.dto.client.ClientSearchCriteria;
 import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.service.ClientService;
+import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class ClientController implements ClientApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ClientResponseDTO> findOne(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -46,10 +47,13 @@ public class ClientController implements ClientApi {
     }
 
     @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Page<ClientResponseDTO>> findAll(
-            @RequestParam(defaultValue = "0") Integer pagePosition,
-            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "0")
+            @Min(value = 0) Integer pagePosition,
+            @RequestParam(defaultValue = "10")
+            @Min(value = 1)
+            Integer pageSize,
             @RequestParam(required = false) String firstname,
             @RequestParam(required = false) String lastname,
             @RequestParam(required = false) String patronymic,
@@ -82,7 +86,7 @@ public class ClientController implements ClientApi {
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ClientResponseDTO> updateClient(@PathVariable Long id, @RequestBody ClientRequestDTO client) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -90,7 +94,7 @@ public class ClientController implements ClientApi {
     }
 
     @PostMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ClientResponseDTO> addClient(@RequestBody ClientRequestDTO client) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -98,7 +102,7 @@ public class ClientController implements ClientApi {
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

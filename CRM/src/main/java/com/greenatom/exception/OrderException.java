@@ -8,7 +8,7 @@ public class OrderException extends RuntimeException {
     @Getter
     public enum CODE {
         NO_SUCH_CLIENT("No person with such id"),
-        NO_SUCH_EMPLOYEE("No employee with such id"),
+        NO_SUCH_EMPLOYEE("No employee with username:"),
         NO_SUCH_ORDER("No order with such id"),
         NO_SUCH_PRODUCT("No product with such id"),
         CANNOT_ASSIGN_ORDER("Only order with DRAFT status can be assigned"),

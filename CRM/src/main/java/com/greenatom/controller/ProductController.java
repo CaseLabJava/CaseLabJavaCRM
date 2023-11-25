@@ -6,6 +6,7 @@ import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.domain.dto.product.ProductSearchCriteria;
 import com.greenatom.service.ProductService;
+import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -37,16 +38,20 @@ public class ProductController implements ProductApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.findOne(id));
     }
 
     @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(
-            @RequestParam(defaultValue = "0") Integer pagePosition,
-            @RequestParam(defaultValue = "10") Integer pageLength,
+            @RequestParam(defaultValue = "0")
+            @Min(value = 0)
+            Integer pagePosition,
+            @RequestParam(defaultValue = "10")
+            @Min(value = 1)
+            Integer pageLength,
             @RequestParam(required = false) String productName,
             @RequestParam(required = false) String unit,
             @RequestParam(required = false) Long storageAmount,
@@ -61,19 +66,19 @@ public class ProductController implements ProductApi {
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO product) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.updateProduct(id, product));
     }
 
     @PostMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ProductResponseDTO> addProduct(@RequestBody ProductRequestDTO product) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.save(product));
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

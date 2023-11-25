@@ -40,8 +40,11 @@ public class CreateEmployeeRequestDTO {
     @Schema(description = "Номер телефона сотрудника", example = "895436848")
     private String phoneNumber;
     
-    @Schema(description = "Пороль сотрудника", example = "Qwer123as")
+    @Schema(description = "Пароль сотрудника", example = "Qwer123as")
     private String password;
+
+    @Schema(description = "Повторение пароля сотрудника", example = "Qwer123as")
+    private String repeatPassword;
 
     @Schema(description = "Роль сотрудника")
     private RoleDTO role;

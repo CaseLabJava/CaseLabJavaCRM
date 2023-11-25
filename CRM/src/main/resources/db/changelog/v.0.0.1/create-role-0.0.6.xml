@@ -5,7 +5,7 @@
 
     <changeSet author="andreynachevny" id="2023-11-19-add-role">
         <insert tableName="role">
-            <column name="role_id" value="7"/>
+            <column name="role_id" value="8"/>
             <column name="name" value="ROLE_CLIENT_INTERMEDIARY"/>
         </insert>
     </changeSet>

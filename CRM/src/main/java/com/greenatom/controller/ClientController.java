@@ -6,6 +6,7 @@ import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.dto.client.ClientSearchCriteria;
 import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.service.ClientService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -87,7 +88,8 @@ public class ClientController implements ClientApi {
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<ClientResponseDTO> updateClient(@PathVariable Long id, @RequestBody ClientRequestDTO client) {
+    public ResponseEntity<ClientResponseDTO> updateClient(@PathVariable Long id,
+                                                          @RequestBody @Valid ClientRequestDTO client) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clientService.updateClient(id, client));
@@ -95,7 +97,7 @@ public class ClientController implements ClientApi {
 
     @PostMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<ClientResponseDTO> addClient(@RequestBody ClientRequestDTO client) {
+    public ResponseEntity<ClientResponseDTO> addClient(@RequestBody @Valid ClientRequestDTO client) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clientService.save(client));

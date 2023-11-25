@@ -7,6 +7,7 @@ import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface OrderService {
@@ -27,7 +28,7 @@ public interface OrderService {
 
     void deleteOrder(Long id);
 
-    OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO);
+    OrderResponseDTO createDraft(String username, OrderRequestDTO orderRequestDTO);
 
     OrderResponseDTO finishOrder(String username, Long orderId);
 }

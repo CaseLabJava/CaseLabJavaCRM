@@ -5,6 +5,7 @@ import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.service.EmployeeService;
+import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<EmployeeResponseDTO> getEmployee(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -46,10 +47,14 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN','ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Page<EmployeeResponseDTO>> getAllEmployees(
-            @RequestParam(defaultValue = "0") Integer pagePosition,
-            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "0")
+            @Min(value = 0)
+            Integer pagePosition,
+            @RequestParam(defaultValue = "10")
+            @Min(value = 1)
+            Integer pageSize,
             @RequestParam(required = false) String firstname,
             @RequestParam(required = false) String surname,
             @RequestParam(required = false) String patronymic,
@@ -80,7 +85,7 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeSearchCriteria employee) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -89,7 +94,7 @@ public class EmployeeController implements EmployeeApi {
 
     @DeleteMapping(value = "/{id}",
             produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

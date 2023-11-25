@@ -20,7 +20,7 @@ public class FileController implements FileApi {
     private final FileService fileService;
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = {"application/json"})
-    @PreAuthorize(value = "hasRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
         UploadDocumentRequestDTO uploadDocumentRequestDTO = new UploadDocumentRequestDTO(file, id);
         fileService.uploadFile(uploadDocumentRequestDTO);
@@ -28,7 +28,7 @@ public class FileController implements FileApi {
     }
 
     @GetMapping
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam("path") String path,
                                                           @RequestParam("content-type") String contentType) {
         return ResponseEntity.ok()
@@ -39,7 +39,7 @@ public class FileController implements FileApi {
     }
 
     @DeleteMapping
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteFile(@RequestParam("fileName") String fileName) {
         fileService.deleteFile(fileName);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

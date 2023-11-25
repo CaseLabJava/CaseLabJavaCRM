@@ -17,8 +17,8 @@ public class OrderExceptionHandler {
         OrderException.CODE code = e.getCode();
         HttpStatus status = switch (code) {
             case NO_SUCH_CLIENT, NO_SUCH_EMPLOYEE, NO_SUCH_ORDER, NO_SUCH_PRODUCT -> HttpStatus.NOT_FOUND;
-            case CANNOT_DELETE_ORDER, CANNOT_ASSIGN_ORDER, INVALID_ORDER, INVALID_STATUS-> HttpStatus.CONFLICT;
-            case INCORRECT_ATTRIBUTE_NAME -> HttpStatus.BAD_REQUEST;
+            case CANNOT_DELETE_ORDER, CANNOT_ASSIGN_ORDER, INVALID_ORDER,
+                    INVALID_STATUS, INCORRECT_ATTRIBUTE_NAME -> HttpStatus.BAD_REQUEST;
             case NOT_PERMIT -> HttpStatus.FORBIDDEN;
             default -> null;
         };

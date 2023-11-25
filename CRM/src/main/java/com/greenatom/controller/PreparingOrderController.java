@@ -5,6 +5,7 @@ import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.preparing_order.PreparingOrderResponseDTO;
 import com.greenatom.domain.dto.preparing_order.PreparingOrderSearchCriteria;
 import com.greenatom.service.impl.PreparingOrderServiceImpl;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -23,11 +24,15 @@ public class PreparingOrderController implements PreparingOrderApi {
     private final PreparingOrderServiceImpl preparingOrderService;
 
     @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER', 'ROLE_SUPER_ADMIN')")
     @Override
     public ResponseEntity<Page<PreparingOrderResponseDTO>> getAllPreparingOrders(
-            @RequestParam(defaultValue = "0") Integer pageNumber,
-            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "0")
+            @Min(value = 0)
+            Integer pageNumber,
+            @RequestParam(defaultValue = "10")
+            @Min(value = 1)
+            Integer pageSize,
             @RequestParam(required = false) Long orderId,
             @RequestParam(required = false) Long employeeId,
             @RequestParam(required = false) String preparingOrderStatus,
@@ -50,14 +55,14 @@ public class PreparingOrderController implements PreparingOrderApi {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER', 'ROLE_SUPER_ADMIN')")
     @Override
     public ResponseEntity<PreparingOrderResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(preparingOrderService.findOne(id));
     }
 
     @PostMapping("/appoint-collector")
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_WAREHOUSE_WORKER', 'ROLE_SUPER_ADMIN')")
     @Override
     public ResponseEntity<Void> appointCollector(Principal principal,
                                                  @RequestParam Long preparingOrderId) {
@@ -66,7 +71,7 @@ public class PreparingOrderController implements PreparingOrderApi {
     }
 
     @PostMapping("/finish-preparing-order")
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_WAREHOUSE_WORKER')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_WAREHOUSE_WORKER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> finishPreparingOrder(Principal principal,
                                                      @RequestParam Long preparingOrderId) {
         preparingOrderService.finishPreparingOrder(principal.getName(), preparingOrderId);

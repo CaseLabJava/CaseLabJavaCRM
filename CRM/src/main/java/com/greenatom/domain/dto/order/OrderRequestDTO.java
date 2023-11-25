@@ -19,9 +19,6 @@ public class OrderRequestDTO {
     @Schema(description = "Информация о клиенте")
     private Long clientId;
 
-    @Schema(description = "Информация о менеджере")
-    private Long employeeId;
-
     @Schema(description = "Список продуктов для заказа")
     private List<OrderItemRequestDTO> orderItemList;
 }

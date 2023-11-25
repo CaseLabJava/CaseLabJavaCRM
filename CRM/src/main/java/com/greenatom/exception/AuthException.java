@@ -8,6 +8,7 @@ public class AuthException extends RuntimeException{
     public enum CODE {
         NO_SUCH_USERNAME_OR_PWD("Incorrect username or password"),
         JWT_VALIDATION_ERROR("JWT validation error"),
+        INVALID_REPEAT_PASSWORD("Passwords are not the same"),
         EMAIL_IN_USE("This email already used");
 
         final String codeDescription;

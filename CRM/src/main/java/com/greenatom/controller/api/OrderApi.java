@@ -119,6 +119,7 @@ public interface OrderApi {
     })
     @Operation(summary = "Создает Order и возвращает OrderDTO")
     ResponseEntity<OrderResponseDTO> addDraftOrder(
+            Principal principal,
             @Parameter(description = "Order Request")
             OrderRequestDTO orderRequestDTO
     );

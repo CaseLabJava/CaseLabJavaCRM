@@ -39,7 +39,7 @@ public class AuthController implements AuthApi {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<JwtResponse> registration(@RequestBody CreateEmployeeRequestDTO employeeRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)

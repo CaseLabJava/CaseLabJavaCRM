@@ -5,6 +5,7 @@ import com.greenatom.domain.entity.Employee;
 import com.greenatom.domain.entity.OrderItem;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.*;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,8 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
+@Component
 public class OrderGenerator {
-
     private static final int FONT_SIZE = 16;
     private static final int DEFAULT_WIDTH = 10000;
     private static final int TOP_MARGIN = 0;

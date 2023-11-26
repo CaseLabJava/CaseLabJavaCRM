@@ -70,6 +70,4 @@ public class OrderControllerTest {
             throw new AssertionError("Failed to get a successful response after maximum retries");
         }
     }
-
-
 }

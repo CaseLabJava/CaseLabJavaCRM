@@ -1,4 +1,7 @@
-name: Docker Image CI
+ Error executing Maven.
+[ERROR] java.lang.IllegalStateException: Unable to load cache item
+[ERROR] Caused by: Unable to load cache item
+[ERROR] Caused by: Could not initialize class com.google.inject.internal.cglib.core.$MethodWrappername: Docker Image CI
 
 on:
   push:
@@ -62,11 +65,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}
-            git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git
-            git checkout develop
-            
-            mvn package -Prod
+            cd /home/${{ secrets.SSH_USER }}/project
+            git update            
+            mvn clean package -Prod
             docker container stop $(docker container ls -q) 
             docker rm $(docker ps -a -q) 
             docker rmi $(docker images -q)

@@ -30,7 +30,13 @@ jobs:
             export MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} 
             export MAIL_PORT=${{ secrets.MAIL_PORT }} 
             export MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} 
+            export JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} 
+            export CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} 
+            export CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }} 
             
+            echo JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} >> .env 
+            echo CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} >> .env 
+            echo CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }} >> .env 
             echo MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} >> .env 
             echo MAIL_PORT=${{ secrets.MAIL_PORT }} >> .env 
             echo MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} >> .env 
@@ -81,7 +87,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [ push_compose, build_image, export_env ]
+    needs: [ export_env ]
     runs-on: ubuntu-latest
     steps:
       - name: Connect with SSH and Deploy
@@ -91,6 +97,11 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            cd /home/${{ secrets.SSH_USER }}
+            git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git
+            git checkout develop
+            
+            mvn package -Prod
             docker container stop $(docker container ls -q) 
             docker rm $(docker ps -a -q) 
             docker rmi $(docker images -q)

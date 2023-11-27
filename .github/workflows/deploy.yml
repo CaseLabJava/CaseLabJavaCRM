@@ -97,7 +97,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}/project
+            cd /home/user/project
             git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git develop
             
             mvn -Dmaven.skip.test package -Prod

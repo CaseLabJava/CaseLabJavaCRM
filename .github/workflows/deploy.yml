@@ -65,7 +65,17 @@ jobs:
           source: "docker-compose.yaml"
           target: "/home/${{ secrets.SSH_USER }}"
           overwrite: true
-  
+    
+      - name: Build a package
+        run: mvn -B package --file CaseLabJavaCRM/pom.xml
+
+      - name: Temporarily save jar artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: jar-artifact
+          path: CaseLabJavaCRM/CRM/target/*.jar
+          retention-days: 1
+          
   build_image:
     runs-on: ubuntu-latest
     name: Build app image
@@ -100,7 +110,8 @@ jobs:
             cd /home/${{ secrets.SSH_USER }}
             git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git
             git checkout develop
-            
+            mvn -Dmaven.test.skip package
+
             mvn package -Prod
             docker container stop $(docker container ls -q) 
             docker rm $(docker ps -a -q) 

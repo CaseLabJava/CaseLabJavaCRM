@@ -86,7 +86,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
+    /*@Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
@@ -99,5 +99,5 @@ public class SecurityConfig {
                         .maxAge(3600); // Max age of the CORS pre-flight request
             }
         };
-    }
+    }*/
 }

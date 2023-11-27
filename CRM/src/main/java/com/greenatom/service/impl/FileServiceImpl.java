@@ -42,7 +42,8 @@ public class FileServiceImpl implements FileService {
                 minioClient.putObject(
                         PutObjectArgs.builder()
                                 .bucket(DOC_DIR_NAME)
-                                .object(uploadDocumentRequestDTO.getId() + "/" + file.getOriginalFilename())
+                                .object(uploadDocumentRequestDTO.getId() + "/" +
+                                        "signed_by_client.docx")
                                 .stream(file.getInputStream(), file.getSize(), -1)
                                 .contentType(file.getContentType())
                                 .build());

@@ -34,7 +34,6 @@ import java.util.List;
 @RestController
 @AccessDeniedResponse
 @RequestMapping(value = "/api/orders")
-@CrossOrigin
 public class OrderController implements OrderApi {
     private final OrderService orderService;
 

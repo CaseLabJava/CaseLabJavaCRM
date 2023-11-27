@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/preparing-orders")
 @RequiredArgsConstructor
-@CrossOrigin
 public class PreparingOrderController implements PreparingOrderApi {
     private final PreparingOrderServiceImpl preparingOrderService;
 

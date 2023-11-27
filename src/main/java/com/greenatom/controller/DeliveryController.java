@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/deliveries")
-@CrossOrigin
+
 public class DeliveryController implements DeliveryApi {
     private final DeliveryService deliveryService;
 

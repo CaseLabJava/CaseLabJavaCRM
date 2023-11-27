@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/api/employees")
-@CrossOrigin
+
 public class EmployeeController implements EmployeeApi {
     private final EmployeeService employeeService;
 

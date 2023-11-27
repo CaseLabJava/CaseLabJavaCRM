@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/api/auth/signin", "/api/auth/access-token").permitAll()
-                                .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                                .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/api/products").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling(exc -> exc.authenticationEntryPoint(jwtAuthEntryPoint))

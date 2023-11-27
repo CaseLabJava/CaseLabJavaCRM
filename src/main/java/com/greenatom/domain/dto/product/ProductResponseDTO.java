@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * A DTO for the Product.
@@ -31,4 +32,7 @@ public class ProductResponseDTO {
 
     @Schema(description = "Цена за единицу продукта", example = "3")
     private Long cost;
+
+    @Schema(description = "Изображение товара")
+    private byte[] image;
 }

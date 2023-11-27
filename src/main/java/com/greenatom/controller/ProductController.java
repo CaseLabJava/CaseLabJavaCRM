@@ -44,7 +44,7 @@ public class ProductController implements ProductApi {
     }
 
     @GetMapping(produces = {"application/json"})
-    //@PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR')")
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts(@RequestParam(defaultValue = "0") Integer pagePosition,
                                                    @RequestParam(defaultValue = "10") Integer pageLength,
                                                    @RequestParam(required = false) String productName,

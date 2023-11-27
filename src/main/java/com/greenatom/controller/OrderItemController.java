@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/order-items")
+@CrossOrigin
 public class OrderItemController implements OrderItemApi {
 
     private final OrderItemService orderItemService;

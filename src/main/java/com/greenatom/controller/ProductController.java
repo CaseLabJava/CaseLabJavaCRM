@@ -30,6 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/products")
+@CrossOrigin
 public class ProductController implements ProductApi {
     private final ProductService productService;
 

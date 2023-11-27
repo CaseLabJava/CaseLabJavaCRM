@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/orders/file")
+@CrossOrigin
 public class FileController implements FileApi {
 
     private final FileService fileService;

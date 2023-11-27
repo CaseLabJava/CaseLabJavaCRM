@@ -30,6 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/clients")
+@CrossOrigin
 public class ClientController implements ClientApi {
 
     private final ClientService clientService;

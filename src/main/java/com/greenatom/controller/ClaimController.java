@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api/claims")
+@CrossOrigin
 public class ClaimController implements ClaimApi {
 
     private final ClaimService claimService;

@@ -38,13 +38,13 @@ public class ProductController implements ProductApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.findOne(id));
     }
 
     @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<Page<ProductResponseDTO>> getAllProducts(
             @RequestParam(defaultValue = "0")
             @Min(value = 0)

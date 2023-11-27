@@ -1,5 +1,6 @@
 package com.greenatom.clientselfservice.contoller;
 
+import com.greenatom.clientselfservice.contoller.api.AuthApi;
 import com.greenatom.clientselfservice.domain.dto.security.AuthDTO;
 import com.greenatom.clientselfservice.domain.dto.security.ClientRegistrationDTO;
 import com.greenatom.clientselfservice.domain.dto.security.JwtResponse;
@@ -15,11 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("self_service/auth")
-public class AuthController {
+public class AuthController implements AuthApi {
 
     private final ClientRegistrationValidator clientRegistrationValidator;
     private final AuthService authService;
@@ -31,6 +33,7 @@ public class AuthController {
             clientRegistrationValidator.validate(clientRegistrationDTO,bindingResult);
             CheckField.checkRegistration(bindingResult);
             JwtResponse jwt = authService.registration(clientRegistrationDTO);
+
             return ResponseEntity.ok(jwt);
     }
 

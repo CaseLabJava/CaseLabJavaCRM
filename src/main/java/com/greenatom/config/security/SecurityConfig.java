@@ -95,7 +95,7 @@ public class SecurityConfig {
                         .allowedOrigins("*") // Specify the allowed origin
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true)
+                        .allowCredentials(false)
                         .maxAge(3600); // Max age of the CORS pre-flight request
             }
         };

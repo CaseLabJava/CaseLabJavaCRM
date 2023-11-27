@@ -45,3 +45,8 @@ minio:
   access-key: ${MINIO_ACCESS}
   secret-key: ${MINIO_SECRET}
   url: ${MINIO_URL}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://case-lab-java-discovery-service:8761

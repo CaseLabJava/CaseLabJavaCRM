@@ -27,6 +27,11 @@ springdoc:
   api-docs:
     path: /api-docs
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://case-lab-java-discovery-service:8761
+
 client_access_token: ${CLIENT_ACCESS_TOKEN}
 client_refresh_token: ${CLIENT_REFRESH_TOKEN}
 jwt_technical_user: ${JWT_TECHNICAL_USER}

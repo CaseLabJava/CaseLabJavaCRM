@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "develop", "master" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "develop", "master" ]
+    branches: [ "master" ]
 
 jobs:
   export_env:
@@ -97,11 +97,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}
-            git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git
-            git checkout develop
+            cd /home/user/project
+            git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git develop
             
-            mvn package -Prod
+            mvn -Dmaven.skip.test package -Prod
             docker container stop $(docker container ls -q) 
             docker rm $(docker ps -a -q) 
             docker rmi $(docker images -q)

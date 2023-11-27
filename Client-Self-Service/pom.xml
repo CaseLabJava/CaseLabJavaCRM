@@ -105,20 +105,20 @@
 
     <profiles>
         <profile>
-            <id>dev</id>
+            <id>prod</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <build.profile.id>dev</build.profile.id>
-                <profileActive>dev</profileActive>
+                <build.profile.id>prod</build.profile.id>
+                <profileActive>prod</profileActive>
             </properties>
         </profile>
         <profile>
-            <id>prod</id>
+            <id>dev</id>
             <properties>
-                <build.profile.id>prod</build.profile.id>
-                <profileActive>prod</profileActive>
+                <build.profile.id>dev</build.profile.id>
+                <profileActive>dev</profileActive>
             </properties>
         </profile>
     </profiles>

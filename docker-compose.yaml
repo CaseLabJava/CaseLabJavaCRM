@@ -22,7 +22,7 @@ services:
       - /var/lib/postgresql/data
 
   case-lab-java-discovery-service:
-    image: sladkkov/case-lab-java-discovery-service
+    image: case-lab-java-discovery-service
     build:
       dockerfile: Dockerfile
       context: Discovery-Service
@@ -39,7 +39,7 @@ services:
         condition: service_started
 
   case-lab-java-client-self-service:
-    image: sladkkov/case-lab-java-client-self-service
+    image: case-lab-java-client-self-service
     build:
       dockerfile: Dockerfile
       context: Client-Self-Service
@@ -65,7 +65,7 @@ services:
         condition: service_started
 
   case-lab-java-crm:
-    image: sladkkov/case-lab-java-crm:latest
+    image: case-lab-java-crm
     build:
       dockerfile: Dockerfile
       context: CRM

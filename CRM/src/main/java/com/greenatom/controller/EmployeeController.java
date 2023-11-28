@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 /**
  * Этот код является контроллером API для управления сотрудниками. Он содержит GET и PUT методы, которые
  * позволяют выполнять следующие операции:
@@ -101,4 +103,13 @@ public class EmployeeController implements EmployeeApi {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping(value = "/me")
+    @PreAuthorize(value = "hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN'," +
+            " 'ROLE_MANAGER', 'ROLE_SPECIALIST'," +
+            " 'ROLE_WAREHOUSE_WORKER', 'ROLE_COURIER')")
+    public ResponseEntity<EmployeeResponseDTO> getEmployeeInfo(Principal principal) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(employeeService.findEmployeeByUsername(principal.getName()));
+    }
 }

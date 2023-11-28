@@ -114,6 +114,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findByUsername(username);
     }
 
+    @Override
+    @Transactional
+    public EmployeeResponseDTO findEmployeeByUsername(String username) {
+        return employeeMapper.toDto(employeeRepository
+                .findByUsername(username)
+                .orElseThrow(() -> EmployeeException.CODE.NO_SUCH_EMPLOYEE.get(username)));
+    }
+
     private String generateUsername(CreateEmployeeRequestDTO employeeRequest) {
         StringBuilder username = new StringBuilder();
         String firstname = TranslateRusToEng.translateFromRusToEng(employeeRequest.getFirstname());

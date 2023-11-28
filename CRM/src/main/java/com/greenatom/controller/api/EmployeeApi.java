@@ -17,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.security.Principal;
+
 @Tag(name = "Employee API", description = "API для работы с сотрудниками")
 public interface EmployeeApi {
     @ApiResponses(value = {
@@ -37,6 +39,16 @@ public interface EmployeeApi {
                             @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = EmployeeErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Нет доступа",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )
@@ -63,6 +75,16 @@ public interface EmployeeApi {
             @ApiResponse(
                     responseCode = "400",
                     description = "Неверная должность сотрудника",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Нет доступа",
                     content = {
                             @Content(
                                     mediaType = "application/json",
@@ -114,7 +136,7 @@ public interface EmployeeApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeResponseDTO.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             ),
@@ -124,7 +146,17 @@ public interface EmployeeApi {
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Нет доступа",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     }
             )
@@ -157,6 +189,16 @@ public interface EmployeeApi {
                                     schema = @Schema(implementation = EmployeeErrorMessage.class)
                             )
                     }
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Нет доступа",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    }
             )
     })
     @Operation(
@@ -167,4 +209,31 @@ public interface EmployeeApi {
             Long id,
             @Parameter(description = "Информация о сотруднике")
             @RequestBody EmployeeSearchCriteria employee);
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешное получение информации о сотруднике",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = EmployeeResponseDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Сотрудник не был найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = EmployeeErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(
+            summary = "Получение информации о текущем сотруднике"
+    )
+    ResponseEntity<EmployeeResponseDTO> getEmployeeInfo(Principal principal);
 }

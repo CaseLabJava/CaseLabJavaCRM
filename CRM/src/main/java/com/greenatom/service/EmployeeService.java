@@ -15,6 +15,8 @@ public interface EmployeeService {
 
     EmployeeResponseDTO findOne(Long id);
 
+    EmployeeResponseDTO findEmployeeByUsername(String username);
+
     EmployeeResponseDTO save(CreateEmployeeRequestDTO employee);
 
     EmployeeResponseDTO updateEmployee(Long id, EmployeeSearchCriteria employee);

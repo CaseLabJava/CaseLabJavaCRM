@@ -14,7 +14,7 @@ jobs:
       - name: Connect with SSH and export
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 79.174.80.230
+          host: 45.130.43.231
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
@@ -58,7 +58,7 @@ jobs:
       - name: Copy docker-compose.yaml via SSH
         uses: appleboy/scp-action@master
         with:
-          host: 79.174.80.230
+          host: 45.130.43.231
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
@@ -93,14 +93,14 @@ jobs:
       - name: Connect with SSH and Deploy
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 79.174.80.230
+          host: 45.130.43.231
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd /home/user/project
             git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git develop
             
-            mvn -Dmaven.skip.test package -Prod
+            mvn -Dmaven.skip.test=true package
             docker container stop $(docker container ls -q) 
             docker rm $(docker ps -a -q) 
             docker rmi $(docker images -q)

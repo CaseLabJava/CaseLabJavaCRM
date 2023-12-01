@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: client-self-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/self-client
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:db.changelog/db.changelog-master.xml
+server:
+  port: 8081
+
+client_access_token: ${CLIENT_ACCESS_TOKEN}
+client_refresh_token: ${CLIENT_REFRESH_TOKEN}
+jwt_technical_user: ${JWT_TECHNICAL_USER}
+

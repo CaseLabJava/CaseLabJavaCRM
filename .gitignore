@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ## Generated res files ##
-/src/main/generated_resources
+/CRM/src/main/generated_resources
 

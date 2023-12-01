@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="andreynachevny" id="2023-11-19-add-role">
+        <insert tableName="role">
+            <column name="role_id" value="8"/>
+            <column name="name" value="ROLE_CLIENT_INTERMEDIARY"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

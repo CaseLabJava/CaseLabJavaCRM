@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://45.130.43.231:5432/
+    name: ${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    show-sql: true
+
+minio:
+  access-key: ${MINIO_ACCESS}
+  secret-key: ${MINIO_SECRET}
+  url: ${MINIO_URL}

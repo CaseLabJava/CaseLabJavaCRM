@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://45.130.43.231:5432/
+    name: ${{ secrets.POSTGRES_DB }}
+    username: ${{ secrets.POSTGRES_USER }}
+    password: ${{ secrets.POSTGRES_PASSWORD }}
+  jpa:
+    show-sql: false
+
+access_token: ${{ secrets.ACCESS_TOKEN }}
+refresh_token: ${{ secrets.REFRESH_TOKEN }}
+
+minio:
+  access-key: ${{ secrets.MINIO_ACCESS }}
+  secret-key: ${{ secrets.MINIO_SECRET }}
+  url: ${{ secrets.MINIO_URL }}

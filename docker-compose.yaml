@@ -21,8 +21,54 @@ services:
     volumes:
       - /var/lib/postgresql/data
 
+  case-lab-java-discovery-service:
+    image: case-lab-java-discovery-service
+    build:
+      dockerfile: Dockerfile
+      context: Discovery-Service
+    restart: always
+    container_name: case-lab-java-discovery-service
+    networks:
+      - case-lab
+    ports:
+      - "8761:8761"
+    depends_on:
+      case-lab-db:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
+  case-lab-java-client-self-service:
+    image: case-lab-java-client-self-service
+    build:
+      dockerfile: Dockerfile
+      context: Client-Self-Service
+    restart: always
+    container_name: case-lab-java-client-self-service
+    networks:
+      - case-lab
+    ports:
+      - "8081:8081"
+    environment:
+      JWT_TECHNICAL_USER: ${JWT_TECHNICAL_USER}
+      CLIENT_REFRESH_TOKEN: ${CLIENT_REFRESH_TOKEN}
+      CLIENT_ACCESS_TOKEN: ${CLIENT_ACCESS_TOKEN}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    depends_on:
+      case-lab-java-discovery-service:
+        condition: service_started
+      case-lab-db:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
   case-lab-java-crm:
-    image: sladkkov/case-lab-java-crm:latest
+    image: case-lab-java-crm
+    build:
+      dockerfile: Dockerfile
+      context: CRM
     restart: always
     container_name: case-lab-java-crm
     environment:
@@ -42,6 +88,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
+      case-lab-java-discovery-service:
+        condition: service_started
       case-lab-db:
         condition: service_healthy
       minio:

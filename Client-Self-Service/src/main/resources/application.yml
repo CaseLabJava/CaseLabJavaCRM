@@ -1,0 +1,38 @@
+spring:
+  profiles:
+    active: @profileActive@
+  application:
+    name: client-self-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://45.130.43.231/self-client
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:db.changelog/db.changelog-master.xml
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60000
+
+server:
+  port: 8081
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://case-lab-java-discovery-service:8761
+
+client_access_token: ${CLIENT_ACCESS_TOKEN}
+client_refresh_token: ${CLIENT_REFRESH_TOKEN}
+jwt_technical_user: ${JWT_TECHNICAL_USER}
+

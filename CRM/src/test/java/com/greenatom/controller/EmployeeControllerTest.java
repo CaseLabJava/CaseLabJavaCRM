@@ -1,5 +1,6 @@
 package com.greenatom.controller;
 
+import com.greenatom.BaseControllerTest;
 import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,17 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class EmployeeControllerTest {
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+public class EmployeeControllerTest extends BaseControllerTest {
 
     @Test
     @WithMockUser(roles = {"ADMIN", "SUPERVISOR"})

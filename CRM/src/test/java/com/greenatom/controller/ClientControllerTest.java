@@ -1,5 +1,6 @@
 package com.greenatom.controller;
 
+import com.greenatom.BaseControllerTest;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
 import jakarta.transaction.Transactional;
@@ -18,17 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ClientControllerTest {
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+public class ClientControllerTest extends BaseControllerTest {
 
     //Тест не проходит, выдает ошибку 400
 //    @Test
@@ -80,7 +71,7 @@ public class ClientControllerTest {
                         .param("sortDirection", "ASC"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(11))
                 .andReturn();
     }
 

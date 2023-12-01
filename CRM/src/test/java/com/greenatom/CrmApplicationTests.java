@@ -11,9 +11,5 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest
 class CrmApplicationTests {
 
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:14");
-
 
 }

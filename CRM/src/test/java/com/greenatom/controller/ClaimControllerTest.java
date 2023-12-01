@@ -1,5 +1,6 @@
 package com.greenatom.controller;
 
+import com.greenatom.BaseControllerTest;
 import com.greenatom.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import jakarta.transaction.Transactional;
@@ -18,16 +19,7 @@ import org.springframework.http.MediaType;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class ClaimControllerTest {
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+public class ClaimControllerTest extends BaseControllerTest {
 
     @Test
     @WithMockUser(roles = "MANAGER")

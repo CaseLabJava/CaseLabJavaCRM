@@ -1,5 +1,6 @@
 package com.greenatom.controller;
 
+import com.greenatom.BaseControllerTest;
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
 import com.greenatom.domain.dto.security.AuthDTO;
 import com.greenatom.domain.dto.security.RoleDTO;
@@ -25,17 +26,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class AuthControllerTest {
+public class AuthControllerTest extends BaseControllerTest {
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
     @Test
     @WithMockUser(roles = "ADMIN")
     public void testRegistration() throws Exception {

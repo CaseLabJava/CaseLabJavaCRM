@@ -1,6 +1,7 @@
 package com.greenatom.controller;
 
 
+import com.greenatom.BaseControllerTest;
 import com.greenatom.domain.dto.employee.CreateEmployeeRequestDTO;
 import com.greenatom.domain.dto.security.AuthDTO;
 import com.greenatom.domain.dto.security.RoleDTO;
@@ -29,17 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class FileControllerTest {
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
+public class FileControllerTest extends BaseControllerTest {
 
 //    @Test
 //    @WithMockUser(roles = "MANAGER")

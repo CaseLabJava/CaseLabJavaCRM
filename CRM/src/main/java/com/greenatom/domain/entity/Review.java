@@ -26,7 +26,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "client_id")
-    private Client clientId;
+    private Client client;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_item_id")

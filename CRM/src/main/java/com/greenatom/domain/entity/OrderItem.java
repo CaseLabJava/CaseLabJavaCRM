@@ -50,6 +50,9 @@ public class OrderItem {
     @JoinColumn(name = "order_id", referencedColumnName = "order_id")
     private Order order;
 
+    @OneToOne(mappedBy = "order_item")
+    private Review review;
+
     public long getTotalCost() {
         return cost * orderAmount;
     }

@@ -2,12 +2,16 @@ package com.greenatom.domain.entity;
 
 import com.greenatom.domain.enums.ReviewStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "review")
@@ -33,6 +37,8 @@ public class Review {
     private OrderItem orderItem;
 
     @Column(name = "review_mark")
+    @Positive
+    @Max(5)
     private Integer reviewMark;
 
     @Column(name = "review_status")

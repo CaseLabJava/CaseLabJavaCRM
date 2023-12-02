@@ -1,5 +1,6 @@
 package com.greenatom.controller;
 
+import com.greenatom.controller.api.ReviewApi;
 import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.review.ReviewRequestDTO;
 import com.greenatom.domain.dto.review.ReviewResponseDTO;
@@ -31,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/reviews")
 
-public class ReviewController {
+public class ReviewController implements ReviewApi {
 
     private final ReviewService reviewService;
 

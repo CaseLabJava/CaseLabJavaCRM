@@ -32,6 +32,6 @@ public class ReviewResponseDTO {
     @Schema(description = "Оценка", example = "5")
     private Integer reviewMark;
 
-    @Schema(description = "Статус отзыв", example = "CREATED")
+    @Schema(description = "Статус отзыва", example = "CREATED")
     private ReviewStatus reviewStatus;
 }

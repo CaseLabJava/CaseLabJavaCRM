@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @ToString
@@ -44,4 +46,7 @@ public class Review {
     @Column(name = "review_status")
     @Enumerated(EnumType.STRING)
     private ReviewStatus reviewStatus;
+
+    @Column(name = "creation_time")
+    private Instant creationTime;
 }

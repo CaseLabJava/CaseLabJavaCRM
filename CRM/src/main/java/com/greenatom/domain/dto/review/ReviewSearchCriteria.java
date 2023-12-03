@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,4 +33,7 @@ public class ReviewSearchCriteria {
 
     @Schema(description = "Статус отзыв", example = "CREATED")
     private ReviewStatus reviewStatus;
+
+    @Schema(description = "Время создания претензии", example = "2016-01-06T15:22:53.403Z")
+    private Instant creationTime;
 }

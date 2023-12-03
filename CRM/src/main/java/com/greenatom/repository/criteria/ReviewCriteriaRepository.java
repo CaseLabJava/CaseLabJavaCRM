@@ -38,11 +38,8 @@ public class ReviewCriteriaRepository {
         TypedQuery<Review> typedQuery = entityManager.createQuery(criteriaQuery);
         typedQuery.setFirstResult(entityPage.getPageNumber() * entityPage.getPageSize());
         typedQuery.setMaxResults(entityPage.getPageSize());
-
         Pageable pageable = getPageable(entityPage);
-
         long reviewCount = getReviewCount();
-
         return new PageImpl<>(typedQuery.getResultList(), pageable, reviewCount);
     }
 
@@ -51,28 +48,38 @@ public class ReviewCriteriaRepository {
         List<Predicate> predicates = new ArrayList<>();
         if(Objects.nonNull(reviewSearchCriteria.getContent())){
             predicates.add(
-                    criteriaBuilder.like(reviewRoot.get("firstname"),
+                    criteriaBuilder.like(reviewRoot.get("content"),
                             "%" + reviewSearchCriteria.getContent() + "%")
             );
         }
         if(Objects.nonNull(reviewSearchCriteria.getClientId())){
             predicates.add(
-                    criteriaBuilder.like(reviewRoot.get("surname"),
-                            "%" + reviewSearchCriteria.getClientId() + "%")
+                    criteriaBuilder.equal(reviewRoot.get("client").get("id"),
+                            reviewSearchCriteria.getClientId())
             );
         }
-
-
+        if(Objects.nonNull(reviewSearchCriteria.getOrderItemId())){
+            predicates.add(
+                    criteriaBuilder.equal(reviewRoot.get("orderItem").get("id"),
+                            reviewSearchCriteria.getOrderItemId())
+            );
+        }
+        if (Objects.nonNull(reviewSearchCriteria.getCreationTime())) {
+            predicates.add(
+                    criteriaBuilder.equal(reviewRoot.get("creationTime"),
+                            reviewSearchCriteria.getCreationTime())
+            );
+        }
         if(Objects.nonNull(reviewSearchCriteria.getReviewStatus())){
             predicates.add(
-                    criteriaBuilder.like(reviewRoot.get("address"),
-                            "%" + reviewSearchCriteria.getReviewStatus() + "%")
+                    criteriaBuilder.equal(reviewRoot.get("reviewStatus"),
+                          reviewSearchCriteria.getReviewStatus())
             );
         }
         if(Objects.nonNull(reviewSearchCriteria.getReviewMark())){
             predicates.add(
-                    criteriaBuilder.like(reviewRoot.get("email"),
-                            "%" + reviewSearchCriteria.getReviewMark() + "%")
+                    criteriaBuilder.equal(reviewRoot.get("reviewMark"),
+                            reviewSearchCriteria.getReviewMark())
             );
         }
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

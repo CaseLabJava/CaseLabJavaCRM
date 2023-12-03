@@ -16,4 +16,5 @@
     <include file="v.0.0.1/create-technical-user-0.0.9.xml" relativeToChangelogFile="true"/>
     <include file="v.0.0.1/update-client-order-1.0.0.xml" relativeToChangelogFile="true"/>
     <include file="v.0.0.1/add-image-to-product-1.0.1.xml" relativeToChangelogFile="true"/>
+    <include file="v.0.0.1/add-review-table-1.1.0.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

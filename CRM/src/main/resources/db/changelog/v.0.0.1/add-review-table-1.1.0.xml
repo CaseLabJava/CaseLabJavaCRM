@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1728694029330-1" author="79969">
+        <createTable tableName="review">
+            <column name="review_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="review_pkey"/>
+            </column>
+            <column name="content" type="VARCHAR(3000)"/>
+            <column name="image" type="LONGBLOB"/>
+            <column name="client_id" type="BIGINT"/>
+            <column name="order_item_id" type="BIGINT"/>
+            <column name="review_mark" type="SMALLINT"/>
+            <column name="review_status" type="VARCHAR(30)"/>
+            <column name="creation_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1728694029330-2" author="79969">
+        <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="review"
+                                 constraintName="client_id_fk"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="client_id"
+                                 referencedTableName="client"/>
+    </changeSet>
+    <changeSet id="1728694029330-3" author="79969">
+        <addForeignKeyConstraint baseColumnNames="order_item_id" baseTableName="review"
+                                 constraintName="order_item_id_fk"
+                                 deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedColumnNames="order_item_id"
+                                 referencedTableName="order_item"/>
+    </changeSet>
+</databaseChangeLog>

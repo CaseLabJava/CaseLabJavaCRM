@@ -4,6 +4,7 @@ import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.review.ReviewRequestDTO;
 import com.greenatom.domain.dto.review.ReviewResponseDTO;
 import com.greenatom.domain.dto.review.ReviewSearchCriteria;
+import com.greenatom.domain.enums.ReviewStatus;
 import org.springframework.data.domain.Page;
 
 public interface ReviewService {
@@ -18,4 +19,5 @@ public interface ReviewService {
 
     void deleteReview(Long id);
 
-    }
+    ReviewResponseDTO process(Long id, ReviewStatus status, ReviewRequestDTO review);
+}

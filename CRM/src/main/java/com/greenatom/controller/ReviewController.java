@@ -101,4 +101,13 @@ public class ReviewController implements ReviewApi {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping(value = "/process/{id}", produces = {"application/json"})
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    public ResponseEntity<ReviewResponseDTO> process(@RequestParam ReviewStatus status,
+                                                     @PathVariable Long id,
+                                                     @RequestBody ReviewRequestDTO review) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviewService.process(id,status,review));
+    }
 }

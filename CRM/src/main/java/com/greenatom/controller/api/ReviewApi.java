@@ -2,6 +2,7 @@ package com.greenatom.controller.api;
 
 import com.greenatom.domain.dto.review.ReviewRequestDTO;
 import com.greenatom.domain.dto.review.ReviewResponseDTO;
+import com.greenatom.domain.enums.ReviewStatus;
 import com.greenatom.exception.message.ReviewErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -159,4 +160,32 @@ public interface ReviewApi {
             @Parameter(description = "Информация об отзыве")
             ReviewRequestDTO clientRequestDTO
     );
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Успешное обновление отзыва",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ReviewResponseDTO.class)
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Указанный отзыв не был найден",
+                    content = {
+                            @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ReviewErrorMessage.class)
+                            )
+                    }
+            )
+    })
+    @Operation(summary = "Проверка содержимого отзыва сотрудником")
+    ResponseEntity<ReviewResponseDTO> process(@Parameter(description = "Назначаемый статус") ReviewStatus status,
+                                              @Parameter(description = "Id отзыва") Long id,
+                                              @Parameter(description = "Отредактированное содержимое отзыва")
+                                              ReviewRequestDTO review);
 }

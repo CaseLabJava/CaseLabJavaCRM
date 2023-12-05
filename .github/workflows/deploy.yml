@@ -18,8 +18,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /home/user/project
-            rm .env
+            rm /home/user/.env
             export POSTGRES_DB=${{ secrets.POSTGRES_DB }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
@@ -35,21 +34,21 @@ jobs:
             export CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }}
             export CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }}
 
-            echo JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} >> .env
-            echo CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} >> .env
-            echo CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }} >> .env
-            echo MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} >> .env
-            echo MAIL_PORT=${{ secrets.MAIL_PORT }} >> .env
-            echo MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} >> .env
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
-            echo ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} >> .env
-            echo REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} >> .env
-            echo MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} >> .env
-            echo MINIO_SECRET=${{ secrets.MINIO_SECRET }} >> .env
-            echo MINIO_URL=${{ secrets.MINIO_URL }} >> .env
-            cd /home/user/project && export $(cat /root/.env | xargs) && env
+            echo JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} >> /home/user/.env
+            echo CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} >> /home/user/.env
+            echo CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }} >> /home/user/.env
+            echo MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} >> /home/user/.env
+            echo MAIL_PORT=${{ secrets.MAIL_PORT }} >> /home/user/.env
+            echo MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} >> /home/user/.env
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> /home/user/.env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> /home/user/.env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> /home/user/.env
+            echo ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} >> /home/user/.env
+            echo REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} >> /home/user/.env
+            echo MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} >> /home/user/.env
+            echo MINIO_SECRET=${{ secrets.MINIO_SECRET }} >> /home/user/.env
+            echo MINIO_URL=${{ secrets.MINIO_URL }} >> /home/user/.env
+            cd /home/user/project && export $(cat /home/user/.env | xargs) && env
 
 #  push_compose:
 #    name: Push docker-compose.yaml to remote server
@@ -101,10 +100,10 @@ jobs:
             docker container stop $(docker container ls -q)
             docker rm $(docker ps -a -q) 
             docker rmi $(docker images -q)
-            rm -rf ./CaseLabJavaCRM
+            rm -rf /home/user/project/develop
             cd /home/user/project
-            git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git
-            cd CaseLabJavaCRM
+            git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git develop
+            cd develop
             mvn package -Dmaven.test.skip=true
             docker compose up -d
 #            docker container stop $(docker container ls -q)

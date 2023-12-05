@@ -1,4 +1,4 @@
-package com.greenatom.PaymentService.dto;
+package com.greenatom.PaymentService.dto.card;
 
 import lombok.Data;
 

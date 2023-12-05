@@ -1,7 +1,7 @@
 package com.greenatom.PaymentService.controllers.api;
 
-import com.greenatom.PaymentService.dto.CardDto;
-import com.greenatom.PaymentService.entities.Card;
+import com.greenatom.PaymentService.dto.payment.PaymentDto;
+import com.greenatom.PaymentService.entities.Payment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,15 +16,15 @@ public interface PaymentApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Карта успешно принята к оплате",
+                    description = "Информация об оплате успешно принята",
                     content = {
                             @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = Card.class)
+                                    schema = @Schema(implementation = Payment.class)
                             )
                     }
             )
     })
-    @Operation(summary = "Возвращает параметры карты")
-    ResponseEntity<Card> pay(@RequestBody CardDto cardDto);
+    @Operation(summary = "Возвращает параметры оплаты заказа")
+    ResponseEntity<Payment> pay(@RequestBody PaymentDto paymentDto);
 }

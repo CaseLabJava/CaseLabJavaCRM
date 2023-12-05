@@ -24,6 +24,7 @@ public class PaymentService {
         }
         else {
             payment = paymentMapper.toEntity(paymentDto);
+            payment.setStatus("in progress");
         }
         return paymentRepository.save(payment);
     }

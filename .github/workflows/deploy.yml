@@ -102,7 +102,7 @@ jobs:
             cd /home/user/project
             git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git
             cd CaseLabJavaCRM
-            mvn -Dmaven.skip.test=true package
+            mvn package -Dmaven.test.skip=true
             docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-crm --format="{{.ID}}"))
             docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-client-self-service --format="{{.ID}}"))
             docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-discovery-service --format="{{.ID}}"))

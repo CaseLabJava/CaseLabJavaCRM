@@ -16,7 +16,7 @@
 ## Ссылки
 1. [Trello](https://trello.com/b/wKr3rsdb/main)
 2. [Miro](https://miro.com/app/board/uXjVNf2JqSY=/?share_link_id=730527650038)
-3. [Swagger](http://178.21.8.3:8080/swagger-ui/index.html)
+3. [Swagger](http://45.130.43.231:8080/swagger-ui/index.html#/)
 4. [Ссылка на видео с демонстрацией](https://www.youtube.com/watch?v=IiJ7lsvLx9M)
 5. [Диаграммы и полезная информация](https://drive.google.com/drive/folders/1kKTUfFGSvf3wOHUtF1s3woI9grvCHA6S?usp=sharing)
 

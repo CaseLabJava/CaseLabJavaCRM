@@ -100,10 +100,10 @@ jobs:
             docker container stop $(docker container ls -q)
             docker rm $(docker ps -a -q) 
             docker rmi $(docker images -q)
-            rm -rf /home/user/project/develop
+            rm -rf /home/user/project/master
             cd /home/user/project
-            git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git develop
-            cd develop
+            git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git master
+            cd master
             mvn package -Dmaven.test.skip=true
             docker compose up -d
 #            docker container stop $(docker container ls -q)

@@ -49,7 +49,7 @@ jobs:
             echo MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} >> .env
             echo MINIO_SECRET=${{ secrets.MINIO_SECRET }} >> .env
             echo MINIO_URL=${{ secrets.MINIO_URL }} >> .env
-            export $(cat /root/.env | xargs) && env
+            cd /home/user/project && export $(cat /root/.env | xargs) && env
 
 #  push_compose:
 #    name: Push docker-compose.yaml to remote server

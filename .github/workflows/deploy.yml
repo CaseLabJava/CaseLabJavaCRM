@@ -19,71 +19,71 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             rm .env
-            export POSTGRES_DB=${{ secrets.POSTGRES_DB }}  
-            export POSTGRES_USER=${{ secrets.POSTGRES_USER }} 
-            export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} 
-            export REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} 
-            export ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} 
-            export MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} 
-            export MINIO_SECRET=${{ secrets.MINIO_SECRET }} 
-            export MINIO_URL=${{ secrets.MINIO_URL }} 
-            export MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} 
-            export MAIL_PORT=${{ secrets.MAIL_PORT }} 
-            export MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} 
-            export JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} 
-            export CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} 
-            export CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }} 
-            
-            echo JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} >> .env 
-            echo CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} >> .env 
-            echo CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }} >> .env 
-            echo MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} >> .env 
-            echo MAIL_PORT=${{ secrets.MAIL_PORT }} >> .env 
-            echo MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} >> .env 
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env 
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env 
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env 
-            echo ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} >> .env 
-            echo REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} >> .env 
-            echo MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} >> .env 
-            echo MINIO_SECRET=${{ secrets.MINIO_SECRET }} >> .env 
-            echo MINIO_URL=${{ secrets.MINIO_URL }} >> .env 
-            export $(cat .env | xargs) && env 
+            export POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+            export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            export REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }}
+            export ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}
+            export MINIO_ACCESS=${{ secrets.MINIO_ACCESS }}
+            export MINIO_SECRET=${{ secrets.MINIO_SECRET }}
+            export MINIO_URL=${{ secrets.MINIO_URL }}
+            export MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
+            export MAIL_PORT=${{ secrets.MAIL_PORT }}
+            export MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
+            export JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }}
+            export CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }}
+            export CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }}
 
-  push_compose:
-    name: Push docker-compose.yaml to remote server
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Copy docker-compose.yaml via SSH
-        uses: appleboy/scp-action@master
-        with:
-          host: 45.130.43.231
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          source: "docker-compose.yaml"
-          target: "/home/${{ secrets.SSH_USER }}"
-          overwrite: true
+            echo JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} >> .env
+            echo CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} >> .env
+            echo CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }} >> .env
+            echo MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} >> .env
+            echo MAIL_PORT=${{ secrets.MAIL_PORT }} >> .env
+            echo MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} >> .env
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            echo ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} >> .env
+            echo REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} >> .env
+            echo MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} >> .env
+            echo MINIO_SECRET=${{ secrets.MINIO_SECRET }} >> .env
+            echo MINIO_URL=${{ secrets.MINIO_URL }} >> .env
+            export $(cat /root/.env | xargs) && env
+
+#  push_compose:
+#    name: Push docker-compose.yaml to remote server
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Copy docker-compose.yaml via SSH
+#        uses: appleboy/scp-action@master
+#        with:
+#          host: 45.130.43.231
+#          username: ${{ secrets.SSH_USER }}
+#          password: ${{ secrets.SSH_PASSWORD }}
+#          port: 22
+#          source: "docker-compose.yaml"
+#          target: "/home/${{ secrets.SSH_USER }}"
+#          overwrite: true
   
-  build_image:
-    runs-on: ubuntu-latest
-    name: Build app image
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Login to hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: sladkkov/case-lab-java-crm:latest
+#  build_image:
+#    runs-on: ubuntu-latest
+#    name: Build app image
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Login to hub
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build and push
+#        uses: docker/build-push-action@v5
+#        with:
+#          push: true
+#          tags: sladkkov/case-lab-java-crm:latest
 
   deploy:
     name: Deploy
@@ -97,12 +97,21 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /home/user/project
-            git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git develop
-            
+            cd /home/user
+            git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git
+            cd CaseLabJavaCRM
             mvn -Dmaven.skip.test=true package
-            docker container stop $(docker container ls -q) 
-            docker rm $(docker ps -a -q) 
-            docker rmi $(docker images -q)
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-crm --format="{{.ID}}"))
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-client-self-service --format="{{.ID}}"))
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-discovery-service --format="{{.ID}}"))
+            docker image rm case-lab-java-crm
+            docker image rm case-lab-java-client-self-service
+            docker image rm case-lab-java-discovery-service
             docker compose up -d
-          
+            cd ..
+            rm -r ./CaseLabJavaCRM
+#            docker container stop $(docker container ls -q)
+#            docker stop case-lab-java-crm
+#            docker rm case-lab-java-crm
+#            docker rm $(docker ps -a -q) 
+#            docker rmi $(docker images -q)

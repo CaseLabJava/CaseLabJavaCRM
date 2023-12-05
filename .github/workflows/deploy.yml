@@ -98,6 +98,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            rm -rf ./CaseLabJavaCRM
             cd /home/user/project
             git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git
             cd CaseLabJavaCRM
@@ -109,8 +110,6 @@ jobs:
             docker image rm case-lab-java-client-self-service
             docker image rm case-lab-java-discovery-service
             docker compose up -d
-            cd ..
-            rm -r ./CaseLabJavaCRM
 #            docker container stop $(docker container ls -q)
 #            docker stop case-lab-java-crm
 #            docker rm case-lab-java-crm

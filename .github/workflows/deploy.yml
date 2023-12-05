@@ -18,6 +18,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
+            cd /home/user/project
             rm .env
             export POSTGRES_DB=${{ secrets.POSTGRES_DB }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
@@ -97,7 +98,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /home/user
+            cd /home/user/project
             git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git
             cd CaseLabJavaCRM
             mvn -Dmaven.skip.test=true package

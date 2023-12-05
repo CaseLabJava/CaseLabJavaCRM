@@ -103,15 +103,12 @@ jobs:
             git clone https://github.com/CaseLabJava/CaseLabJavaCRM.git
             cd CaseLabJavaCRM
             mvn package -Dmaven.test.skip=true
-#            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-crm --format="{{.ID}}"))
-#            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-client-self-service --format="{{.ID}}"))
-#            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-discovery-service --format="{{.ID}}"))
-            docker container stop $(docker container ls -q)
-            docker rm $(docker ps -a -q)
-            docker rmi $(docker images -q)
-#            docker image rm case-lab-java-crm
-#            docker image rm case-lab-java-client-self-service
-#            docker image rm case-lab-java-discovery-service
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-crm --format="{{.ID}}"))
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-client-self-service --format="{{.ID}}"))
+            docker rm $(docker stop $(docker ps -a -q --filter ancestor=case-lab-java-discovery-service --format="{{.ID}}"))
+            docker image rm case-lab-java-crm
+            docker image rm case-lab-java-client-self-service
+            docker image rm case-lab-java-discovery-service
             docker compose up -d
 #            docker container stop $(docker container ls -q)
 #            docker stop case-lab-java-crm

@@ -1,6 +1,6 @@
 package com.greenatom.PaymentService.controllers.api;
 
-import com.greenatom.PaymentService.dto.PaymentDto;
+import com.greenatom.PaymentService.dto.CardDto;
 import com.greenatom.PaymentService.entities.Card;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,5 +26,5 @@ public interface PaymentApi {
             )
     })
     @Operation(summary = "Возвращает параметры карты")
-    ResponseEntity<Card> pay(@RequestBody PaymentDto paymentDto);
+    ResponseEntity<Card> pay(@RequestBody CardDto cardDto);
 }

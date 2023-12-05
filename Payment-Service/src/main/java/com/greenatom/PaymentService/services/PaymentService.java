@@ -1,7 +1,8 @@
 package com.greenatom.PaymentService.services;
 
-import com.greenatom.PaymentService.dto.PaymentDto;
-import com.greenatom.PaymentService.entities.Card;
+import com.greenatom.PaymentService.dto.payment.PaymentDto;
+import com.greenatom.PaymentService.entities.Payment;
+import com.greenatom.PaymentService.mappers.PaymentMapper;
 import com.greenatom.PaymentService.repositories.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,21 +11,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PaymentService {
     private final PaymentRepository paymentRepository;
-    public Card pay(PaymentDto paymentDto) {
-        String cardNumber = paymentDto.getNumber();
+    private final PaymentMapper paymentMapper;
+    public Payment pay(PaymentDto paymentDto) {
+        Payment payment;
+        Long userId = paymentDto.getUserId();
+        Long orderId = paymentDto.getOrderId();
 
-        if (paymentRepository.existsByNumber(cardNumber)) {
-            return paymentRepository
-                    .findByNumber(cardNumber)
+        if(paymentRepository.existsByUserIdAndOrderId(userId, orderId)) {
+            payment = paymentRepository
+                    .findByUserIdAndOrderId(userId, orderId)
                     .orElseThrow();
         }
         else {
-            Card card = new Card();
-            card.setNumber(cardNumber);
-            card.setCardholder(paymentDto.getCardholder());
-            card.setExpiredDate(paymentDto.getExpiredDate());
-            card.setCvv(paymentDto.getCvv());
-            return paymentRepository.save(card);
+            payment = paymentMapper.toEntity(paymentDto);
         }
+        return paymentRepository.save(payment);
     }
 }

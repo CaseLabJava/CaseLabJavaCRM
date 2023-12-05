@@ -2,10 +2,8 @@ package com.greenatom.PaymentService.dto;
 
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
-public class PaymentDto {
+public class CardDto {
     private String number;
     private String cardholder="cardholder";
     private String expiredDate;

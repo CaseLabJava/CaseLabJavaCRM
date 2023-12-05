@@ -23,7 +23,4 @@ public class Card {
 
     @Column(name = "expired_date", nullable = false)
     private String expiredDate;
-
-    @Column(name = "cvv", nullable = false)
-    private String cvv;
 }

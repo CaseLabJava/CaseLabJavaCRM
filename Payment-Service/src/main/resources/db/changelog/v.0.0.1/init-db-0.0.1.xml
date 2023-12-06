@@ -1,0 +1,29 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="ZmaevDA" id="1698759224711-1">
+    </changeSet>
+    <changeSet author="ZmaevDA" id="1698759224711-2">
+        <createTable tableName="card">
+            <column name="card_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pkey"/>
+            </column>
+            <column name="number" type="VARCHAR(255)"/>
+            <column name="cardholder" type="VARCHAR(255)"/>
+            <column name="expiredDate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="cvv" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="ZmaevDA" id="1698759224711-3">
+        <createTable tableName="payment">
+            <column name="payment_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pkey"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="sumOfPay" type="BIGINT"/>
+            <column name="status" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

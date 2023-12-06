@@ -7,7 +7,7 @@
     <changeSet author="ZmaevDA" id="1698759224711-2">
         <createTable tableName="card">
             <column name="card_id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pkey"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="card_pkey"/>
             </column>
             <column name="number" type="VARCHAR(255)"/>
             <column name="cardholder" type="VARCHAR(255)"/>

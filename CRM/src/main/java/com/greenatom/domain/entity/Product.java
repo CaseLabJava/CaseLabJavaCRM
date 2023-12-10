@@ -44,6 +44,9 @@ public class Product {
     @Min(0)
     private Long cost;
 
+    @Column(name = "rating")
+    private Double rating;
+
     @Column(name = "image")
     private byte[] image;
 

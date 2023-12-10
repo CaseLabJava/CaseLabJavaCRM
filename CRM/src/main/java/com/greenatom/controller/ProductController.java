@@ -56,13 +56,15 @@ public class ProductController implements ProductApi {
             @RequestParam(required = false) String unit,
             @RequestParam(required = false) Long storageAmount,
             @RequestParam(required = false) Long cost,
+            @RequestParam(required = false) Double rating,
             @RequestParam(required = false, defaultValue = "id") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(productService.findAll(
                         new EntityPage(pagePosition, pageLength, sortDirection, sortBy),
-                        new ProductSearchCriteria(0L, productName, unit, storageAmount, cost)));
+                        new ProductSearchCriteria(0L, productName, unit, storageAmount,
+                                rating, cost)));
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})

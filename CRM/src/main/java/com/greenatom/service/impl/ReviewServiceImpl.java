@@ -4,10 +4,12 @@ import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.domain.dto.review.ReviewRequestDTO;
 import com.greenatom.domain.dto.review.ReviewResponseDTO;
 import com.greenatom.domain.dto.review.ReviewSearchCriteria;
+import com.greenatom.domain.entity.Product;
 import com.greenatom.domain.entity.Review;
 import com.greenatom.domain.enums.ReviewStatus;
 import com.greenatom.domain.mapper.ReviewMapper;
 import com.greenatom.exception.ReviewException;
+import com.greenatom.repository.ProductRepository;
 import com.greenatom.repository.ReviewRepository;
 import com.greenatom.repository.criteria.ReviewCriteriaRepository;
 import com.greenatom.service.ReviewService;
@@ -16,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * ReviewServiceImpl является сервисом для работы с отзывами. Он использует репозиторий
@@ -37,6 +41,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewCriteriaRepository reviewCriteriaRepository;
     private final ReviewMapper reviewMapper;
 
+    private final ProductRepository productRepository;
+
     @Override
     @Transactional(readOnly = true)
     public Page<ReviewResponseDTO> findAll(EntityPage entityPage,
@@ -57,8 +63,22 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ReviewResponseDTO save(ReviewRequestDTO reviewRequestDTO) {
         Review review = reviewMapper.toEntity(reviewRequestDTO);
+        updateRating(reviewRequestDTO.getOrderItemId());
         reviewRepository.save(review);
         return reviewMapper.toDto(review);
+    }
+
+    private void updateRating(Long orderItemId) {
+        Product product = productRepository.findByReviewId(orderItemId);
+        List<Review> reviews = reviewRepository.findByProduct(product.getId());
+        double rating = 0.0;
+        for (Review r : reviews){
+            if (!r.getReviewStatus().equals(ReviewStatus.DISAPPROVED)){
+                rating+=r.getReviewMark();
+            }
+        }
+        product.setRating(rating/reviews.size());
+        productRepository.save(product);
     }
 
     @Override

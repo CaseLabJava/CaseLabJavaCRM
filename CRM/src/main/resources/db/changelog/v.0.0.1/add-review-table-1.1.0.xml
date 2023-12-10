@@ -35,4 +35,9 @@
                                  referencedColumnNames="order_item_id"
                                  referencedTableName="order_item"/>
     </changeSet>
+    <changeSet id="1728694029330-4" author="79969">
+        <addColumn tableName="product">
+            <column name="rating" type="DOUBLE"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+
 /**
  * Этот код - контроллер, обрабатывающий запросы API для управления клиентами.
  * Он предоставляет GET и PUT методы для выполнения следующих операций:
@@ -62,6 +64,7 @@ public class ReviewController implements ReviewApi {
             @RequestParam(required = false) Integer reviewMark,
             @RequestParam(required = false) String reviewStatus,
             @RequestParam(required = false) Long orderItemId,
+            @RequestParam(required = false) Instant creationTime,
             @RequestParam(required = false, defaultValue = "id") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection) {
         return ResponseEntity
@@ -74,7 +77,8 @@ public class ReviewController implements ReviewApi {
                                 clientId,
                                 orderItemId,
                                 reviewMark,
-                                ReviewStatus.valueOf(reviewStatus))));
+                                ReviewStatus.valueOf(reviewStatus), creationTime)
+                        ));
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})

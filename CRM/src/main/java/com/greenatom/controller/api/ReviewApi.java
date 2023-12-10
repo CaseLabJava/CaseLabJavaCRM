@@ -16,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
+import java.time.Instant;
+
 @Tag(name = "Review API", description = "API для работы с отзывами")
 public interface ReviewApi {
     @ApiResponses(value = {
@@ -72,6 +74,7 @@ public interface ReviewApi {
             @Parameter(description = "Оценка") Integer reviewMark,
             @Parameter(description = "Статус отзыва") String reviewStatus,
             @Parameter(description = "Id позиции заказа") Long orderItemId,
+            @Parameter(description = "Время создания") Instant creationTime,
             @Parameter(description = "Поле для сортировки") String sortBy,
             @Parameter(
                     in = ParameterIn.QUERY,

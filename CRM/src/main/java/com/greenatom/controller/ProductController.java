@@ -6,6 +6,7 @@ import com.greenatom.domain.dto.product.ProductRequestDTO;
 import com.greenatom.domain.dto.product.ProductResponseDTO;
 import com.greenatom.domain.dto.product.ProductSearchCriteria;
 import com.greenatom.service.ProductService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -67,13 +68,15 @@ public class ProductController implements ProductApi {
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO product) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id,
+                                                            @RequestBody @Valid ProductRequestDTO product) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.updateProduct(id, product));
     }
 
     @PostMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<ProductResponseDTO> addProduct(@RequestBody ProductRequestDTO product) {
+    public ResponseEntity<ProductResponseDTO> addProduct(
+            @RequestBody @Valid ProductRequestDTO product) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.save(product));
     }
 

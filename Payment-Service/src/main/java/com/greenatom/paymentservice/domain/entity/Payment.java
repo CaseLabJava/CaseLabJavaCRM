@@ -16,8 +16,9 @@ public class Payment {
     @Column(name = "payment_id", nullable = false)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "card_id", nullable = false)
+    private Card card;
 
     @Column(name = "order_id", nullable = false)
     private Long orderId;

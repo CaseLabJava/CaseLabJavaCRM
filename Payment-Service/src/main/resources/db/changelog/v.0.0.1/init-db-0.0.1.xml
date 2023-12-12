@@ -9,9 +9,10 @@
             <column name="card_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="card_pkey"/>
             </column>
+            <column name="client_id" type="BIGINT"/>
             <column name="number" type="VARCHAR(255)"/>
             <column name="cardholder" type="VARCHAR(255)"/>
-            <column name="expiredDate" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="expired_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
             <column name="cvv" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
@@ -20,9 +21,10 @@
             <column name="payment_id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pkey"/>
             </column>
-            <column name="user_id" type="BIGINT"/>
+            <column name="card_id" type="BIGINT"/>
+            <column name="order_id" type="BIGINT"/>
             <column name="date" type="TIMESTAMP WITHOUT TIME ZONE"/>
-            <column name="sumOfPay" type="BIGINT"/>
+            <column name="sum_of_pay" type="BIGINT"/>
             <column name="status" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>

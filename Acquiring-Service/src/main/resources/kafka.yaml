@@ -1,0 +1,8 @@
+kafka:
+  consumer:
+    id: consumerServer
+  producer:
+    id: producerServer
+  server: localhost:9092
+  group:
+    id: server.broadcast

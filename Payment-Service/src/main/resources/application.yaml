@@ -7,8 +7,15 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      retries: 3
+      batch-size: 16384
+      buffer-memory: 33554432

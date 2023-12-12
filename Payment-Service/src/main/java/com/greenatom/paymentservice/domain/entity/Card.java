@@ -1,18 +1,23 @@
 package com.greenatom.paymentservice.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "cards")
+@RequiredArgsConstructor
+@Table(name = "card")
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "card_id", nullable = false)
     private Long id;
+
+    @Column(name = "client_id")
+    private Long clientId;
 
     @Column(name = "number", unique = true, nullable = false, length = 19)
     private String cardNumber;
@@ -25,4 +30,7 @@ public class Card {
 
     @Column(name = "cvv", nullable = false)
     private String cvv;
+
+    @OneToMany(mappedBy = "card")
+    private List<Payment> payments;
 }

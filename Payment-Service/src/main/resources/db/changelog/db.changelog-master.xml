@@ -4,5 +4,5 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <include file="v.0.0.1/init-db-0.0.1.xml" relativeToChangelogFile="true"/>
+    <include file="./v.0.0.1/init-db-0.0.1.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

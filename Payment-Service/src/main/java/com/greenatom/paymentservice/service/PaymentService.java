@@ -7,5 +7,7 @@ public interface PaymentService {
 
     void createPayment(Long userId, Long orderId, Long sumOfPay);
 
-    void produce(Long paymentId);
+    void initiatePayment(Long paymentId);
+
+    PaymentResponseDto consumePaymentResult(PaymentResponseDto dto);
 }

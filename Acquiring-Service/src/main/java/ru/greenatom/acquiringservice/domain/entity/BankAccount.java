@@ -1,7 +1,9 @@
 package ru.greenatom.acquiringservice.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "bank_account")
 public class BankAccount {

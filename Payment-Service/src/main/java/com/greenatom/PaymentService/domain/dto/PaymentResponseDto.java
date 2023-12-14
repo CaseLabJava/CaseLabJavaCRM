@@ -1,13 +1,14 @@
 package com.greenatom.paymentservice.domain.dto;
 
+import com.greenatom.paymentservice.domain.enums.PaymentStatus;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 @Data
-@ToString
 @RequiredArgsConstructor
 public class PaymentResponseDto {
+    private Long id;
     private String cardNumber;
+    private PaymentStatus status;
     private Long sumOfPay;
 }

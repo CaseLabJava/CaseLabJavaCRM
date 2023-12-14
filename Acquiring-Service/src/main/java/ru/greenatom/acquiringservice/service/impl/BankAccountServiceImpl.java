@@ -1,21 +1,54 @@
 package ru.greenatom.acquiringservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.greenatom.acquiringservice.domain.dto.PaymentResponseDto;
+import ru.greenatom.acquiringservice.domain.entity.BankAccount;
+import ru.greenatom.acquiringservice.domain.enums.PaymentStatus;
 import ru.greenatom.acquiringservice.repository.BankAccountRepository;
 import ru.greenatom.acquiringservice.service.BankAccountService;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class BankAccountServiceImpl implements BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
+    private final KafkaTemplate<Long, PaymentResponseDto> kafkaTemplate;
 
     @Override
+    @Transactional
     @KafkaListener(topics = "payment", groupId = "consumerServer")
     public void consume(PaymentResponseDto dto) {
-        System.out.println("\n\n\n" + dto.toString());
+        log.info("consume: {}", dto);
+        try {
+            validatePayment(dto);
+        } catch (RuntimeException e) {
+            // TODO: В кастомном exception e.getCode() или типа того. Нужно доделать.
+            dto.setStatus(PaymentStatus.PAYMENT_COMPLETED);
+        }
+        sendPaymentResult(dto);
+    }
+
+    private void sendPaymentResult(PaymentResponseDto dto) {
+        log.info("produce: {}", dto);
+        kafkaTemplate.send("payment-result-topic", dto);
+    }
+
+    private void validatePayment(PaymentResponseDto dto) {
+        BankAccount bankAccount = bankAccountRepository
+                .findBankAccountByCardNumber(dto.getCardNumber())
+                .orElseThrow(RuntimeException::new);
+        long currBalance = bankAccount.getBalance();
+        if (currBalance < dto.getSumOfPay()) {
+            // TODO: Exceptions
+            throw new RuntimeException();
+        }
+        bankAccount.setBalance(currBalance - dto.getSumOfPay());
+        bankAccountRepository.save(bankAccount);
     }
 }

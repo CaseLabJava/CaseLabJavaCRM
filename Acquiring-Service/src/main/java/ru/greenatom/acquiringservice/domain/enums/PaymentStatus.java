@@ -1,4 +1,4 @@
-package com.greenatom.paymentservice.domain.enums;
+package ru.greenatom.acquiringservice.domain.enums;
 
 public enum PaymentStatus {
     WAITING_FOR_PAYMENT,

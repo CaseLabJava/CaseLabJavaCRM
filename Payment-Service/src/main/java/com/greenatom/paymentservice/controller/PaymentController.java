@@ -28,6 +28,6 @@ public class PaymentController {
 
     @PostMapping("/kafka")
     public void send(@RequestParam Long paymentId) {
-        paymentService.produce(paymentId);
+        paymentService.initiatePayment(paymentId);
     }
 }

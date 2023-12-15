@@ -21,7 +21,8 @@ public class FileController implements FileApi {
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<Void> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
+    public ResponseEntity<Void> uploadFile(@RequestParam("file") MultipartFile file,
+                                           @RequestParam("id") Long id) {
         UploadDocumentRequestDTO uploadDocumentRequestDTO = new UploadDocumentRequestDTO(file, id);
         fileService.uploadFile(uploadDocumentRequestDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

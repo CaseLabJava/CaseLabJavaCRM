@@ -6,6 +6,7 @@ import com.greenatom.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.domain.enums.ClaimStatus;
 import com.greenatom.service.ClaimService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +47,7 @@ public class ClaimController implements ClaimApi {
 
     @PostMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<ClaimResponseDTO> addClaim(@RequestBody ClaimCreationDTO claim) {
+    public ResponseEntity<ClaimResponseDTO> addClaim(@RequestBody @Valid ClaimCreationDTO claim) {
         return ResponseEntity.ok(claimService.save(claim));
     }
 

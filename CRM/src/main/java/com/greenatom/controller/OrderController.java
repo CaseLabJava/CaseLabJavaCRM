@@ -7,6 +7,7 @@ import com.greenatom.domain.dto.order.OrderRequestDTO;
 import com.greenatom.domain.dto.order.OrderResponseDTO;
 import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.service.OrderService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -83,7 +84,8 @@ public class OrderController implements OrderApi {
     @Override
     @PostMapping(value = "/draft")
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<OrderResponseDTO> addDraftOrder(Principal principal, @RequestBody OrderRequestDTO orderRequestDTO) {
+    public ResponseEntity<OrderResponseDTO> addDraftOrder(Principal principal,
+                                                          @RequestBody @Valid OrderRequestDTO orderRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(orderService.createDraft(principal.getName(), orderRequestDTO));
@@ -119,7 +121,7 @@ public class OrderController implements OrderApi {
     @PatchMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<OrderResponseDTO> updateOrder(@PathVariable Long id,
-                                                        @RequestBody OrderResponseDTO order) {
+                                                        @RequestBody @Valid OrderResponseDTO order) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(orderService.updateOrder(order, id));

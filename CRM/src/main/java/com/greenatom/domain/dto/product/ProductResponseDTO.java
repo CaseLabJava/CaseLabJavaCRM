@@ -32,6 +32,8 @@ public class ProductResponseDTO {
     @Schema(description = "Цена за единицу продукта", example = "3")
     private Long cost;
 
+    @Schema(description = "Рейтинг продукта", example = "4.6")
+    private Double rating;
     @Schema(description = "Изображение товара")
     private byte[] image;
 }

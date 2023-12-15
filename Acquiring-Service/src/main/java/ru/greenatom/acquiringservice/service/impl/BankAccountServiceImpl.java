@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.greenatom.acquiringservice.domain.dto.PaymentResponseDto;
 import ru.greenatom.acquiringservice.domain.entity.BankAccount;
 import ru.greenatom.acquiringservice.domain.enums.PaymentStatus;
+import ru.greenatom.acquiringservice.exception.AcquiringException;
 import ru.greenatom.acquiringservice.repository.BankAccountRepository;
 import ru.greenatom.acquiringservice.service.BankAccountService;
 
@@ -25,12 +26,8 @@ public class BankAccountServiceImpl implements BankAccountService {
     @KafkaListener(topics = "payment", groupId = "consumerServer")
     public void consume(PaymentResponseDto dto) {
         log.info("consume: {}", dto);
-        try {
-            validatePayment(dto);
-        } catch (RuntimeException e) {
-            // TODO: В кастомном exception e.getCode() или типа того. Нужно доделать.
-            dto.setStatus(PaymentStatus.PAYMENT_COMPLETED);
-        }
+        validatePayment(dto);
+        dto.setStatus(PaymentStatus.PAYMENT_COMPLETED);
         sendPaymentResult(dto);
     }
 
@@ -42,11 +39,10 @@ public class BankAccountServiceImpl implements BankAccountService {
     private void validatePayment(PaymentResponseDto dto) {
         BankAccount bankAccount = bankAccountRepository
                 .findBankAccountByCardNumber(dto.getCardNumber())
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(AcquiringException.CODE.BANK_ACCOUNT_NOT_FOUND::get);
         long currBalance = bankAccount.getBalance();
         if (currBalance < dto.getSumOfPay()) {
-            // TODO: Exceptions
-            throw new RuntimeException();
+            throw AcquiringException.CODE.NOT_ENOUGH_BALANCE.get();
         }
         bankAccount.setBalance(currBalance - dto.getSumOfPay());
         bankAccountRepository.save(bankAccount);

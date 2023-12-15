@@ -5,6 +5,7 @@ import com.greenatom.paymentservice.domain.entity.Card;
 import com.greenatom.paymentservice.domain.entity.Payment;
 import com.greenatom.paymentservice.domain.enums.PaymentStatus;
 import com.greenatom.paymentservice.domain.mapper.PaymentMapper;
+import com.greenatom.paymentservice.exception.PaymentException;
 import com.greenatom.paymentservice.repository.CardRepository;
 import com.greenatom.paymentservice.repository.PaymentRepository;
 import com.greenatom.paymentservice.service.PaymentService;
@@ -27,8 +28,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Transactional
     public void createPayment(Long clientId, Long orderId, Long sumOfPay) {
-        // TODO: Добавить exception
-        Card card = cardRepository.findCardByClientId(clientId).orElseThrow();
+        Card card = cardRepository.findCardByClientId(clientId).orElseThrow(
+                PaymentException.CODE.NO_SUCH_CARD::get);
         Payment payment = savePayment(paymentMapper.mapToPayment(card, orderId, sumOfPay));
         initiatePayment(payment.getId());
     }
@@ -38,8 +39,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     public void initiatePayment(Long paymentId) {
-        // TODO: Exceptions
-        Payment payment = paymentRepository.findById(paymentId).orElseThrow();
+        Payment payment = paymentRepository.findById(paymentId).orElseThrow(
+                PaymentException.CODE.NO_SUCH_PAYMENT::get);
         PaymentResponseDto dto = paymentMapper.toDto(payment);
         log.info("sending {}", dto.toString());
         kafkaTemplate.send("payment", dto);
@@ -55,11 +56,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     private void updatePaymentStatus(PaymentResponseDto dto) {
         PaymentStatus paymentStatus = dto.getStatus();
-        // TODO: Тут по идее должен быть switch case для разных статусов, но пока так
-        if (paymentStatus == PaymentStatus.PAYMENT_COMPLETED) {
-            confirmPayment(dto);
-        } else {
-            cancelPayment(dto);
+        switch (paymentStatus) {
+            case PAYMENT_COMPLETED -> confirmPayment(dto);
+            case DENIED -> cancelPayment(dto);
         }
     }
 

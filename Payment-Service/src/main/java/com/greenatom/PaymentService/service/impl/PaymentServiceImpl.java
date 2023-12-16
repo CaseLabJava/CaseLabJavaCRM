@@ -3,7 +3,6 @@ package com.greenatom.paymentservice.service.impl;
 import com.greenatom.paymentservice.domain.dto.PaymentResponseDto;
 import com.greenatom.paymentservice.domain.entity.Card;
 import com.greenatom.paymentservice.domain.entity.Payment;
-import com.greenatom.paymentservice.domain.enums.PaymentStatus;
 import com.greenatom.paymentservice.domain.mapper.PaymentMapper;
 import com.greenatom.paymentservice.exception.PaymentException;
 import com.greenatom.paymentservice.repository.CardRepository;
@@ -55,19 +54,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void updatePaymentStatus(PaymentResponseDto dto) {
-        PaymentStatus paymentStatus = dto.getStatus();
-        switch (paymentStatus) {
-            case PAYMENT_COMPLETED -> confirmPayment(dto);
-            case DENIED -> cancelPayment(dto);
-        }
-    }
-
-    private void confirmPayment(PaymentResponseDto dto) {
         paymentRepository.updatePaymentStatusById(dto.getId(), dto.getStatus());
-    }
-
-    private void cancelPayment(PaymentResponseDto dto) {
-        paymentRepository.updatePaymentStatusById(dto.getId(), dto.getStatus());
-        // TODO: Логика отказа???
     }
 }

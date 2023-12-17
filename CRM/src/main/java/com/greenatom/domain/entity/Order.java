@@ -47,9 +47,8 @@ public class Order {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @Column(name = "client_id")
+    private Long clientId;
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;

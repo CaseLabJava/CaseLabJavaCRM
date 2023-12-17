@@ -1,5 +1,6 @@
 package com.greenatom.controller.api;
 
+import com.greenatom.domain.dto.client.ClientRegistrationDTO;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.exception.message.ClientErrorMessage;
@@ -162,6 +163,6 @@ public interface ClientApi {
     @Operation(summary = "Создает Client и возвращает ClientDTO")
     ResponseEntity<ClientResponseDTO> addClient(
             @Parameter(description = "Инфомрация о клиенте")
-            ClientRequestDTO clientRequestDTO
+            ClientRegistrationDTO clientRegistrationDTO
     );
 }

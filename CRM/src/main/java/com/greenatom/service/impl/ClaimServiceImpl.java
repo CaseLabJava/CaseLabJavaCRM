@@ -50,7 +50,7 @@ public class ClaimServiceImpl implements ClaimService {
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
         Claim claim = claimMapper.toClaim(claimRequestDTO);
         claim.setOrder(order);
-        claim.setClient(order.getClient());
+        claim.setClientId(order.getClientId());
         claim.setCreationTime(Instant.now());
         claim.setClaimStatus(ClaimStatus.CREATED);
         return claimMapper.toDto(claimRepository.save(claim));

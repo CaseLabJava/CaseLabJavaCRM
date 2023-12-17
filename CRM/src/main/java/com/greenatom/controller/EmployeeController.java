@@ -5,6 +5,7 @@ import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.dto.employee.EmployeeSearchCriteria;
 import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.service.EmployeeService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -87,7 +88,8 @@ public class EmployeeController implements EmployeeApi {
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeSearchCriteria employee) {
+    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id,
+                                                              @RequestBody @Valid EmployeeSearchCriteria employee) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(employeeService.updateEmployee(id, employee));

@@ -17,8 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-
 /**
  * Product API - это интерфейс, который описывает набор методов для работы с продуктами. Он включает методы
  * для сохранения новых продуктов, получения уже существующих, удаление и их обновление.
@@ -91,6 +89,7 @@ public interface ProductApi {
             @Parameter(description = "Единица измерения") String unit,
             @Parameter(description = "Количество продукта на складе") Long storageAmount,
             @Parameter(description = "Стоимость продукта") Long cost,
+            @Parameter(description = "Рейтинг продукта") Double rating,
             @Parameter(description = "Поле для сортировки") String sortBy,
             @Parameter(
                     in = ParameterIn.QUERY,

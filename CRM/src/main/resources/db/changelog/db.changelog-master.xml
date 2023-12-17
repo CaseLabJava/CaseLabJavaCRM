@@ -18,4 +18,5 @@
     <include file="v.0.0.1/add-image-to-product-1.0.1.xml" relativeToChangelogFile="true"/>
     <include file="v.0.0.1/remove-client-table-change-dependencies-1.0.2.xml" relativeToChangelogFile="true"/>
     <include file="v.0.0.1/add-column-client-id-1.0.3.xml" relativeToChangelogFile="true"/>
+    <include file="v.0.0.1/add-review-table-1.1.0.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

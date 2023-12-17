@@ -21,6 +21,9 @@ public class ProductSearchCriteria {
     @Schema(description = "Общее количество продукта", example = "1000")
     private Long storageAmount;
 
+    @Schema(description = "Рейтинг продукта", example = "4.6")
+    private Double rating;
+    
     @Schema(description = "Цена за единицу продукта", example = "3")
     private Long cost;
 }

@@ -68,6 +68,9 @@ public class Client {
 
     private Set<Claim> claims;
 
+    @OneToMany(mappedBy = "client")
+    private Set<Review> reviews;
+
     public String getFullName() {
         return String.format("%s %s %s", surname, name, patronymic);
     }

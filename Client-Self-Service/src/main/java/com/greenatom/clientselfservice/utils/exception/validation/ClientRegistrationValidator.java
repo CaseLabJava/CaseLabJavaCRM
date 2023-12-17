@@ -2,7 +2,7 @@ package com.greenatom.clientselfservice.utils.exception.validation;
 
 import com.greenatom.clientselfservice.domain.dto.security.ClientRegistrationDTO;
 import com.greenatom.clientselfservice.domain.entity.Client;
-import com.greenatom.clientselfservice.service.impl.ClientService;
+import com.greenatom.clientselfservice.restTemplate.ClientRestTemplate;
 import com.greenatom.clientselfservice.utils.exception.AuthException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientRegistrationValidator implements Validator {
 
-    private final ClientService clientService;
+    private final ClientRestTemplate clientRestTemplate;
 
     @Override
     public boolean supports(@NonNull Class<?> clazz) {
@@ -26,7 +26,7 @@ public class ClientRegistrationValidator implements Validator {
     @Override
     public void validate(@NonNull Object target,@NonNull Errors errors) {
         ClientRegistrationDTO client = (ClientRegistrationDTO) target;
-        Optional<Client> clientFromDb = clientService.findByEmail(client.getEmail());
+        Optional<Client> clientFromDb = clientRestTemplate.getOneByEmail(client.getEmail());
         if(clientFromDb.isPresent()){
             throw AuthException.CODE.EMAIL_IN_USE.get();
         }

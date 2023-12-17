@@ -54,7 +54,8 @@ public interface AuthApi {
     @Operation(summary = "Возвращает jwt и refresh токены")
     ResponseEntity<JwtResponse> login(
             @Parameter(description = "Имя пользователя и пароль")
-            AuthDTO authDto
+            AuthDTO authDto,
+            BindingResult bindingResult
     );
 
 

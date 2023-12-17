@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,14 +30,16 @@ public class AuthController implements AuthApi {
             @RequestBody @Valid ClientRegistrationDTO clientRegistrationDTO,
             BindingResult bindingResult) {
             clientRegistrationValidator.validate(clientRegistrationDTO,bindingResult);
-            CheckField.checkRegistration(bindingResult);
+            CheckField.checkFieldException(bindingResult);
             JwtResponse jwt = authService.registration(clientRegistrationDTO);
 
             return ResponseEntity.ok(jwt);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtResponse> login(@RequestBody AuthDTO authDTO) {
+    public ResponseEntity<JwtResponse> login(@RequestBody @Valid AuthDTO authDTO,
+                                             BindingResult bindingResult) {
+        CheckField.checkFieldException(bindingResult);
         JwtResponse jwt = authService.login(authDTO);
         return ResponseEntity.ok(jwt);
     }

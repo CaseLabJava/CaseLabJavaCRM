@@ -3,17 +3,6 @@ spring:
     active: @profileActive@
   application:
     name: client-self-service
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://79.174.80.230:5432/self-client
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-  liquibase:
-    change-log: classpath:db.changelog/db.changelog-master.xml
   cache:
     type: redis
     redis:
@@ -27,10 +16,6 @@ springdoc:
   api-docs:
     path: /api-docs
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://case-lab-java-discovery-service:8761
 
 client_access_token: ${CLIENT_ACCESS_TOKEN}
 client_refresh_token: ${CLIENT_REFRESH_TOKEN}

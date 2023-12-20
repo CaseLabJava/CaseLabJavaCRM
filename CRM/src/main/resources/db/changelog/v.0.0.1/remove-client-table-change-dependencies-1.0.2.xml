@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="2023-12-17-change-dependencies-client" author="andreynachevny">
+        <dropColumn tableName="client_order" columnName="client_id"/>
+        <dropColumn tableName="claim" columnName="client_id"/>
+        <dropTable tableName="client"/>
+    </changeSet>
+</databaseChangeLog>

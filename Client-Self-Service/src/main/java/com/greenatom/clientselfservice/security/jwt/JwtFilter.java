@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -32,9 +33,12 @@ public class JwtFilter extends OncePerRequestFilter {
         if(jwt != null && jwtCore.validateAccessToken(jwt) && SecurityContextHolder.getContext().getAuthentication() == null){
             Claims claims = jwtCore.extractAccessClaims(jwt);
             UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails,
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
                     userDetails.getPassword(),
-                    userDetails.getAuthorities()));
+                    userDetails.getAuthorities()
+            );
+            authentication.setDetails(claims);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request,response);
     }

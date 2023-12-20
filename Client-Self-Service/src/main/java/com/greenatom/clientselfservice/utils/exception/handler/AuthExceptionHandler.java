@@ -22,8 +22,7 @@ public class AuthExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = switch (code) {
             case NO_SUCH_USERNAME_OR_PWD -> HttpStatus.NOT_FOUND;
             case JWT_VALIDATION_ERROR -> HttpStatus.UNAUTHORIZED;
-            case EMAIL_IN_USE -> HttpStatus.CONFLICT;
-            case INVALID_EMAIL -> HttpStatus.CONFLICT;
+            case EMAIL_IN_USE, INVALID_EMAIL -> HttpStatus.CONFLICT;
         };
         String codeStr = code.toString();
         return ResponseEntity

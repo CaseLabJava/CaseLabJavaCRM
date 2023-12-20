@@ -15,7 +15,6 @@ import org.mapstruct.Mapping;
 public interface ClaimMapper extends EntityMapper<ClaimResponseDTO, Claim> {
 
     @Mapping(target = "employeeId", source = "s.employee.id")
-    @Mapping(target = "clientId", source = "s.client.id")
     @Mapping(target = "orderId", source = "s.order.id")
     ClaimResponseDTO toDto(Claim s);
 

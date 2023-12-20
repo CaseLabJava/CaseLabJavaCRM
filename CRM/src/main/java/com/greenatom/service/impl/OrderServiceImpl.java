@@ -8,11 +8,13 @@ import com.greenatom.domain.dto.order.OrderSearchCriteria;
 import com.greenatom.domain.entity.*;
 import com.greenatom.domain.enums.OrderStatus;
 import com.greenatom.domain.enums.PreparingOrderStatus;
+import com.greenatom.domain.mapper.ClientMapper;
 import com.greenatom.domain.mapper.OrderMapper;
 import com.greenatom.exception.FileException;
 import com.greenatom.exception.OrderException;
 import com.greenatom.repository.*;
 import com.greenatom.repository.criteria.OrderCriteriaRepository;
+import com.greenatom.restTemplate.ClientRestTemplate;
 import com.greenatom.service.OrderService;
 import com.greenatom.utils.generator.request.OrderGenerator;
 import io.minio.GetObjectArgs;
@@ -65,10 +67,12 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final ClientRepository clientRepository;
+    private final ClientRestTemplate clientRestTemplate;
     private final EmployeeRepository employeeRepository;
     private final ProductRepository productRepository;
     private final PreparingOrderRepository preparingOrderRepository;
+
+    private final ClientMapper clientMapper;
 
     private final Environment env;
     private final OrderMapper orderMapper;
@@ -151,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void sendOrderToClient(Order order) {
         File file = new File(order.getId() + ".docx");
-        Client client = order.getClient();
+        Client client = clientMapper.toEntity(clientRestTemplate.getOneById(order.getClientId()));
         String toAddress = client.getEmail();
         String senderName = "Green Atom";
         String subject = "Ваш заказ";
@@ -194,13 +198,12 @@ public class OrderServiceImpl implements OrderService {
 
     private Order createDraftOrder(String username, OrderRequestDTO orderRequestDTO) {
         Order order = new Order();
-        Client client = clientRepository
-                .findById(orderRequestDTO.getClientId())
-                .orElseThrow(OrderException.CODE.NO_SUCH_CLIENT::get);
+        Client client = clientMapper.toEntity(clientRestTemplate
+                .getOneById(orderRequestDTO.getClientId()));
         Employee employee = employeeRepository
                 .findByUsername(username)
                 .orElseThrow(() -> OrderException.CODE.NO_SUCH_EMPLOYEE.get(username));
-        order.setClient(client);
+        order.setClientId(client.getId());
         order.setEmployee(employee);
         order.setOrderDate(Instant.now());
         order.setOrderStatus(OrderStatus.DRAFT);
@@ -216,6 +219,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository
                 .findById(orderId)
                 .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get);
+        Client client = clientMapper.toEntity(clientRestTemplate.getOneById(order.getClientId()));
         if (!order.getOrderStatus().equals(OrderStatus.DRAFT)) {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
@@ -225,7 +229,7 @@ public class OrderServiceImpl implements OrderService {
         String filename = "Order_" + order.getId();
         byte[] doc = orderGenerator.processGeneration(
                 order.getOrderItems(),
-                order.getClient(),
+                client,
                 order.getEmployee(),
                 filename + ".docx");
         try {
@@ -256,9 +260,9 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponseDTO save(OrderResponseDTO orderResponseDTO) {
         Order order = orderMapper.toEntity(orderResponseDTO);
-        order.setClient(clientRepository.findById(
-                        orderResponseDTO.getClient().getId())
-                .orElseThrow(OrderException.CODE.NO_SUCH_ORDER::get));
+        Client client = clientMapper.toEntity(clientRestTemplate.getOneById(
+                orderResponseDTO.getClient().getId()));
+        order.setClientId(client.getId());
         order.setEmployee(employeeRepository.findById(
                         orderResponseDTO.getEmployee().getId())
                 .orElseThrow(OrderException.CODE.NO_SUCH_EMPLOYEE::get));

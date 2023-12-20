@@ -1,9 +1,9 @@
-package com.greenatom.repository.criteria;
+package com.greenatom.clientservice.repository.criteria;
 
-import com.greenatom.domain.dto.client.ClientSearchCriteria;
-import com.greenatom.domain.dto.EntityPage;
-import com.greenatom.domain.entity.Client;
-import com.greenatom.exception.ClientException;
+import com.greenatom.clientservice.domain.dto.client.ClientSearchCriteria;
+import com.greenatom.clientservice.domain.dto.client.EntityPage;
+import com.greenatom.clientservice.domain.entity.Client;
+import com.greenatom.clientservice.utils.exception.ClientException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -141,3 +141,4 @@ public class ClientCriteriaRepository {
         return entityManager.createQuery(countQuery).getSingleResult();
     }
 }
+

@@ -1,19 +1,23 @@
 package com.greenatom.controller;
 
 import com.greenatom.controller.api.ClientApi;
+import com.greenatom.domain.dto.client.ClientRegistrationDTO;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.dto.client.ClientSearchCriteria;
 import com.greenatom.domain.dto.EntityPage;
+import com.greenatom.restTemplate.ClientRestTemplate;
 import com.greenatom.service.ClientService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Этот код - контроллер, обрабатывающий запросы API для управления клиентами. Он предоставляет GET и PUT методы
@@ -31,21 +35,18 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/clients")
-
+@RequiredArgsConstructor
 public class ClientController implements ClientApi {
 
-    private final ClientService clientService;
+    private final ClientRestTemplate clientRestTemplate;
 
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
-    }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<ClientResponseDTO> findOne(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clientService.findOne(id));
+                .body(clientRestTemplate.getOneById(id));
     }
 
     @GetMapping(produces = {"application/json"})
@@ -69,22 +70,28 @@ public class ClientController implements ClientApi {
             @RequestParam(required = false) String email,
             @RequestParam(required = false, defaultValue = "id") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection) {
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://Client-Service/client_service")
+                .queryParam("pagePosition",pagePosition)
+                .queryParam("pageSize", pageSize)
+                .queryParam("firstName", firstname)
+                .queryParam("lastname", lastname)
+                .queryParam("patronymic", patronymic)
+                .queryParam("address", address)
+                .queryParam("bank", bank)
+                .queryParam("company", company)
+                .queryParam("correspondentAccount",correspondentAccount)
+                .queryParam("inn", inn)
+                .queryParam("ogrn", ogrn)
+                .queryParam("phoneNumber",phoneNumber)
+                .queryParam("email",email)
+                .queryParam("sortBy", sortBy)
+                .queryParam("sortDirection", sortDirection);
+
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clientService.findAll(
-                        new EntityPage(pagePosition, pageSize, sortDirection, sortBy),
-                        new ClientSearchCriteria(
-                                0L, firstname,
-                                lastname,
-                                patronymic,
-                                company,
-                                bank,
-                                inn,
-                                ogrn,
-                                correspondentAccount,
-                                address,
-                                email,
-                                phoneNumber)));
+                .body(clientRestTemplate.findAll(builder));
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
@@ -93,21 +100,21 @@ public class ClientController implements ClientApi {
                                                           @RequestBody @Valid ClientRequestDTO client) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clientService.updateClient(id, client));
+                .body(clientRestTemplate.update(client, id));
     }
 
     @PostMapping(produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<ClientResponseDTO> addClient(@RequestBody @Valid ClientRequestDTO client) {
+    public ResponseEntity<ClientResponseDTO> addClient(@RequestBody ClientRegistrationDTO client) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clientService.save(client));
+                .body(clientRestTemplate.save(client));
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-        clientService.deleteClient(id);
+        clientRestTemplate.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

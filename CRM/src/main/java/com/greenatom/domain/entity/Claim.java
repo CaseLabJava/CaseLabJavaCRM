@@ -33,9 +33,8 @@ public class Claim {
     @JoinColumn(name = "employee_id", referencedColumnName = "employee_id")
     private Employee employee;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
-    private Client client;
+    @Column(name = "client_id")
+    private Long clientId;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

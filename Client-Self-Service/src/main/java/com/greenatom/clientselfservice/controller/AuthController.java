@@ -1,6 +1,6 @@
-package com.greenatom.clientselfservice.contoller;
+package com.greenatom.clientselfservice.controller;
 
-import com.greenatom.clientselfservice.contoller.api.AuthApi;
+import com.greenatom.clientselfservice.controller.api.AuthApi;
 import com.greenatom.clientselfservice.domain.dto.security.AuthDTO;
 import com.greenatom.clientselfservice.domain.dto.security.ClientRegistrationDTO;
 import com.greenatom.clientselfservice.domain.dto.security.JwtResponse;

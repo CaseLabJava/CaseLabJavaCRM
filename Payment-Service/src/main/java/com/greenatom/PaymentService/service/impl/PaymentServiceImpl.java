@@ -48,7 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
     @KafkaListener(topics = "payment-result-topic", groupId = "payment-service-group")
     @Transactional
     public PaymentResponseDto consumePaymentResult(PaymentResponseDto dto) {
-        log.info("consume: {}", dto);
+        log.info("consuming: {}", dto);
         updatePaymentStatus(dto);
         return dto;
     }

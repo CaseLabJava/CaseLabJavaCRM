@@ -25,14 +25,14 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @KafkaListener(topics = "payment", groupId = "consumerServer")
     public void consume(PaymentResponseDto dto) {
-        log.info("consume: {}", dto);
+        log.info("consuming: {}", dto);
         validatePayment(dto);
         dto.setStatus(PaymentStatus.PAYMENT_COMPLETED);
         sendPaymentResult(dto);
     }
 
     private void sendPaymentResult(PaymentResponseDto dto) {
-        log.info("produce: {}", dto);
+        log.info("sending: {}", dto);
         kafkaTemplate.send("payment-result-topic", dto);
     }
 

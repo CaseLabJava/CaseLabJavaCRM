@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.greenatom</groupId>
+		<artifactId>CaseLabJavaCRM</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<groupId>ru.greenatom</groupId>
+	<artifactId>Acquiring-Service</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Acquiring-Service</name>
+	<description>Acquiring-Service</description>
+	<properties>
+		<java.version>17</java.version>
+		<liquibase.version>4.20.0</liquibase.version>	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${liquibase.version}</version>
+				<configuration>
+					<driver>org.postgresql.Driver</driver>
+					<url>jdbc:postgresql://45.130.43.231:5432/</url>
+					<username>postgres</username>
+					<password>postgres</password>
+					<outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

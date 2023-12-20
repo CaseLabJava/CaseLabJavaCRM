@@ -1,0 +1,21 @@
+server:
+  port: 8082
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${PAYMENT_DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      retries: 3
+      batch-size: 16384
+      buffer-memory: 33554432

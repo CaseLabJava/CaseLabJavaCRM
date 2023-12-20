@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="ZmaevDA" id="1698154224711-1">
+        <createTable tableName="bank_account">
+            <column name="bank_account_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pkey"/>
+            </column>
+            <column name="card_number" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="balance" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

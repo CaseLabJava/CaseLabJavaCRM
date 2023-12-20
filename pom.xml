@@ -20,6 +20,8 @@
         <module>Discovery-Service</module>
         <module>CRM</module>
         <module>Client-Self-Service</module>
+        <module>Acquiring-Service</module>
+        <module>Payment-Service</module>
     </modules>
 
     <properties>

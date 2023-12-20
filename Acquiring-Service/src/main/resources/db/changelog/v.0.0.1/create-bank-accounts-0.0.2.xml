@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1698154222131-1" author="ZmaevDA">
+        <insert tableName="bank_account">
+            <column name="bank_account_id" value="1"/>
+            <column name="balance" value="10000000"/>
+            <column name="card_number" value="1234567890"/>
+        </insert>
+    </changeSet>
+    <changeSet id="1698154222131-2" author="ZmaevDA">
+        <insert tableName="bank_account">
+            <column name="bank_account_id" value="2"/>
+            <column name="balance" value="10000000"/>
+            <column name="card_number" value="123456123"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

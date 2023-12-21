@@ -17,15 +17,6 @@
             <column name="creation_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>
     </changeSet>
-    <changeSet id="1728694029330-2" author="79969">
-        <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="review"
-                                 constraintName="client_id_fk"
-                                 deferrable="false"
-                                 initiallyDeferred="false" onDelete="NO ACTION"
-                                 onUpdate="NO ACTION"
-                                 referencedColumnNames="client_id"
-                                 referencedTableName="client"/>
-    </changeSet>
     <changeSet id="1728694029330-3" author="79969">
         <addForeignKeyConstraint baseColumnNames="order_item_id" baseTableName="review"
                                  constraintName="order_item_id_fk"

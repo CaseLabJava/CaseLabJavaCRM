@@ -30,9 +30,8 @@ public class Review {
     @Column(name = "image")
     private byte[] image;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id", referencedColumnName = "client_id")
-    private Client client;
+    @Column(name = "client_id")
+    private Long clientId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_item_id")
@@ -41,7 +40,7 @@ public class Review {
     @Column(name = "review_mark")
     @Positive
     @Max(5)
-    private Integer reviewMark;
+    private Short reviewMark;
 
     @Column(name = "review_status")
     @Enumerated(EnumType.STRING)

@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("select p from product p where p.product_id = (select product_id from " +
-            "order_item" +
-            " where order_item_id = ?1 )")
+    @Query("select p from Product p where p.id = (select oi.product.id from OrderItem oi where oi.id = ?1 )")
     Product findByReviewId(Long orderItemId);
 
     Page<Product> findProductByProductNameContainingAndCostBefore(Pageable pageable, String name, Integer cost);

@@ -12,10 +12,9 @@ public class OrderService {
 
     private final RestTemplate restTemplate;
 
-    public OrderResponseDTO createDraft(String name, OrderRequestDTO orderRequestDTO) {
+    public OrderResponseDTO createDraft(OrderRequestDTO orderRequestDTO) {
         String url = getUrl("/draft");
-        OrderResponseDTO orderResponseDTO = restTemplate.postForObject(url, orderRequestDTO, OrderResponseDTO.class);
-        return orderResponseDTO;
+        return restTemplate.postForObject(url, orderRequestDTO, OrderResponseDTO.class);
     }
 
     private String getUrl (String action){

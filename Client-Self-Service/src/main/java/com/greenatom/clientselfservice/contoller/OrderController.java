@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-
 @RestController
 @RequestMapping("self_service/order")
 @RequiredArgsConstructor
@@ -20,9 +18,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping(value = "/draft")
-    public ResponseEntity<OrderResponseDTO> addDraftOrder(Principal principal, @RequestBody OrderRequestDTO orderRequestDTO) {
+    public ResponseEntity<OrderResponseDTO> addDraftOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(orderService.createDraft(principal.getName(), orderRequestDTO));
+                .body(orderService.createDraft(orderRequestDTO));
     }
 }

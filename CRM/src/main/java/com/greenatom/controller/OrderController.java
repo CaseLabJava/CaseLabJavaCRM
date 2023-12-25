@@ -83,7 +83,7 @@ public class OrderController implements OrderApi {
 
     @Override
     @PostMapping(value = "/draft")
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<OrderResponseDTO> addDraftOrder(Principal principal,
                                                           @RequestBody @Valid OrderRequestDTO orderRequestDTO) {
         return ResponseEntity

@@ -13,3 +13,18 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
     change-log: ./db/changelog/db.changelog-master.xml
+  mail:
+    port: ${MAIL_PORT}
+    default-encoding: utf-8
+    host: smtp.gmail.com
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable:
+              true

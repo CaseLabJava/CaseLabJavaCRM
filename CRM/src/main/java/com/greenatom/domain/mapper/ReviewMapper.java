@@ -14,7 +14,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {EmployeeMapper.class, ClientMapper.class})
 public interface ReviewMapper extends EntityMapper<ReviewResponseDTO, Review> {
 
-    @Mapping(target = "clientId", source = "r.client.id")
     @Mapping(target = "orderItemId", source = "r.orderItem.id")
     ReviewResponseDTO toDto(Review r);
 

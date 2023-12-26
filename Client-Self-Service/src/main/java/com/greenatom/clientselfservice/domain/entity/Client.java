@@ -1,7 +1,6 @@
 package com.greenatom.clientselfservice.domain.entity;
 
 import com.greenatom.clientselfservice.domain.enums.ClientSource;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1698154222764-1" author="79969">
+        <addColumn tableName="bank_account">
+            <column name="name_of_bank" type="varchar"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1698154222764-2" author="79969">
+        <insert tableName="bank_account">
+            <column name="bank_account_id" value="3"/>
+            <column name="balance" value="1488"/>
+            <column name="card_number" value="2280228013371337"/>
+            <column name="name_of_bank" value="Tinkfooff"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -22,6 +22,7 @@
         <module>Client-Self-Service</module>
         <module>Acquiring-Service</module>
         <module>Payment-Service</module>
+        <module>Client-Service</module>
     </modules>
 
     <properties>

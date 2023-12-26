@@ -1,6 +1,6 @@
-package com.greenatom.clientselfservice.contoller;
+package com.greenatom.clientselfservice.controller;
 
-import com.greenatom.clientselfservice.contoller.api.ReviewApi;
+import com.greenatom.clientselfservice.controller.api.ReviewApi;
 import com.greenatom.clientselfservice.domain.dto.review.ReviewRequestDTO;
 import com.greenatom.clientselfservice.domain.dto.review.ReviewResponseDTO;
 import com.greenatom.clientselfservice.domain.enums.ReviewStatus;

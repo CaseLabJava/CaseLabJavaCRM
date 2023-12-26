@@ -1,8 +1,7 @@
-package com.greenatom.clientselfservice.contoller;
+package com.greenatom.clientselfservice.controller;
 
 
 import com.greenatom.clientselfservice.domain.dto.client.ClientResponseDTO;
-import com.greenatom.clientselfservice.domain.entity.Client;
 import com.greenatom.clientselfservice.restTemplate.ClientRestTemplate;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;

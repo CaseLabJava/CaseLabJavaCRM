@@ -1,4 +1,4 @@
-package com.greenatom.clientselfservice.contoller;
+package com.greenatom.clientselfservice.controller;
 
 import com.greenatom.clientselfservice.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.clientselfservice.domain.dto.claim.ClaimResponseDTO;

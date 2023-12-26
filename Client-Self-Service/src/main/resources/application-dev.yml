@@ -1,6 +1,10 @@
 spring:
   application:
     name: client-self-service
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60000
 server:
   port: 8081
 

@@ -104,12 +104,12 @@ jobs:
           docker pull andreynachevny/client-self-service:latest || true 
           docker pull andreynachevny/acquiring-service:latest || true 
           docker pull andreynachevny/payment-service:latest || true
-          docker manifest inspect andreynachevny/discovery-service:latest && docker push --disable-content-trust=false andreynachevny/discovery-service:latest || true
-          docker manifest inspect andreynachevny/crm-service:latest && docker push --disable-content-trust=false andreynachevny/crm-service:latest || true
-          docker manifest inspect andreynachevny/client-service:latest && docker push --disable-content-trust=false andreynachevny/client-service:latest || true
-          docker manifest inspect andreynachevny/client-self-service:latest && docker push --disable-content-trust=false andreynachevny/client-self-service:latest || true
-          docker manifest inspect andreynachevny/acquiring-service:latest && docker push --disable-content-trust=false andreynachevny/acquiring-service:latest || true
-          docker manifest inspect andreynachevny/payment-service:latest && docker push --disable-content-trust=false andreynachevny/payment-service:latest || true
+          docker manifest inspect andreynachevny/discovery-service:latest && docker rmi --disable-content-trust=false andreynachevny/discovery-service:latest || true
+          docker manifest inspect andreynachevny/crm-service:latest && docker docker rmi --disable-content-trust=false andreynachevny/crm-service:latest || true
+          docker manifest inspect andreynachevny/client-service:latest && docker rmi --disable-content-trust=false andreynachevny/client-service:latest || true
+          docker manifest inspect andreynachevny/client-self-service:latest && docker docker rmi --disable-content-trust=false andreynachevny/client-self-service:latest || true
+          docker manifest inspect andreynachevny/acquiring-service:latest && docker rmi --disable-content-trust=false andreynachevny/acquiring-service:latest || true
+          docker manifest inspect andreynachevny/payment-service:latest && docker rmi --disable-content-trust=false andreynachevny/payment-service:latest || true
           docker logout
 
   build:

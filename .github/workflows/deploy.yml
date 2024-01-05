@@ -127,7 +127,7 @@ jobs:
           tags: andreynachevny/crm-service:latest
 
       - name: Build Client Service with Maven
-        run: mvn package -Dmaven.test.skip=true -P prod --file Client-service/pom.xml
+        run: mvn package -Dmaven.test.skip=true -P prod --file Client-Service/pom.xml
 
       - name: Push Docker Image of Client Service to Docker Hub
         uses: docker/build-push-action@v3

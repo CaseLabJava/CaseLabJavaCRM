@@ -81,7 +81,12 @@ jobs:
     name: Delete docker images from Docker Hub
     runs-on: ubuntu-latest
 
+
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Remove Docker images
         run: |
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }

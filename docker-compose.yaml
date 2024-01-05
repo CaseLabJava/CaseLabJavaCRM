@@ -3,11 +3,7 @@ version: "v2.21.0"
 services:
   discovery-service:
     image: andreynachevny/discovery-service:latest
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
+    restart: always
     networks:
       - case-lab
     ports:

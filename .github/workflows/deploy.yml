@@ -184,20 +184,20 @@ jobs:
         with:
           host: ${{ secrets.REMOTE_SERVER_HOST }}
           username: ${{ secrets.REMOTE_SERVER_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           script: |
             cd /home/${{ secrets.REMOTE_SERVER_USERNAME}}
             
-            docker container stop $(docker container ls -q --filter "name!=case-lab-db" --filter "name!=redis" --filter "name!=minio") || true 
-            docker rm $(docker ps -a -q --filter "name!=case-lab-db" --filter "name!=redis" --filter "name!=minio") || true
-            docker rmi $(docker images -q --filter "reference!=postgres:14-alpine" --filter "reference!=redis:7.2.3-alpine" --filter "reference!=minio/minio:latest") || true
+            docker container stop $(docker container ls -q --filter "name!=case-lab-db" --filter "name!=redis" --filter "name!=minio") 
+            docker rm $(docker ps -a -q --filter "name!=case-lab-db" --filter "name!=redis" --filter "name!=minio") 
+            docker rmi $(docker images -q --filter "reference!=postgres:14-alpine" --filter "reference!=redis:7.2.3-alpine" --filter "reference!=minio/minio:latest") 
             
-            docker pull andreynachevny/discovery-service:latest || true
-            docker pull andreynachevny/crm-service:latest || true
-            docker pull andreynachevny/client-service:latest || true
-            docker pull andreynachevny/client-self-service:latest || true
-            docker pull andreynachevny/acquiring-service:latest || true
-            docker pull andreynachevny/payment-service:latest || true
+            docker pull andreynachevny/discovery-service:latest 
+            docker pull andreynachevny/crm-service:latest 
+            docker pull andreynachevny/client-service:latest 
+            docker pull andreynachevny/client-self-service:latest 
+            docker pull andreynachevny/acquiring-service:latest 
+            docker pull andreynachevny/payment-service:latest 
             
-            docker compose up -d --no-recreate || true
+            docker compose up -d --no-recreate 
           

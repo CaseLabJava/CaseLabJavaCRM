@@ -77,9 +77,33 @@ jobs:
           target: "/home/${{ secrets.REMOTE_SERVER_USERNAME }}"
           overwrite: true
 
+  cleanup:
+    name: Delete docker images from Docker Hub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Remove Docker images
+        run: |
+          docker rmi andreynachevny/discovery-service:latest  || true
+          docker rmi andreynachevny/crm-service:latest || true
+          docker rmi andreynachevny/client-service:latest || true 
+          docker rmi andreynachevny/client-self-service:latest || true
+          docker rmi andreynachevny/acquiring-service:latest || true 
+          docker rmi andreynachevny/payment-service:latest || true 
+
+      - name: Logout from Docker Hub
+        run: docker logout
+
   build:
     runs-on: ubuntu-latest
     name: Build Images And Push To DockerHub
+    needs: [cleanup]
     steps:
 
       - name: Checkout Repository

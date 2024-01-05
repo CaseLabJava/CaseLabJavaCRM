@@ -82,23 +82,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Login to Docker Hub
-        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-
       - name: Remove Docker images
         run: |
-          docker rmi andreynachevny/discovery-service:latest  || true
-          docker rmi andreynachevny/crm-service:latest || true
-          docker rmi andreynachevny/client-service:latest || true 
-          docker rmi andreynachevny/client-self-service:latest || true
-          docker rmi andreynachevny/acquiring-service:latest || true 
-          docker rmi andreynachevny/payment-service:latest || true 
-
-      - name: Logout from Docker Hub
-        run: docker logout
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }
+          docker manifest inspect andreynachevny/discovery-service:latest && docker push --disable-content-trust=false andreynachevny/discovery-service:latest || true
+          docker manifest inspect andreynachevny/crm-service:latest && docker push --disable-content-trust=false andreynachevny/crm-service:latest || true
+          docker manifest inspect andreynachevny/client-service:latest && docker push --disable-content-trust=false andreynachevny/client-service:latest || true
+          docker manifest inspect andreynachevny/client-self-service:latest && docker push --disable-content-trust=false andreynachevny/client-self-service:latest || true
+          docker manifest inspect andreynachevny/acquiring-service:latest && docker push --disable-content-trust=false andreynachevny/acquiring-service:latest || true
+          docker manifest inspect andreynachevny/payment-service:latest && docker push --disable-content-trust=false andreynachevny/payment-service:latest || true
+          docker logout
 
   build:
     runs-on: ubuntu-latest

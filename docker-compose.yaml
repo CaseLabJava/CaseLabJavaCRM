@@ -111,7 +111,7 @@ services:
     image: andreynachevny/crm-service:latest
     depends_on:
       discovery-service:
-        condition: service_healthy
+        condition: service_started
       case-lab-db:
         condition: service_healthy
       minio:
@@ -143,7 +143,7 @@ services:
     image: andreynachevny/client-service:latest
     depends_on:
       discovery-service:
-        condition: service_healthy
+        condition: service_started
       case-lab-db:
         condition: service_healthy
     healthcheck:
@@ -165,7 +165,7 @@ services:
     image: andreynachevny/client-self-service:latest
     depends_on:
       discovery-service:
-        condition: service_healthy
+        condition: service_started
       client-service:
         condition: service_healthy
       redis:
@@ -189,7 +189,7 @@ services:
     image: andreynachevny/client-self-service:latest
     depends_on:
       discovery-service:
-        condition: service_healthy
+        condition: service_started
       case-lab-db:
         condition: service_healthy
     healthcheck:
@@ -216,7 +216,7 @@ services:
     image: andreynachevny/payment-service:latest
     depends_on:
       discovery-service:
-        condition: service_healthy
+        condition: service_started
       case-lab-db:
         condition: service_healthy
     healthcheck:

@@ -173,7 +173,7 @@ services:
       client-service:
         condition: service_healthy
       redis:
-        condition: service_healthy
+        condition: service_started
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
       interval: 30s
@@ -195,8 +195,6 @@ services:
       discovery-service:
         condition: service_healthy
       case-lab-db:
-        condition: service_healthy
-      kafka:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
@@ -224,8 +222,6 @@ services:
       discovery-service:
         condition: service_healthy
       case-lab-db:
-        condition: service_healthy
-      kafka:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8083/actuator/health" ]

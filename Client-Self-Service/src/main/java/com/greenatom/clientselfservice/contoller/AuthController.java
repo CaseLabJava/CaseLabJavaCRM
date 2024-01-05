@@ -12,14 +12,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("self_service/auth")
+@RequestMapping("self-service/auth")
 public class AuthController implements AuthApi {
 
     private final ClientRegistrationValidator clientRegistrationValidator;
@@ -36,20 +33,19 @@ public class AuthController implements AuthApi {
             return ResponseEntity.ok(jwt);
     }
 
-    @PostMapping("/signin")
+    @GetMapping("/signin")
     public ResponseEntity<JwtResponse> login(@RequestBody @Valid AuthDTO authDTO,
                                              BindingResult bindingResult) {
         CheckField.checkFieldException(bindingResult);
         JwtResponse jwt = authService.login(authDTO);
         return ResponseEntity.ok(jwt);
     }
-
-    @PostMapping("/access_token")
+    @GetMapping("/access-token")
     public  ResponseEntity<JwtResponse> getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest) {
         return ResponseEntity.ok(authService.getAccessToken(refreshJwtRequest.getRefreshToken()));
     }
 
-    @PostMapping("/refresh_token")
+    @GetMapping("/refresh-token")
     public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshJwtRequest refreshJwtRequest) {
         return ResponseEntity.ok(authService.refresh(refreshJwtRequest.getRefreshToken()));
     }

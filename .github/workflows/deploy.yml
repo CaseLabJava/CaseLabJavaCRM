@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master","develop" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master","develop" ]
 
 jobs:
   export_env:
@@ -14,12 +14,11 @@ jobs:
       - name: Connect with SSH and export
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 79.174.80.230
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          host: ${{ secrets.REMOTE_SERVER_HOST }}
+          username: ${{ secrets.REMOTE_SERVER_USERNAME }}
+          password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           script: |
             rm .env
-            export POSTGRES_DB=${{ secrets.POSTGRES_DB }}  
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }} 
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} 
             export REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} 
@@ -33,6 +32,12 @@ jobs:
             export JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} 
             export CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} 
             export CLIENT_ACCESS_TOKEN=${{ secrets.CLIENT_ACCESS_TOKEN }} 
+            export POSTGRES_IP=${{ secrets.POSTGRES_IP}}
+            export CRM_DB_NAME=${{ secrets.CRM_DB_NAME}}
+            export ACQUIRING_DB_NAME=${{ secrets.ACQUIRING_DB_NAME}}
+            export CLIENT_SERVICE_DB_NAME=${{ secrets.CLIENT_SERVICE_DB_NAME}}
+            export PAYMENT_DB_NAME=${{ secrets.PAYMENT_DB_NAME}}
+            export REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD}}
             
             echo JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} >> .env 
             echo CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} >> .env 
@@ -40,7 +45,6 @@ jobs:
             echo MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} >> .env 
             echo MAIL_PORT=${{ secrets.MAIL_PORT }} >> .env 
             echo MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} >> .env 
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env 
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env 
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env 
             echo ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} >> .env 
@@ -48,6 +52,12 @@ jobs:
             echo MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} >> .env 
             echo MINIO_SECRET=${{ secrets.MINIO_SECRET }} >> .env 
             echo MINIO_URL=${{ secrets.MINIO_URL }} >> .env 
+            echo POSTGRES_IP=${{ secrets.POSTGRES_IP}} >> .env
+            echo CRM_DB_NAME=${{ secrets.CRM_DB_NAME}} >> .env
+            echo ACQUIRING_DB_NAME=${{ secrets.ACQUIRING_DB_NAME}} >> .env
+            echo CLIENT_SERVICE_DB_NAME=${{ secrets.CLIENT_SERVICE_DB_NAME}} >> .env
+            echo PAYMENT_DB_NAME=${{ secrets.PAYMENT_DB_NAME}} >> .env 
+            echo REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD}} >> .env
             export $(cat .env | xargs) && env 
 
   push_compose:
@@ -58,51 +68,134 @@ jobs:
       - name: Copy docker-compose.yaml via SSH
         uses: appleboy/scp-action@master
         with:
-          host: 79.174.80.230
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          host: ${{ secrets.REMOTE_SERVER_HOST }}
+          username: ${{ secrets.REMOTE_SERVER_USERNAME }}
+          password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           port: 22
           source: "docker-compose.yaml"
-          target: "/home/${{ secrets.SSH_USER }}"
+          target: "/home/${{ secrets.REMOTE_SERVER_USERNAME }}"
           overwrite: true
-  
-  build_image:
+
+  build:
     runs-on: ubuntu-latest
-    name: Build app image
+    name: Build Images And Push To DockerHub
     steps:
-      - name: Checkout
+
+      - name: Checkout Repository
         uses: actions/checkout@v3
-      - name: Login to hub
+
+
+      - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set up Docker Buildx
+
+      - name: Set up Docker BuildX
         uses: docker/setup-buildx-action@v3
-      - name: Build and push
-        uses: docker/build-push-action@v5
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
         with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      # Discovery Service
+
+      - name: Build Discovery Service with Maven
+        run: mvn package -Dmaven.test.skip=true --file Discovery-Service/pom.xml
+
+      - name: Push Docker Image of Discovery service to Docker Hub
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Discovery-Service/Dockerfile
           push: true
-          tags: sladkkov/case-lab-java-crm:latest
+          tags: andreynachevny/discovery-service:latest
+
+      # CRM Service
+
+      - name: Build CRM Service with Maven
+        run: mvn package -Dmaven.test.skip=true -P prod --file CRM/pom.xml
+
+      - name: Push Docker Image of CRM service to Docker Hub
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          file: CRM/Dockerfile
+          tags: andreynachevny/crm-service:latest
+
+      - name: Build Client Service with Maven
+        run: mvn package -Dmaven.test.skip=true -P prod --file Client-service/pom.xml
+
+      - name: Push Docker Image of Client Service to Docker Hub
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          file: Client-Service/Dockerfile
+          tags: andreynachevny/client-service:latest
+
+      # Client Self Service
+
+      - name: Build Client Self Service with Maven
+        run: mvn package -Dmaven.test.skip=true -P prod --file Client-Self-Service/pom.xml
+
+      - name: Push Docker Image for Client Self service to Docker Hub
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          file: Client-Self-Service/Dockerfile
+          tags: andreynachevny/client-self-service:latest
+
+      - name: Build Acquiring Service with Maven
+        run: mvn package -Dmaven.test.skip=true --file Acquiring-Service/pom.xml
+
+      - name: Push Docker Image of Acquiring Service to Docker Hub
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          file: Acquiring-Service/Dockerfile
+          tags: andreynachevny/acquiring-service:latest
+
+      - name: Build Payment Service with Maven
+        run: mvn package -Dmaven.test.skip=true --file Payment-Service/pom.xml
+
+      - name: Push Docker Image of Payment Service to Docker Hub
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          file: Payment-Service/Dockerfile
+          tags: andreynachevny/payment-service:latest
+
 
   deploy:
     name: Deploy
-    needs: [ export_env ]
+    needs: [ export_env, build ]
     runs-on: ubuntu-latest
     steps:
       - name: Connect with SSH and Deploy
         uses: appleboy/ssh-action@v0.1.8
         with:
-          host: 79.174.80.230
-          username: ${{ secrets.SSH_USER }}
+          host: ${{ secrets.REMOTE_SERVER_HOST }}
+          username: ${{ secrets.REMOTE_SERVER_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd /home/user/project
-            git pull https://github.com/CaseLabJava/CaseLabJavaCRM.git develop
+            cd /home/${{ secrets.REMOTE_SERVER_USERNAME}}
+            docker pull andreynachevny/discovery-service:latest
+            docker pull andreynachevny/crm-service:latest
+            docker pull andreynachevny/client-service:latest
+            docker pull andreynachevny/client-self-service:latest
+            docker pull andreynachevny/acquiring-service:latest
+            docker pull andreynachevny/payment-service:latest
             
-            mvn -Dmaven.skip.test package -Prod
-            docker container stop $(docker container ls -q) 
-            docker rm $(docker ps -a -q) 
-            docker rmi $(docker images -q)
-            docker compose up -d
+            
+            docker container stop $(docker container ls -q --filter "name!=case-lab-db" --filter "name!=redis" --filter "name!=minio") 
+            docker rm $(docker ps -a -q --filter "name!=case-lab-db" --filter "name!=redis" --filter "name!=minio") 
+            docker rmi $(docker images -q --filter "reference!=postgres:14-alpine" --filter "reference!=redis:7.2.3-alpine" --filter "reference!=minio/minio:latest")
+            docker compose up -d --no-recreate
           

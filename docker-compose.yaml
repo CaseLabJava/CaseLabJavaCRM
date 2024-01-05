@@ -1,39 +1,74 @@
 version: "v2.21.0"
 
 services:
-#  case-lab-db:
-#    image: postgres:14-alpine
-#    container_name: case-lab-db
-#    ports:
-#      - "5432:5432"
-#    environment:
-#      POSTGRES_USER: ${POSTGRES_USER}
-#      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-#      POSTGRES_DB: ${POSTGRES_DB}
-#    restart: always
-#    networks:
-#      - case-lab
-#    healthcheck:
-#      test: [ "CMD", "pg_isready","-d","postgres","-U","postgres" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
-#    volumes:
-#      - /var/lib/postgresql/data
-#
-#  minio:
-#    image: minio/minio:latest
-#    command: server --console-address ":9090" /data/
-#    ports:
-#      - "9000:9000"
-#      - "9090:9090"
-#    environment:
-#      MINIO_ROOT_USER: ${MINIO_ACCESS}
-#      MINIO_ROOT_PASSWORD: ${MINIO_SECRET}
-#    volumes:
-#      - ~/minio/data:/data
-#    networks:
-#      case-lab:
+  discovery-service:
+    image: andreynachevny/discovery-service:latest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - case-lab
+    ports:
+      - 8761:8761
+
+  redis:
+    image: redis:7.2.3-alpine
+    ports:
+      - 6379:6379
+    restart: always
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_PORT: 6379
+      REDIS_DATABASE: 1
+    networks:
+      - case-lab
+    volumes:
+      - /var/lib/redis/data/etc/redis.conf:/usr/local/etc/redis/redis.conf
+
+  case-lab-db:
+    image: postgres:14-alpine
+    container_name: case-lab-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${CRM_DB_NAME}
+    restart: always
+    command: >
+      bash -c '
+        max_connections=300
+        psql -U ${POSTGRES_USER} -d ${ACQUIRING_DB_NAME} -c "ALTER SYSTEM SET max_connections TO $max_connections;"; 
+        psql -U ${POSTGRES_USER} -d ${CLIENT_SERVICE_DB_NAME} -c "CREATE DATABASE ${SERVICE1_DB} WITH OWNER = ${POSTGRES_USER} PASSWORD '\''${POSTGRES_PASSWORD}'\'';";
+        psql -U ${POSTGRES_USER} -d ${PAYMENT_DB_NAME} -c "CREATE DATABASE ${SERVICE2_DB} WITH OWNER = ${POSTGRES_USER} PASSWORD '\''${POSTGRES_PASSWORD}'\'';";
+        postgres -c "max_connections=$max_connections";
+        exec docker-entrypoint.sh postgres
+      '
+    networks:
+      - case-lab
+    healthcheck:
+      test: [ "CMD", "pg_isready","-d","postgres","-U","postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - /var/lib/postgresql/data
+
+  minio:
+    image: minio/minio:latest
+    command: server --console-address ":9090" /data/
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET}
+    volumes:
+      - ~/minio/data:/data
+    networks:
+      - case-lab
 
   zookeeper:
     image: zookeeper:3.7.0
@@ -76,8 +111,141 @@ services:
     depends_on:
       - kafka
 
+  crm-service:
+    image: andreynachevny/crm-service:latest
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      case-lab-db:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - case-lab
+    environment:
+      CRM_DB_NAME: ${CRM_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MINIO_ACCESS: ${MINIO_ACCESS}
+      MINIO_SECRET: ${MINIO_SECRET}
+      MINIO_URL: ${MINIO_URL}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      ACCESS_TOKEN: ${ACCESS_TOKEN}
+      REFRESH_TOKEN: ${REFRESH_TOKEN}
+      POSTGRES_IP: ${POSTGRES_IP}
+    ports:
+      - 8080:8080
+
+  client-service:
+    image: andreynachevny/client-service:latest
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      case-lab-db:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - case-lab
+    environment:
+      POSTGRES_IP: ${POSTGRES_IP}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD}
+      CLIENT_SERVICE_DB_NAME: ${CLIENT_SERVICE_DB_NAME}
+    ports:
+      - 8082:8082
+
+  client-self-service:
+    image: andreynachevny/client-self-service:latest
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      client-service:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - case-lab
+    environment:
+      CLIENT_ACCESS_TOKEN: ${CLIENT_ACCESS_TOKEN}
+      CLIENT_REFRESH_TOKEN: ${CLIENT_REFRESH_TOKEN}
+      JWT_TECHNICAL_USER: ${JWT_TECHNICAL_USER}
+      REDIS_HOST_NAME: redis
+    ports:
+      - 8081:8081
+
+  acquiring-service:
+    image: andreynachevny/client-self-service:latest
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      case-lab-db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - case-lab
+      - kafka-net
+    environment:
+      POSTGRES_IP: ${POSTGRES_IP}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      ACQUIRING_DB_NAME: ${ACQUIRING_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    ports:
+      - 8084:8084
+
+  payment-service:
+    image: andreynachevny/payment-service:latest
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+      case-lab-db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8083/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - case-lab
+      - kafka-net
+    environment:
+      POSTGRES_IP: ${POSTGRES_IP}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      PAYMENT_DB_NAME: ${PAYMENT_DB_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 8083:8083
 volumes:
   minio-storage:
+
 
 networks:
   case-lab:

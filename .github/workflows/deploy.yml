@@ -98,6 +98,12 @@ jobs:
 
       - name: Remove docker images
         run: |
+          docker pull andreynachevny/discovery-service:latest || true
+          docker pull andreynachevny/crm-service:latest || true 
+          docker pull andreynachevny/client-service:latest || true 
+          docker pull andreynachevny/client-self-service:latest || true 
+          docker pull andreynachevny/acquiring-service:latest || true 
+          docker pull andreynachevny/payment-service:latest || true
           docker manifest inspect andreynachevny/discovery-service:latest && docker push --disable-content-trust=false andreynachevny/discovery-service:latest || true
           docker manifest inspect andreynachevny/crm-service:latest && docker push --disable-content-trust=false andreynachevny/crm-service:latest || true
           docker manifest inspect andreynachevny/client-service:latest && docker push --disable-content-trust=false andreynachevny/client-service:latest || true

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("self_service/product")
+@RequestMapping("self-service/product")
 @RequiredArgsConstructor
 public class ProductController {
 

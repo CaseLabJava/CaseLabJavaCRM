@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
 @RestController
-@RequestMapping("self_service/claim")
+@RequestMapping("self-service/claim")
 @RequiredArgsConstructor
 public class ClaimController {
     private final RestTemplate restTemplate;

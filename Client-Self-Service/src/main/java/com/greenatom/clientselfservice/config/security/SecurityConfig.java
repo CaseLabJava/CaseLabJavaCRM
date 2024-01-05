@@ -42,9 +42,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/self_service/auth/signin",
-                                        "/self_service/auth/access_token",
-                                        "/self_service/auth/signup",
+                                .requestMatchers("/self-service/auth/signin",
+                                        "/self-service/auth/access-token",
+                                        "/self-service/auth/signup",
                                         "/actuator/health").permitAll()
                                 .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .anyRequest().authenticated()

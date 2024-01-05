@@ -3,6 +3,11 @@ version: "v2.21.0"
 services:
   discovery-service:
     image: andreynachevny/discovery-service:latest
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     restart: always
     networks:
       - case-lab
@@ -37,9 +42,9 @@ services:
     command: >
       bash -c '
         max_connections=300
-        psql -U ${POSTGRES_USER} -d ${ACQUIRING_DB_NAME} -c "ALTER SYSTEM SET max_connections TO $max_connections;"; 
-        psql -U ${POSTGRES_USER} -d ${CLIENT_SERVICE_DB_NAME} -c "CREATE DATABASE ${SERVICE1_DB} WITH OWNER = ${POSTGRES_USER} PASSWORD '\''${POSTGRES_PASSWORD}'\'';";
-        psql -U ${POSTGRES_USER} -d ${PAYMENT_DB_NAME} -c "CREATE DATABASE ${SERVICE2_DB} WITH OWNER = ${POSTGRES_USER} PASSWORD '\''${POSTGRES_PASSWORD}'\'';";
+        psql -U ${POSTGRES_USER} -d ${CRM_DB_NAME} -c "CREATE DATABASE ${ACQUIRING_DB_NAME} WITH OWNER = ${POSTGRES_USER} PASSWORD '\''${POSTGRES_PASSWORD}'\'';";
+        psql -U ${POSTGRES_USER} -d ${CRM_DB_NAME} -c "CREATE DATABASE ${CLIENT_SERVICE_DB_NAME} WITH OWNER = ${POSTGRES_USER} PASSWORD '\''${POSTGRES_PASSWORD}'\'';";
+        psql -U ${POSTGRES_USER} -d ${CRM_DB_NAME} -c "CREATE DATABASE ${PAYMENT_DB_NAME} WITH OWNER = ${POSTGRES_USER} PASSWORD '\''${POSTGRES_PASSWORD}'\'';";
         postgres -c "max_connections=$max_connections";
         exec docker-entrypoint.sh postgres
       '

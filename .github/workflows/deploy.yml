@@ -104,12 +104,12 @@ jobs:
           docker pull andreynachevny/client-self-service:latest || true 
           docker pull andreynachevny/acquiring-service:latest || true 
           docker pull andreynachevny/payment-service:latest || true
-          docker manifest inspect andreynachevny/discovery-service:latest && docker rmi  andreynachevny/discovery-service:latest || true
-          docker manifest inspect andreynachevny/crm-service:latest && docker docker rmi  andreynachevny/crm-service:latest || true
-          docker manifest inspect andreynachevny/client-service:latest && docker rmi  andreynachevny/client-service:latest || true
-          docker manifest inspect andreynachevny/client-self-service:latest && docker docker rmi  andreynachevny/client-self-service:latest || true
-          docker manifest inspect andreynachevny/acquiring-service:latest && docker rmi  andreynachevny/acquiring-service:latest || true
-          docker manifest inspect andreynachevny/payment-service:latest && docker rmi  andreynachevny/payment-service:latest || true
+          docker rmi  andreynachevny/discovery-service:latest || true
+          docker rmi  andreynachevny/crm-service:latest || true
+          docker rmi  andreynachevny/client-service:latest || true
+          docker rmi  andreynachevny/client-self-service:latest || true
+          docker rmi  andreynachevny/acquiring-service:latest || true
+          docker rmi  andreynachevny/payment-service:latest || true
           docker logout
 
   build:

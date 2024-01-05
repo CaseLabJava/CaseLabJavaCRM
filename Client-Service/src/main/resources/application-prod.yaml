@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_IP}:5432/client-service-dev
+    url: jdbc:postgresql://${POSTGRES_IP}:5432/${CLIENT_SERVICE_DB_NAME}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
@@ -9,4 +9,6 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://case-lab-java-discovery-service:8761
+      defaultZone: http://service-discovery:8761/eureka/
+server:
+  port: 8082

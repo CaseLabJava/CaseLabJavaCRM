@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://79.174.80.230:5432/
-    name: ${POSTGRES_DB}
+    url: jdbc:postgresql://${POSTGRES_IP}:5432/
+    name: ${CRM_DB_NAME}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
@@ -9,7 +9,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://discovery-service:8761
+      defaultZone: http://service-discovery:8761/eureka/
 minio:
   access-key: ${MINIO_ACCESS}
   secret-key: ${MINIO_SECRET}

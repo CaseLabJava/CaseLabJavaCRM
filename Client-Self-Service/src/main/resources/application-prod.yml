@@ -7,11 +7,12 @@ spring:
       time-to-live: 60000
 server:
   port: 8081
-
+redis_host_name: ${REDIS_HOST_NAME}
+redis_password: ${REDIS_PASSWORD}
 eureka:
   client:
     service-url:
-      defaultZone: http://case-lab-java-discovery-service:8761
+      defaultZone: http://discovery-service:8761/eureka/
 client_access_token: ${CLIENT_ACCESS_TOKEN}
 client_refresh_token: ${CLIENT_REFRESH_TOKEN}
 jwt_technical_user: ${JWT_TECHNICAL_USER}

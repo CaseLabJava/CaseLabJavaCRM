@@ -1,10 +1,10 @@
 server:
-  port: 8083
+  port: 8084
 spring:
   datasource:
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${ACQUIRING_DB_NAME}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_IP}:${POSTGRES_PORT}/${ACQUIRING_DB_NAME}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -28,3 +28,7 @@ spring:
           ssl:
             enable:
               true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/

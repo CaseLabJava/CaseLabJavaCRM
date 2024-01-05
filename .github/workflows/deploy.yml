@@ -189,9 +189,9 @@ jobs:
           script: |
             cd /home/${{ secrets.REMOTE_SERVER_USERNAME}}
             
-            docker container stop $(docker container ls -q --filter "name!=case-lab-db" --filter "name!=redis" --filter "name!=minio") 
-            docker rm $(docker ps -a -q --filter "name!=case-lab-db" --filter "name!=redis" --filter "name!=minio") 
-            docker rmi $(docker images -q --filter "reference!=postgres:14-alpine" --filter "reference!=redis:7.2.3-alpine" --filter "reference!=minio/minio:latest") 
+            docker container stop $(docker container ls --format '{{.Names}}' | grep -vE '^(case-lab-db|redis|minio)$')
+            docker ps -a --format '{{.Names}}' | grep -vE '^(case-lab-db|redis|minio)$' | xargs docker rm 
+            docker images --format '{{.Repository}}:{{.Tag}}' | grep -vE '^(postgres:14-alpine|redis:7.2.3-alpine|minio/minio:latest)$' | xargs docker rmi 
             
             docker pull andreynachevny/discovery-service:latest 
             docker pull andreynachevny/crm-service:latest 

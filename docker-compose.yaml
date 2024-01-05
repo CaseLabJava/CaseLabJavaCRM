@@ -11,6 +11,7 @@ services:
 
   redis:
     image: redis:7.2.3-alpine
+    container_name: redis
     ports:
       - 6379:6379
     restart: always
@@ -53,6 +54,7 @@ services:
       - /var/lib/postgresql/data
 
   minio:
+    container_name: minio
     image: minio/minio:latest
     command: server --console-address ":9090" /data/
     ports:

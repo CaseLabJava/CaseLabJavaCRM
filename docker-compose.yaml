@@ -46,7 +46,7 @@ services:
       - case-lab
     healthcheck:
       test: [ "CMD", "pg_isready","--dbname=$CRM_DB_NAME","--username=$POSTGRES_USER" ]
-      interval: 10s
+      interval: 20s
       timeout: 5s
       retries: 5
     volumes:

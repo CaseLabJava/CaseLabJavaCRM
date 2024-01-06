@@ -8,7 +8,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://service-discovery:8761/eureka/
+      defaultZone: http://discovery-service:8761/eureka/
 minio:
   access-key: ${MINIO_ACCESS}
   secret-key: ${MINIO_SECRET}

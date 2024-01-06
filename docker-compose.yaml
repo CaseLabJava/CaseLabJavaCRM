@@ -45,7 +45,7 @@ services:
     networks:
       - case-lab
     healthcheck:
-      test: [ "CMD", "pg_isready","-d","postgres","-U","postgres" ]
+      test: [ "CMD", "pg_isready","--dbname=$CRM_DB_NAME","--username=$POSTGRES_USER" ]
       interval: 10s
       timeout: 5s
       retries: 5

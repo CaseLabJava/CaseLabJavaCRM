@@ -4,7 +4,7 @@ services:
   discovery-service:
     image: andreynachevny/discovery-service:latest
     container_name: discovery-service
-    command: ["sh", "-c", "apk update && apk add curl"]
+    command: ["CMD", "apk update", "apk add curl"]
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
       interval: 30s

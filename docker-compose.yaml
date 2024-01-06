@@ -186,11 +186,12 @@ services:
       CLIENT_REFRESH_TOKEN: ${CLIENT_REFRESH_TOKEN}
       JWT_TECHNICAL_USER: ${JWT_TECHNICAL_USER}
       REDIS_HOST_NAME: redis
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
       - 8081:8081
 
   acquiring-service:
-    image: andreynachevny/client-self-service:latest
+    image: andreynachevny/acquiring-service:latest
     container_name: acquiring-service
     depends_on:
       discovery-service:

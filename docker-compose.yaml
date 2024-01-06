@@ -4,6 +4,7 @@ services:
   discovery-service:
     image: andreynachevny/discovery-service:latest
     container_name: discovery-service
+    command: ["sh", "-c", "apk update && apk add curl"]
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
       interval: 30s
@@ -33,6 +34,7 @@ services:
   case-lab-db:
     image: postgres:14-alpine
     container_name: case-lab-db
+    command: ["sh", "-c", "apk update && apk add curl"]
     ports:
       - "5432:5432"
     environment:
@@ -110,16 +112,17 @@ services:
   crm-service:
     image: andreynachevny/crm-service:latest
     container_name: crm-service
+    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
-        condition: service_started
+        condition: service_healthy
       case-lab-db:
         condition: service_healthy
       minio:
         condition: service_started
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
-      interval: 30s
+      interval: 20s
       timeout: 5s
       retries: 5
     networks:
@@ -143,14 +146,15 @@ services:
   client-service:
     image: andreynachevny/client-service:latest
     container_name: client-service
+    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
-        condition: service_started
+        condition: service_healthy
       case-lab-db:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
-      interval: 30s
+      interval: 20s
       timeout: 5s
       retries: 5
     networks:
@@ -166,16 +170,17 @@ services:
   client-self-service:
     image: andreynachevny/client-self-service:latest
     container_name: client-self-service
+    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
-        condition: service_started
+        condition: service_healthy
       client-service:
         condition: service_healthy
       redis:
         condition: service_started
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
-      interval: 30s
+      interval: 20s
       timeout: 5s
       retries: 5
     networks:
@@ -191,14 +196,15 @@ services:
   acquiring-service:
     image: andreynachevny/client-self-service:latest
     container_name: acquiring-service
+    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
-        condition: service_started
+        condition: service_healthy
       case-lab-db:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
-      interval: 30s
+      interval: 20s
       timeout: 5s
       retries: 5
     networks:
@@ -206,7 +212,6 @@ services:
       - kafka-net
     environment:
       POSTGRES_IP: ${POSTGRES_IP}
-      POSTGRES_PORT: ${POSTGRES_PORT}
       ACQUIRING_DB_NAME: ${ACQUIRING_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -219,14 +224,15 @@ services:
   payment-service:
     image: andreynachevny/payment-service:latest
     container_name: payment-service
+    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
-        condition: service_started
+        condition: service_healthy
       case-lab-db:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8083/actuator/health" ]
-      interval: 30s
+      interval: 20s
       timeout: 5s
       retries: 5
     networks:
@@ -234,7 +240,6 @@ services:
       - kafka-net
     environment:
       POSTGRES_IP: ${POSTGRES_IP}
-      POSTGRES_PORT: ${POSTGRES_PORT}
       PAYMENT_DB_NAME: ${PAYMENT_DB_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

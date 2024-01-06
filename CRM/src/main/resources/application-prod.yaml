@@ -1,7 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_IP}:5432/
-    name: ${CRM_DB_NAME}
+    url: jdbc:postgresql://${POSTGRES_IP}:5432/${CRM_DB_NAME}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:

@@ -4,10 +4,9 @@ services:
   discovery-service:
     image: andreynachevny/discovery-service:latest
     container_name: discovery-service
-    command: ["CMD", "apk update", "apk add curl"]
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
-      interval: 30s
+      interval: 10s
       timeout: 5s
       retries: 3
     restart: always
@@ -34,7 +33,6 @@ services:
   case-lab-db:
     image: postgres:14-alpine
     container_name: case-lab-db
-    command: ["sh", "-c", "apk update && apk add curl"]
     ports:
       - "5432:5432"
     environment:
@@ -42,6 +40,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${CRM_DB_NAME}
       PGDATA: "/var/lib/postgresql/data"
+      POSTGRES_INITDB_ARGS: '--data-checksums --username=${POSTGRES_USER} --pwfile=<(echo "${POSTGRES_PASSWORD}")'
     restart: always
     networks:
       - case-lab
@@ -112,7 +111,6 @@ services:
   crm-service:
     image: andreynachevny/crm-service:latest
     container_name: crm-service
-    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
         condition: service_healthy
@@ -146,7 +144,6 @@ services:
   client-service:
     image: andreynachevny/client-service:latest
     container_name: client-service
-    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
         condition: service_healthy
@@ -170,7 +167,6 @@ services:
   client-self-service:
     image: andreynachevny/client-self-service:latest
     container_name: client-self-service
-    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
         condition: service_healthy
@@ -196,7 +192,6 @@ services:
   acquiring-service:
     image: andreynachevny/client-self-service:latest
     container_name: acquiring-service
-    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
         condition: service_healthy
@@ -224,7 +219,6 @@ services:
   payment-service:
     image: andreynachevny/payment-service:latest
     container_name: payment-service
-    command: ["sh", "-c", "apk update && apk add curl"]
     depends_on:
       discovery-service:
         condition: service_healthy

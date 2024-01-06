@@ -6,7 +6,7 @@ services:
     container_name: discovery-service
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
-      interval: 10s
+      interval: 30s
       timeout: 5s
       retries: 3
     restart: always

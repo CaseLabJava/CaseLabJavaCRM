@@ -2,7 +2,7 @@ server:
   port: 8083
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_IP}:${POSTGRES_PORT}/${PAYMENT_DB_NAME}
+    url: jdbc:postgresql://${POSTGRES_IP}:5432/${PAYMENT_DB_NAME}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:

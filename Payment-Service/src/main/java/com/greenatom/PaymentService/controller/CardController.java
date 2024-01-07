@@ -1,6 +1,7 @@
 package com.greenatom.PaymentService.controller;
 
 
+import com.greenatom.PaymentService.controller.api.CardApi;
 import com.greenatom.PaymentService.domain.dto.CardRequestDto;
 import com.greenatom.PaymentService.service.CardService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/cards")
 @RestController
 @RequiredArgsConstructor
-public class CardController {
+public class CardController implements CardApi {
 
     private final CardService cardService;
 

@@ -1,7 +1,7 @@
-package com.greenatom.paymentservice.service;
+package com.greenatom.PaymentService.service;
 
 
-import com.greenatom.paymentservice.domain.dto.PaymentResponseDto;
+import com.greenatom.PaymentService.domain.dto.PaymentResponseDto;
 
 public interface PaymentService {
 

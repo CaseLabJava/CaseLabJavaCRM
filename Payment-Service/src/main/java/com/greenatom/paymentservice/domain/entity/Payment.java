@@ -1,8 +1,10 @@
-package com.greenatom.paymentservice.domain.entity;
+package com.greenatom.PaymentService.domain.entity;
 
-import com.greenatom.paymentservice.domain.enums.PaymentStatus;
+
+import com.greenatom.PaymentService.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.time.Instant;
 

@@ -1,4 +1,4 @@
-package com.greenatom.paymentservice.exception;
+package com.greenatom.PaymentService.exception;
 
 import lombok.Getter;
 

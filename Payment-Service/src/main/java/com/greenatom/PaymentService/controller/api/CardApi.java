@@ -1,6 +1,6 @@
-package com.greenatom.paymentservice.controller.api;
+package com.greenatom.PaymentService.controller.api;
 
-import com.greenatom.paymentservice.domain.dto.CardRequestDto;
+import com.greenatom.PaymentService.domain.dto.CardRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

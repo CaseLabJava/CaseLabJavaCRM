@@ -1,6 +1,7 @@
-package com.greenatom.paymentservice.controller;
+package com.greenatom.PaymentService.controller;
 
-import com.greenatom.paymentservice.service.PaymentService;
+
+import com.greenatom.PaymentService.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

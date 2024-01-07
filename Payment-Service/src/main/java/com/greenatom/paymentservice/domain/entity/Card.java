@@ -1,4 +1,4 @@
-package com.greenatom.paymentservice.domain.entity;
+package com.greenatom.PaymentService.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

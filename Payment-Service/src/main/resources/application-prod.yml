@@ -1,8 +1,6 @@
 server:
   port: 8083
 spring:
-  profiles:
-    active: @profileActive@
   datasource:
     url: jdbc:postgresql://${POSTGRES_IP}:5432/${PAYMENT_DB_NAME}
     username: ${POSTGRES_USER}
@@ -26,4 +24,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://discovery-service:8761/eureka/

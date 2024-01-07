@@ -28,6 +28,8 @@ spring:
           ssl:
             enable:
               true
+  application:
+    name: acquiring-service
 eureka:
   client:
     service-url:

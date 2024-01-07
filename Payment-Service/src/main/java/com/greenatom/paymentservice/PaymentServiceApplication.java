@@ -1,4 +1,4 @@
-package com.greenatom.paymentservice;
+package com.greenatom.PaymentService;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;

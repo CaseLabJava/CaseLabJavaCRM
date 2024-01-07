@@ -5,9 +5,13 @@ spring:
     type: redis
     redis:
       time-to-live: 60000
+  data:
+    redis:
+      host: redis
+      password: ${REDIS_PASSWORD}
 server:
   port: 8081
-redis_host_name: 5.35.83.19
+redis_host_name: redis
 redis_password: ${REDIS_PASSWORD}
 eureka:
   client:

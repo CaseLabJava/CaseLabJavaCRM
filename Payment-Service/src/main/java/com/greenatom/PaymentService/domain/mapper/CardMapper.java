@@ -1,8 +1,9 @@
-package com.greenatom.paymentservice.domain.mapper;
+package com.greenatom.PaymentService.domain.mapper;
 
-import com.greenatom.paymentservice.domain.dto.CardRequestDto;
-import com.greenatom.paymentservice.domain.dto.CardResponseDto;
-import com.greenatom.paymentservice.domain.entity.Card;
+
+import com.greenatom.PaymentService.domain.dto.CardRequestDto;
+import com.greenatom.PaymentService.domain.dto.CardResponseDto;
+import com.greenatom.PaymentService.domain.entity.Card;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = CardMapper.class)

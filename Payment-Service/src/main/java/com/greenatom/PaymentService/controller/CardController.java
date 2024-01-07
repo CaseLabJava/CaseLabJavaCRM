@@ -1,7 +1,8 @@
-package com.greenatom.paymentservice.controller;
+package com.greenatom.PaymentService.controller;
 
-import com.greenatom.paymentservice.domain.dto.CardRequestDto;
-import com.greenatom.paymentservice.service.CardService;
+
+import com.greenatom.PaymentService.domain.dto.CardRequestDto;
+import com.greenatom.PaymentService.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

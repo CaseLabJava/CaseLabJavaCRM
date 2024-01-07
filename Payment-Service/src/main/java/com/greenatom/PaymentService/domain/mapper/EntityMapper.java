@@ -1,11 +1,10 @@
-package com.greenatom.paymentservice.domain.mapper;
+package com.greenatom.PaymentService.domain.mapper;
 
-import com.greenatom.paymentservice.domain.entity.Card;
-import com.greenatom.paymentservice.domain.entity.Payment;
-import com.greenatom.paymentservice.domain.enums.PaymentStatus;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import java.time.Instant;
 import java.util.List;
 
 /**

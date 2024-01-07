@@ -1,13 +1,14 @@
-package com.greenatom.paymentservice.service.impl;
+package com.greenatom.PaymentService.service.impl;
 
-import com.greenatom.paymentservice.domain.dto.PaymentResponseDto;
-import com.greenatom.paymentservice.domain.entity.Card;
-import com.greenatom.paymentservice.domain.entity.Payment;
-import com.greenatom.paymentservice.domain.mapper.PaymentMapper;
-import com.greenatom.paymentservice.exception.PaymentException;
-import com.greenatom.paymentservice.repository.CardRepository;
-import com.greenatom.paymentservice.repository.PaymentRepository;
-import com.greenatom.paymentservice.service.PaymentService;
+
+import com.greenatom.PaymentService.domain.dto.PaymentResponseDto;
+import com.greenatom.PaymentService.domain.entity.Card;
+import com.greenatom.PaymentService.domain.entity.Payment;
+import com.greenatom.PaymentService.domain.mapper.PaymentMapper;
+import com.greenatom.PaymentService.exception.PaymentException;
+import com.greenatom.PaymentService.repository.CardRepository;
+import com.greenatom.PaymentService.repository.PaymentRepository;
+import com.greenatom.PaymentService.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

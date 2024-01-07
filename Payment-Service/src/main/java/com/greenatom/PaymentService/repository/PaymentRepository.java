@@ -1,13 +1,12 @@
-package com.greenatom.paymentservice.repository;
+package com.greenatom.PaymentService.repository;
 
-import com.greenatom.paymentservice.domain.entity.Payment;
-import com.greenatom.paymentservice.domain.enums.PaymentStatus;
+
+import com.greenatom.PaymentService.domain.entity.Payment;
+import com.greenatom.PaymentService.domain.enums.PaymentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.Optional;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Modifying

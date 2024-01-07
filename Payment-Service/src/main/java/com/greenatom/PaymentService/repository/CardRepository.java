@@ -1,6 +1,7 @@
-package com.greenatom.paymentservice.repository;
+package com.greenatom.PaymentService.repository;
 
-import com.greenatom.paymentservice.domain.entity.Card;
+
+import com.greenatom.PaymentService.domain.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

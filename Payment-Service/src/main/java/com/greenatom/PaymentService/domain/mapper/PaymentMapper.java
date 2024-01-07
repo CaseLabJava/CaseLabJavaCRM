@@ -1,11 +1,11 @@
-package com.greenatom.paymentservice.domain.mapper;
+package com.greenatom.PaymentService.domain.mapper;
 
 
-import com.greenatom.paymentservice.domain.dto.PaymentRequestDto;
-import com.greenatom.paymentservice.domain.dto.PaymentResponseDto;
-import com.greenatom.paymentservice.domain.entity.Card;
-import com.greenatom.paymentservice.domain.entity.Payment;
-import com.greenatom.paymentservice.domain.enums.PaymentStatus;
+import com.greenatom.PaymentService.domain.dto.PaymentRequestDto;
+import com.greenatom.PaymentService.domain.dto.PaymentResponseDto;
+import com.greenatom.PaymentService.domain.entity.Card;
+import com.greenatom.PaymentService.domain.entity.Payment;
+import com.greenatom.PaymentService.domain.enums.PaymentStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

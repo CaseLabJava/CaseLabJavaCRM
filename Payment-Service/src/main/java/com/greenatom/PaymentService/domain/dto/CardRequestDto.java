@@ -1,4 +1,4 @@
-package com.greenatom.paymentservice.domain.dto;
+package com.greenatom.PaymentService.domain.dto;
 
 import lombok.Data;
 

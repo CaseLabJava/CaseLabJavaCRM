@@ -1,7 +1,7 @@
-package com.greenatom.paymentservice.config.kafka;
+package com.greenatom.PaymentService.config.kafka;
 
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.greenatom.paymentservice.domain.dto.PaymentResponseDto;
+import com.greenatom.PaymentService.domain.dto.PaymentResponseDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;

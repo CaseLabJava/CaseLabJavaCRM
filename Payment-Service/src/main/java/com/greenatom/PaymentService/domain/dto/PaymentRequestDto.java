@@ -1,6 +1,7 @@
-package com.greenatom.paymentservice.domain.dto;
+package com.greenatom.PaymentService.domain.dto;
 
-import com.greenatom.paymentservice.domain.enums.PaymentStatus;
+
+import com.greenatom.PaymentService.domain.enums.PaymentStatus;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

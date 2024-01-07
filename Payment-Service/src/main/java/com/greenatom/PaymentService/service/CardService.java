@@ -1,6 +1,7 @@
-package com.greenatom.paymentservice.service;
+package com.greenatom.PaymentService.service;
 
-import com.greenatom.paymentservice.domain.dto.CardRequestDto;
+
+import com.greenatom.PaymentService.domain.dto.CardRequestDto;
 
 public interface CardService {
     void createCard(CardRequestDto cardRequestDto);

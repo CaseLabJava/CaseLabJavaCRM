@@ -1,10 +1,10 @@
-package com.greenatom.paymentservice.service.impl;
+package com.greenatom.PaymentService.service.impl;
 
-import com.greenatom.paymentservice.domain.dto.CardRequestDto;
-import com.greenatom.paymentservice.domain.entity.Card;
-import com.greenatom.paymentservice.domain.mapper.CardMapper;
-import com.greenatom.paymentservice.repository.CardRepository;
-import com.greenatom.paymentservice.service.CardService;
+import com.greenatom.PaymentService.domain.dto.CardRequestDto;
+import com.greenatom.PaymentService.domain.entity.Card;
+import com.greenatom.PaymentService.domain.mapper.CardMapper;
+import com.greenatom.PaymentService.repository.CardRepository;
+import com.greenatom.PaymentService.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

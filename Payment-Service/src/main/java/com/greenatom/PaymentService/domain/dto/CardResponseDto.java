@@ -1,4 +1,4 @@
-package com.greenatom.paymentservice.domain.dto;
+package com.greenatom.PaymentService.domain.dto;
 
 import lombok.Data;
 
@@ -13,6 +13,6 @@ public class CardResponseDto {
     private String cardholder="cardholder";
     private Instant expiredDate;
     private String cvv;
-    private List<PaymentResponseDto> payments;
+    private List<com.greenatom.PaymentService.domain.dto.PaymentResponseDto> payments;
 
 }

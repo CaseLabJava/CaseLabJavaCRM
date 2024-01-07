@@ -1,6 +1,7 @@
 package com.greenatom.PaymentService.controller;
 
 
+import com.greenatom.PaymentService.controller.api.PaymentApi;
 import com.greenatom.PaymentService.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/payments")
 @RestController
 @RequiredArgsConstructor
-public class PaymentController {
+public class PaymentController implements PaymentApi {
 
     private final PaymentService paymentService;
 

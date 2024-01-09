@@ -29,8 +29,6 @@ services:
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       REDIS_PORT: 6379
-      REDIS_DATABASE: 1
-      REDIS_USERNAME: ${REDIS_USERNAME}
     networks:
       - case-lab
     volumes:

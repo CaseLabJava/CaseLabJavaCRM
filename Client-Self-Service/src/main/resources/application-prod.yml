@@ -1,18 +1,18 @@
 spring:
   application:
     name: client-self-service
-  cache:
-    type: redis
-    redis:
-      time-to-live: 60000
   data:
     redis:
       host: redis
       password: ${REDIS_PASSWORD}
+      port: 6379
+      database: 0
+      username: ${REDIS_USERNAME}
 server:
   port: 8081
 redis_host_name: redis
 redis_password: ${REDIS_PASSWORD}
+redis_username: ${REDIS_USERNAME}
 eureka:
   client:
     service-url:

@@ -52,9 +52,9 @@ services:
       - case-lab
     healthcheck:
       test: [ "CMD", "pg_isready","--dbname=$CRM_DB_NAME","--username=$POSTGRES_USER" ]
-      interval: 20s
+      interval: 30s
       timeout: 5s
-      retries: 5
+      retries: 7
     volumes:
       - /var/lib/postgresql/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
 

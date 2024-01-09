@@ -39,6 +39,7 @@ jobs:
             export CLIENT_SERVICE_DB_NAME=${{ secrets.CLIENT_SERVICE_DB_NAME}}
             export PAYMENT_DB_NAME=${{ secrets.PAYMENT_DB_NAME}}
             export REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD}}
+            export REDIS_USERNAME=${{ secrets.REDIS_USERNAME}}
             
             echo JWT_TECHNICAL_USER=${{ secrets.JWT_TECHNICAL_USER }} >> .env 
             echo CLIENT_REFRESH_TOKEN=${{ secrets.CLIENT_REFRESH_TOKEN }} >> .env 
@@ -59,6 +60,7 @@ jobs:
             echo CLIENT_SERVICE_DB_NAME=${{ secrets.CLIENT_SERVICE_DB_NAME}} >> .env
             echo PAYMENT_DB_NAME=${{ secrets.PAYMENT_DB_NAME}} >> .env 
             echo REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD}} >> .env
+            echo REDIS_USERNAME=${{ secrets.REDIS_USERNAME}} >> .env
             export $(cat .env | xargs) && env 
 
   push_compose:

@@ -3,10 +3,9 @@ spring:
     name: client-self-service
   data:
     redis:
-      host: redis
+      host: 5.35.83.19
       password: ${REDIS_PASSWORD}
       port: 6379
-      database: 0
       username: ${REDIS_USERNAME}
 server:
   port: 8081

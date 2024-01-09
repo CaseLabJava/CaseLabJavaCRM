@@ -18,6 +18,11 @@ services:
   redis:
     image: redis:7.2.3-alpine
     container_name: redis
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     ports:
       - 6379:6379
     restart: always
@@ -25,6 +30,7 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       REDIS_PORT: 6379
       REDIS_DATABASE: 1
+      REDIS_USERNAME: ${REDIS_USERNAME}
     networks:
       - case-lab
     volumes:
@@ -173,7 +179,7 @@ services:
       client-service:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
       interval: 20s
@@ -182,6 +188,7 @@ services:
     networks:
       - case-lab
     environment:
+      REDIS_USERNAME: ${REDIS_USERNAME}
       CLIENT_ACCESS_TOKEN: ${CLIENT_ACCESS_TOKEN}
       CLIENT_REFRESH_TOKEN: ${CLIENT_REFRESH_TOKEN}
       JWT_TECHNICAL_USER: ${JWT_TECHNICAL_USER}

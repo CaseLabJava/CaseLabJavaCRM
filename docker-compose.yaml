@@ -26,7 +26,7 @@ services:
     ports:
       - 6379:6379
     restart: always
-    command: /bin/sh -c "ACL SETUSER alan on allkeys +@string +@set -SADD >password"
+    command: "ACL SETUSER alan on allkeys +@string +@set -SADD >password"
     networks:
       - case-lab
     volumes:

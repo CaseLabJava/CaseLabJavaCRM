@@ -26,7 +26,6 @@ services:
     ports:
       - 6379:6379
     restart: always
-    command: redis-cli ACL SETUSER alan on allkeys +@string +@set -SADD >password
     networks:
       - case-lab
     volumes:

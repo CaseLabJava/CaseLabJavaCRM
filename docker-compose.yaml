@@ -26,9 +26,7 @@ services:
     ports:
       - 6379:6379
     restart: always
-    environment:
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      REDIS_PORT: 6379
+    command: /bin/sh -c "redis-server --appendonly yes --requirepass $$REDIS_PASSWORD"
     networks:
       - case-lab
     volumes:

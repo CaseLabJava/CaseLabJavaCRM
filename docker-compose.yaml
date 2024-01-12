@@ -26,6 +26,8 @@ services:
     ports:
       - 6379:6379
     restart: always
+    environment:
+      REDIS_ARGS: "--requirepass password --user tom on >password ~* allcommands --user default off nopass nocommands"
     networks:
       - case-lab
     volumes:

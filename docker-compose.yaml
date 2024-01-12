@@ -31,6 +31,8 @@ services:
       REDIS_PORT: 6379
     networks:
       - case-lab
+    volumes:
+      - /var/lib/redis/data/etc/redis.conf:/usr/local/etc/redis/redis.conf
 
   case-lab-db:
     image: postgres:14-alpine

@@ -1,11 +1,9 @@
 spring:
   application:
     name: client-self-service
-  data:
+  cache:
     redis:
-      host: redis
-      password: ${REDIS_PASSWORD}
-      port: 6379
+      time-to-live: 60000
 server:
   port: 8081
 redis_host_name: redis

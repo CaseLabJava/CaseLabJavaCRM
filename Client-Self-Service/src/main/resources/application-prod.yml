@@ -7,7 +7,7 @@ spring:
 server:
   port: 8081
 redis_host_name: redis
-redis_password: test
+redis_password: ${REDIS_PASSWORD}
 redis_username: ${REDIS_USERNAME}
 eureka:
   client:

@@ -20,7 +20,7 @@ services:
     container_name: redis
     healthcheck:
       test: ["CMD-SHELL", "AUTH \"$REDIS_PASSWORD\"", "redis-cli ping | grep PONG" ]
-      interval: 10s
+      interval: 5s
       timeout: 3s
       retries: 5
     ports:

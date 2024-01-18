@@ -19,10 +19,12 @@ services:
     image: redis:7.2.3-alpine
     container_name: redis
     healthcheck:
-      test: ["CMD-SHELL", "AUTH \"$REDIS_PASSWORD\"", "redis-cli ping | grep PONG" ]
+      test: ["CMD-SHELL", "redis-cli -a $REDIS_PASSWORD ping | grep PONG" ]
       interval: 5s
       timeout: 3s
       retries: 5
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
       - 6379:6379
     restart: always

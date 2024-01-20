@@ -33,19 +33,19 @@ public class AuthController implements AuthApi {
             return ResponseEntity.ok(jwt);
     }
 
-    @GetMapping("/signin")
+    @PostMapping("/signin")
     public ResponseEntity<JwtResponse> login(@RequestBody @Valid AuthDTO authDTO,
                                              BindingResult bindingResult) {
         CheckField.checkFieldException(bindingResult);
         JwtResponse jwt = authService.login(authDTO);
         return ResponseEntity.ok(jwt);
     }
-    @GetMapping("/access-token")
+    @PostMapping("/access-token")
     public  ResponseEntity<JwtResponse> getAccessToken(@RequestBody RefreshJwtRequest refreshJwtRequest) {
         return ResponseEntity.ok(authService.getAccessToken(refreshJwtRequest.getRefreshToken()));
     }
 
-    @GetMapping("/refresh-token")
+    @PostMapping("/refresh-token")
     public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshJwtRequest refreshJwtRequest) {
         return ResponseEntity.ok(authService.refresh(refreshJwtRequest.getRefreshToken()));
     }

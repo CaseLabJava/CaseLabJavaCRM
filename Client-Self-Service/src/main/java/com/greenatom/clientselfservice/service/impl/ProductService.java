@@ -50,7 +50,7 @@ public class ProductService {
     }
 
     private String getUrl (String action){
-        return "http://CaseLabJavaCrm/api/products" + action;
+        return "http://Crm-Service/api/products" + action;
     }
 
 }

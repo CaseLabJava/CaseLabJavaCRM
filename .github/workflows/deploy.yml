@@ -53,8 +53,14 @@ jobs:
             echo MAIL_USERNAME=${{ secrets.MAIL_USERNAME }} >> .env 
             echo MAIL_PORT=${{ secrets.MAIL_PORT }} >> .env 
             echo MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }} >> .env 
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env 
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env 
+            echo CRM_POSTGRES_USER=${{ secrets.CRM_POSTGRES_USER }} >> .env 
+            echo CRM_POSTGRES_PASSWORD=${{ secrets.CRM_POSTGRES_PASSWORD }} >> .env 
+            echo CLIENT_POSTGRES_USER=${{ secrets.CLIENT_POSTGRES_USER }} >> .env
+            echo CLIENT_POSTGRES_PASSWORD=${{ secrets.CLIENT_POSTGRES_PASSWORD }} >> .env 
+            echo PAYMENT_POSTGRES_USER=${{ secrets.PAYMENT_POSTGRES_USER }} >> .env
+            echo PAYMENT_POSTGRES_PASSWORD=${{ secrets.PAYMENT_POSTGRES_PASSWORD }} >> .env
+            echo ACQUIRING_POSTGRES_USER=${{ secrets.ACQUIRING_POSTGRES_USER }} >> .env
+            echo ACQUIRING_POSTGRES_PASSWORD=${{ secrets.ACQUIRING_POSTGRES_PASSWORD }} >> .env
             echo ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} >> .env 
             echo REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} >> .env 
             echo MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} >> .env 

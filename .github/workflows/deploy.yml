@@ -20,8 +20,14 @@ jobs:
           script: |
             cd /home/${{ secrets.REMOTE_SERVER_USERNAME}}
             rm .env
-            export POSTGRES_USER=${{ secrets.POSTGRES_USER }} 
-            export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} 
+            export CRM_POSTGRES_USER=${{ secrets.CRM_POSTGRES_USER }} 
+            export CRM_POSTGRES_PASSWORD=${{ secrets.CRM_POSTGRES_PASSWORD }} 
+            export CLIENT_POSTGRES_USER=${{ secrets.CLIENT_POSTGRES_USER }} 
+            export CLIENT_POSTGRES_PASSWORD=${{ secrets.CLIENT_POSTGRES_PASSWORD }} 
+            export PAYMENT_POSTGRES_USER=${{ secrets.PAYMENT_POSTGRES_USER }}
+            export PAYMENT_POSTGRES_PASSWORD=${{ secrets.PAYMENT_POSTGRES_PASSWORD }}
+            export ACQUIRING_POSTGRES_USER=${{ secrets.ACQUIRING_POSTGRES_USER }}
+            export ACQUIRING_POSTGRES_PASSWORD=${{ secrets.ACQUIRING_POSTGRES_PASSWORD }}
             export REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }} 
             export ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }} 
             export MINIO_ACCESS=${{ secrets.MINIO_ACCESS }} 

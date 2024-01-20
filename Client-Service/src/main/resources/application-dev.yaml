@@ -3,9 +3,9 @@ spring:
     name: Client-Service
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_IP}:5432/client-service-dev
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_IP}:5432/${CLIENT_SERVICE_DB_NAME}
+    username: ${CLIENT_POSTGRES_USER}
+    password: ${CLIENT_POSTGRES_PASSWORD}
   jpa:
     show-sql: true
     hibernate:

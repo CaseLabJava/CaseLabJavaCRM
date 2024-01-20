@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_IP}:5432/${CRM_DB_NAME}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: ${CRM_POSTGRES_USER}
+    password: ${CRM_POSTGRES_PASSWORD}
   jpa:
     show-sql: true
 eureka:

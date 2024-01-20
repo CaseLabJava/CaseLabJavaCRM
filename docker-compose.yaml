@@ -40,16 +40,16 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${CRM_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${CRM_POSTGRES_PASSWORD}
       POSTGRES_DB: ${CRM_DB_NAME}
       PGDATA: "/var/lib/postgresql/data"
-      POSTGRES_INITDB_ARGS: '--data-checksums --username=${POSTGRES_USER} --pwfile=<(echo "${POSTGRES_PASSWORD}")'
+      POSTGRES_INITDB_ARGS: '--data-checksums --username=${CRM_POSTGRES_USER} --pwfile=<(echo "${CRM_POSTGRES_PASSWORD}")'
     restart: always
     networks:
       - case-lab
     healthcheck:
-      test: [ "CMD", "pg_isready","--dbname=$CRM_DB_NAME","--username=$POSTGRES_USER" ]
+      test: [ "CMD", "pg_isready","--dbname=$CRM_DB_NAME","--username=$CRM_POSTGRES_USER" ]
       interval: 30s
       timeout: 5s
       retries: 7
@@ -131,8 +131,8 @@ services:
       - case-lab
     environment:
       CRM_DB_NAME: ${CRM_DB_NAME}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      CRM_POSTGRES_USER: ${CRM_POSTGRES_USER}
+      CRM_POSTGRES_PASSWORD: ${CRM_POSTGRES_PASSWORD}
       MINIO_ACCESS: ${MINIO_ACCESS}
       MINIO_SECRET: ${MINIO_SECRET}
       MINIO_URL: ${MINIO_URL}
@@ -162,8 +162,8 @@ services:
       - case-lab
     environment:
       POSTGRES_IP: ${POSTGRES_IP}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      CLIENT_POSTGRES_USER: ${CLIENT_POSTGRES_USER}
+      CLIENT_POSTGRES_PASSWORD: ${CLIENT_POSTGRES_PASSWORD}
       CLIENT_SERVICE_DB_NAME: ${CLIENT_SERVICE_DB_NAME}
     ports:
       - 8082:8082
@@ -213,8 +213,8 @@ services:
     environment:
       POSTGRES_IP: ${POSTGRES_IP}
       ACQUIRING_DB_NAME: ${ACQUIRING_DB_NAME}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      ACQUIRING_POSTGRES_USER: ${ACQUIRING_POSTGRES_USER}
+      ACQUIRING_POSTGRES_PASSWORD: ${ACQUIRING_POSTGRES_PASSWORD}
       MAIL_PORT: ${MAIL_PORT}
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
@@ -240,8 +240,8 @@ services:
     environment:
       POSTGRES_IP: ${POSTGRES_IP}
       PAYMENT_DB_NAME: ${PAYMENT_DB_NAME}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PAYMENT_POSTGRES_USER: ${PAYMENT_POSTGRES_USER}
+      PAYMENT_POSTGRES_PASSWORD: ${PAYMENT_POSTGRES_PASSWORD}
     ports:
       - 8083:8083
 volumes:

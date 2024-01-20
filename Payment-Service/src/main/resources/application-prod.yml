@@ -3,8 +3,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_IP}:5432/${PAYMENT_DB_NAME}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: ${PAYMENT_POSTGRES_USER}
+    password: ${PAYMENT_POSTGRES_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate

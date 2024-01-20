@@ -16,19 +16,17 @@ public class RedisConfiguration {
     private final String REDIS_HOSTNAME;
     private final String REDIS_PASSWORD;
 
-    private final String REDIS_USERNAME;
 
     @Autowired
-    public RedisConfiguration(@Value("${redis_host_name}") String redisHostname, @Value("${redis_password}") String redisPassword,@Value("${redis_username}") String redisUsername) {
+    public RedisConfiguration(@Value("${redis_host_name}") String redisHostname, @Value("${redis_password}") String redisPassword) {
         this.REDIS_HOSTNAME = redisHostname;
         REDIS_PASSWORD = redisPassword;
-        REDIS_USERNAME = redisUsername;
     }
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName("redis");
+        configuration.setHostName(REDIS_HOSTNAME);
         configuration.setPort(6379);
         configuration.setPassword(REDIS_PASSWORD);
         return new JedisConnectionFactory(configuration);

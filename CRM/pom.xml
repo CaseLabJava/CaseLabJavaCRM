@@ -153,16 +153,9 @@
             <artifactId>minio</artifactId>
             <version>8.4.6</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>4.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter</artifactId>
-            <version>4.0.3</version>
         </dependency>
     </dependencies>
 

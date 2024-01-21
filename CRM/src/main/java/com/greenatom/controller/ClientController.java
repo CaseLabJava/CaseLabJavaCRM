@@ -4,10 +4,8 @@ import com.greenatom.controller.api.ClientApi;
 import com.greenatom.domain.dto.client.ClientRegistrationDTO;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
-import com.greenatom.domain.dto.client.ClientSearchCriteria;
-import com.greenatom.domain.dto.EntityPage;
 import com.greenatom.restTemplate.ClientRestTemplate;
-import com.greenatom.service.ClientService;
+import com.greenatom.utils.url.GenerateUrl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Этот код - контроллер, обрабатывающий запросы API для управления клиентами. Он предоставляет GET и PUT методы
@@ -57,8 +58,8 @@ public class ClientController implements ClientApi {
             @RequestParam(defaultValue = "10")
             @Min(value = 1)
             Integer pageSize,
-            @RequestParam(required = false) String firstname,
-            @RequestParam(required = false) String lastname,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String surname,
             @RequestParam(required = false) String patronymic,
             @RequestParam(required = false) String address,
             @RequestParam(required = false) String bank,
@@ -74,24 +75,26 @@ public class ClientController implements ClientApi {
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://Client-Service/client_service")
                 .queryParam("pagePosition",pagePosition)
                 .queryParam("pageSize", pageSize)
-                .queryParam("firstName", firstname)
-                .queryParam("lastname", lastname)
-                .queryParam("patronymic", patronymic)
-                .queryParam("address", address)
-                .queryParam("bank", bank)
-                .queryParam("company", company)
-                .queryParam("correspondentAccount",correspondentAccount)
-                .queryParam("inn", inn)
-                .queryParam("ogrn", ogrn)
-                .queryParam("phoneNumber",phoneNumber)
-                .queryParam("email",email)
                 .queryParam("sortBy", sortBy)
                 .queryParam("sortDirection", sortDirection);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("firstName", name);
+        params.put("lastname", surname);
+        params.put("patronymic", patronymic);
+        params.put("address", address);
+        params.put("bank", bank);
+        params.put("company", company);
+        params.put("correspondentAccount", correspondentAccount);
+        params.put("inn", inn);
+        params.put("ogrn", ogrn);
+        params.put("phoneNumber", phoneNumber);
+        params.put("email", email);
 
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clientRestTemplate.findAll(builder));
+                .body(clientRestTemplate.findAll(GenerateUrl.generateUrl(params, builder)));
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})

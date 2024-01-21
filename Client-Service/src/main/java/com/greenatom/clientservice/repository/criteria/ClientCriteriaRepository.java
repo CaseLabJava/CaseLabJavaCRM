@@ -42,7 +42,7 @@ public class ClientCriteriaRepository {
         Pageable pageable = getPageable(entityPage);
 
         long clientCount = getClientCount();
-
+        entityManager.close();
         return new PageImpl<>(typedQuery.getResultList(), pageable, clientCount);
     }
 
@@ -51,7 +51,7 @@ public class ClientCriteriaRepository {
         List<Predicate> predicates = new ArrayList<>();
         if(Objects.nonNull(clientSearchCriteria.getName())){
             predicates.add(
-                    criteriaBuilder.like(clientRoot.get("firstname"),
+                    criteriaBuilder.like(clientRoot.get("name"),
                             "%" + clientSearchCriteria.getName() + "%")
             );
         }

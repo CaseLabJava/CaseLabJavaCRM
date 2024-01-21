@@ -1,5 +1,6 @@
 package com.greenatom.domain.dto.client;
 
+import com.greenatom.domain.enums.ClientSource;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,4 +52,8 @@ public class ClientResponseDTO {
 
     @Schema(description = "Номер телефона клиента", example = "88005553535")
     private String phoneNumber;
+
+    private Boolean legalEntity;
+
+    private ClientSource clientSource;
 }

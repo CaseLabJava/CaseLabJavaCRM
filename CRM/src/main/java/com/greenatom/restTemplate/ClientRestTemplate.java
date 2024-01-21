@@ -3,6 +3,7 @@ package com.greenatom.restTemplate;
 import com.greenatom.domain.dto.client.ClientRegistrationDTO;
 import com.greenatom.domain.dto.client.ClientRequestDTO;
 import com.greenatom.domain.dto.client.ClientResponseDTO;
+import com.greenatom.domain.dto.page.CustomPage;
 import com.greenatom.domain.entity.Client;
 import com.greenatom.domain.enums.ClientSource;
 import com.greenatom.exception.ClientException;
@@ -65,8 +66,15 @@ public class ClientRestTemplate {
     }
 
     public Page<ClientResponseDTO> findAll(UriComponentsBuilder builder){
-        ParameterizedTypeReference<Page<ClientResponseDTO>> responseType = new ParameterizedTypeReference<>() {};
-        return restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null, responseType).getBody();
+
+        CustomPage<ClientResponseDTO> page = restTemplate.exchange(
+                        builder.toUriString(),
+                        HttpMethod.GET, null,
+                        new ParameterizedTypeReference<CustomPage<ClientResponseDTO>>() {
+                        })
+                        .getBody();
+        System.out.println(page.getContent());
+        return page;
     }
 
 

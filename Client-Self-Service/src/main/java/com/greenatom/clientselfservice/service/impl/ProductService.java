@@ -1,5 +1,6 @@
 package com.greenatom.clientselfservice.service.impl;
 
+import com.greenatom.clientselfservice.domain.dto.CustomPage;
 import com.greenatom.clientselfservice.domain.dto.product.ProductResponseDTO;
 import com.greenatom.clientselfservice.domain.entity.Product;
 import com.greenatom.clientselfservice.domain.mapper.ProductMapper;
@@ -28,8 +29,8 @@ public class ProductService {
         List<ProductResponseDTO> productResponseDTOList =  redisTemplate.opsForHash().values(HASH_KEY).stream()
                 .map(i ->productMapper.toDto((Product)i)).toList();
         if(productResponseDTOList.isEmpty()){
-            ParameterizedTypeReference<Page<ProductResponseDTO>> responseType = new ParameterizedTypeReference<>() {};
-            Page<ProductResponseDTO> pageProducts = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,null, responseType).getBody();
+            ParameterizedTypeReference<CustomPage<ProductResponseDTO>> responseType = new ParameterizedTypeReference<>() {};
+            CustomPage<ProductResponseDTO> pageProducts = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,null, responseType).getBody();
             List<ProductResponseDTO> products;
             if(pageProducts != null && pageProducts.getSize() != 0){
                 products = pageProducts.toList();

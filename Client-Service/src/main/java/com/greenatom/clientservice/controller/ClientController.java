@@ -56,8 +56,8 @@ public class ClientController {
             @RequestParam(defaultValue = "10")
             @Min(value = 1)
             Integer pageSize,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String surname,
+            @RequestParam(required = false) String firstname,
+            @RequestParam(required = false) String lastname,
             @RequestParam(required = false) String patronymic,
             @RequestParam(required = false) String address,
             @RequestParam(required = false) String bank,
@@ -75,8 +75,8 @@ public class ClientController {
                         new EntityPage(pagePosition, pageSize, sortDirection, sortBy),
                         new ClientSearchCriteria(
                                 0L,
-                                name,
-                                surname,
+                                firstname,
+                                lastname,
                                 patronymic,
                                 company,
                                 bank,

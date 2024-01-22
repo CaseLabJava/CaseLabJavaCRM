@@ -12,13 +12,13 @@ public class ClientRegistrationDTO {
     @Schema(description = "Имя клиента", example = "Иван")
     @NotNull
     @Size(min = 1, max = 20)
-    private String name;
+    private String firstname;
 
     @Schema(description = "Пароль для аутентификации", example = "dobryachok23")
     private String password;
 
     @Schema(description = "Фамилия клиента", example = "Иванов")
-    private String surname;
+    private String lastname;
 
     @Schema(description = "Отчество клиента", example = "Иванович")
     private String patronymic;

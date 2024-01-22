@@ -25,10 +25,10 @@ public class Client {
 
     @Column(name = "firstname", length = 50)
     @NonNull
-    private String name;
+    private String firstname;
 
     @Column(name = "lastname", length = 50)
-    private String surname;
+    private String lastname;
 
     @Column(name = "patronymic", length = 50)
     private String patronymic;

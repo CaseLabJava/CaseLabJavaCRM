@@ -12,14 +12,14 @@ import lombok.Setter;
 @Setter
 public class ClientCreateDTO {
     @Schema(description = "Имя клиента", example = "Иван")
-    private String name;
+    private String firstname;
 
     @Schema(description = "Пароль для аутентификации", example = "dobryachok23")
     @NotEmpty
     private String password;
 
     @Schema(description = "Фамилия клиента", example = "Иванов")
-    private String surname;
+    private String lastname;
 
     @Schema(description = "Отчество клиента", example = "Иванович")
     private String patronymic;

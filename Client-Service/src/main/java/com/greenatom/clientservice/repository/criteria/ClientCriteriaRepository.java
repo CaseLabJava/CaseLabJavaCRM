@@ -49,16 +49,16 @@ public class ClientCriteriaRepository {
     private Predicate getPredicate(ClientSearchCriteria clientSearchCriteria,
                                    Root<Client> clientRoot) {
         List<Predicate> predicates = new ArrayList<>();
-        if(Objects.nonNull(clientSearchCriteria.getName())){
+        if(Objects.nonNull(clientSearchCriteria.getFirstname())){
             predicates.add(
-                    criteriaBuilder.like(clientRoot.get("name"),
-                            "%" + clientSearchCriteria.getName() + "%")
+                    criteriaBuilder.like(clientRoot.get("firstname"),
+                            "%" + clientSearchCriteria.getFirstname() + "%")
             );
         }
-        if(Objects.nonNull(clientSearchCriteria.getSurname())){
+        if(Objects.nonNull(clientSearchCriteria.getLastname())){
             predicates.add(
-                    criteriaBuilder.like(clientRoot.get("surname"),
-                            "%" + clientSearchCriteria.getSurname() + "%")
+                    criteriaBuilder.like(clientRoot.get("lastname"),
+                            "%" + clientSearchCriteria.getLastname() + "%")
             );
         }
         if(Objects.nonNull(clientSearchCriteria.getPatronymic())){

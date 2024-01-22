@@ -31,10 +31,12 @@ public class ProductService {
         if(productResponseDTOList.isEmpty()){
             ParameterizedTypeReference<CustomPage<ProductResponseDTO>> responseType = new ParameterizedTypeReference<>() {};
             CustomPage<ProductResponseDTO> pageProducts = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,null, responseType).getBody();
-            List<ProductResponseDTO> products;
             if(pageProducts != null && pageProducts.getSize() != 0){
-                products = pageProducts.toList();
-                products.forEach(i -> redisTemplate.opsForHash().put(HASH_KEY,i.getId(),i));
+                List<ProductResponseDTO> products = pageProducts.toList();
+                for (ProductResponseDTO productResponseDTO : products) {
+                    Product product = productMapper.toEntity(productResponseDTO);
+                    redisTemplate.opsForHash().put(HASH_KEY, product.getId(), product);
+                }
             }
             return pageProducts;
         }

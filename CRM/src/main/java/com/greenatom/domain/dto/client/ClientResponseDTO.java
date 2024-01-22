@@ -21,10 +21,10 @@ public class ClientResponseDTO {
     private Long id;
 
     @Schema(description = "Имя клиента", example = "Иван")
-    private String name;
+    private String firstname;
 
     @Schema(description = "Фамилия клиента", example = "Иванов")
-    private String surname;
+    private String lastname;
 
     @Schema(description = "Отчество клиента", example = "Иванович")
     private String patronymic;

@@ -2,6 +2,7 @@ package com.greenatom.clientselfservice.contoller;
 
 import com.greenatom.clientselfservice.domain.dto.product.ProductResponseDTO;
 import com.greenatom.clientselfservice.service.impl.ProductService;
+import com.greenatom.clientselfservice.utils.url.GenerateUrl;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("self-service/product")
@@ -32,16 +36,22 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "id") String sortBy,
             @RequestParam(required = false, defaultValue = "ASC") Sort.Direction sortDirection) {
 
-        String url = getUrl("");
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(getUrl(""))
                 .queryParam("pagePosition",pagePosition)
                 .queryParam("pageLength", pageLength)
-                .queryParam("productName", productName)
-                .queryParam("unit", unit)
-                .queryParam("storageAmount", storageAmount)
-                .queryParam("cost", cost)
                 .queryParam("sortBy", sortBy)
                 .queryParam("sortDirection", sortDirection);
+
+        Map<String, String> stringParams = new HashMap<>();
+        stringParams.put("productName", productName);
+        stringParams.put("unit", unit);
+
+        Map<String,Long> longParams = new HashMap<>();
+        longParams.put("storageAmount", storageAmount);
+        longParams.put("cost", cost);
+
+        GenerateUrl.generateUrl(stringParams,builder);
+        GenerateUrl.generateUrl(longParams,builder);
 
         return ResponseEntity.ok(productService.getAll(builder));
 

@@ -224,7 +224,7 @@ public class OrderServiceImpl implements OrderService {
             throw OrderException.CODE.CANNOT_ASSIGN_ORDER.get();
         }
 
-        if (!Objects.equals(order.getEmployee().getUsername(), username) || !Objects.equals("technicalUser_t_t_1", username)) {
+        if (!Objects.equals(order.getEmployee().getUsername(), username) && !Objects.equals("technicalUser_t_t_1", username)) {
             throw OrderException.CODE.NOT_PERMIT.get(username);
         }
         String filename = "Order_" + order.getId();

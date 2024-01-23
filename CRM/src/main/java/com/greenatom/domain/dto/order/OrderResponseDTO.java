@@ -1,6 +1,5 @@
 package com.greenatom.domain.dto.order;
 
-import com.greenatom.domain.dto.client.ClientResponseDTO;
 import com.greenatom.domain.dto.employee.EmployeeResponseDTO;
 import com.greenatom.domain.enums.DeliveryType;
 import com.greenatom.domain.enums.OrderStatus;
@@ -27,7 +26,7 @@ public class OrderResponseDTO {
     private Long id;
 
     @Schema(description = "Информация о клиенте")
-    private ClientResponseDTO client;
+    private Long clientId;
 
     @Schema(description = "Информация о сотруднике")
     private EmployeeResponseDTO employee;

@@ -261,7 +261,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO save(OrderResponseDTO orderResponseDTO) {
         Order order = orderMapper.toEntity(orderResponseDTO);
         Client client = clientMapper.toEntity(clientRestTemplate.getOneById(
-                orderResponseDTO.getClient().getId()));
+                orderResponseDTO.getClientId()));
         order.setClientId(client.getId());
         order.setEmployee(employeeRepository.findById(
                         orderResponseDTO.getEmployee().getId())

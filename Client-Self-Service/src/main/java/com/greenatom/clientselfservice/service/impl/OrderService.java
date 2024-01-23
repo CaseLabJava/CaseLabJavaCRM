@@ -18,6 +18,6 @@ public class OrderService {
     }
 
     private String getUrl (String action){
-        return "http://CaseLabJavaCrm/api/orders" + action;
+        return "http://Crm-Service/api/orders" + action;
     }
 }

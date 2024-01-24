@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.security.Principal;
@@ -141,7 +142,7 @@ public interface OrderApi {
     @Operation(
             summary = "Генерация докумена заказа"
     )
-    ResponseEntity<Void> generateOrder(
+    ResponseEntity<HttpStatus> generateOrder(
             @Parameter(description = "Id заказа", example = "1")
             Long orderId,
             @Parameter(description = "Логин сотрудника", example = "1")

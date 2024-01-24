@@ -94,9 +94,9 @@ public class OrderController implements OrderApi {
     @Override
     @PostMapping(value = "/assign", produces = {"application/json"})
     @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
-    public ResponseEntity<Void> generateOrder(@RequestParam Long orderId, Principal principal) {
+    public ResponseEntity<HttpStatus> generateOrder(@RequestParam Long orderId, Principal principal) {
         orderService.generateOrder(principal.getName(), orderId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @Override

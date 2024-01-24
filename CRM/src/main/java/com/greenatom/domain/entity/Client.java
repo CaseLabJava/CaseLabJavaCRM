@@ -25,11 +25,11 @@ public class Client {
 
     @NonNull
     @Size(min = 1, max = 50)
-    private String name;
+    private String firstname;
 
     @NonNull
     @Size(min = 1, max = 50)
-    private String surname;
+    private String lastname;
 
     @NonNull
     @Size(min = 1, max = 50)
@@ -71,7 +71,7 @@ public class Client {
 //    private Set<Review> reviews;
 
     public String getFullName() {
-        return String.format("%s %s %s", surname, name, patronymic);
+        return String.format("%s %s %s", lastname, firstname, patronymic);
     }
 
 }

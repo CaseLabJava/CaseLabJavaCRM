@@ -28,7 +28,7 @@ import java.util.Objects;
  */
 
 @RestController
-@RequestMapping(value = "/api/reviews")
+@RequestMapping(value = "/self-service/reviews")
 @RequiredArgsConstructor
 public class ReviewController implements ReviewApi {
     private final RestTemplate restTemplate;

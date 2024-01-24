@@ -72,6 +72,6 @@ public class ReviewController implements ReviewApi {
     }
 
     private String getUrl (String action){
-        return "http://CaseLabJavaCrm/api/reviews" + action;
+        return "http://Crm-Service/api/reviews" + action;
     }
 }

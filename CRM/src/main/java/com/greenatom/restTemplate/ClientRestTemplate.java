@@ -84,8 +84,8 @@ public class ClientRestTemplate {
 
     private String generatePassword(ClientRegistrationDTO clientRegistrationDTO) {
         StringBuilder password = new StringBuilder();
-        String firstname = TranslateRusToEng.translateFromRusToEng(clientRegistrationDTO.getName());
-        String surname = TranslateRusToEng.translateFromRusToEng(clientRegistrationDTO.getSurname());
+        String firstname = TranslateRusToEng.translateFromRusToEng(clientRegistrationDTO.getFirstname());
+        String surname = TranslateRusToEng.translateFromRusToEng(clientRegistrationDTO.getLastname());
         String patronymic = TranslateRusToEng.translateFromRusToEng(clientRegistrationDTO.getPatronymic());
         password.append(surname)
                 .append(firstname.charAt(0))

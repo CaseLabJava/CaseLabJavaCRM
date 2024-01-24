@@ -28,7 +28,7 @@ import java.util.Objects;
  */
 
 @RestController
-@RequestMapping(value = "/api/reviews")
+@RequestMapping(value = "/self-service/reviews")
 @RequiredArgsConstructor
 public class ReviewController implements ReviewApi {
     private final RestTemplate restTemplate;
@@ -72,6 +72,6 @@ public class ReviewController implements ReviewApi {
     }
 
     private String getUrl (String action){
-        return "http://CaseLabJavaCrm/api/reviews" + action;
+        return "http://Crm-Service/api/reviews" + action;
     }
 }

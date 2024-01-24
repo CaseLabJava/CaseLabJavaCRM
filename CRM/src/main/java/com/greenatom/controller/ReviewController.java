@@ -43,7 +43,7 @@ public class ReviewController implements ReviewApi {
     }
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<ReviewResponseDTO> findOne(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -51,7 +51,7 @@ public class ReviewController implements ReviewApi {
     }
 
     @GetMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<Page<ReviewResponseDTO>> findAll(
             @RequestParam(defaultValue = "0")
             @Min(value = 0) Integer pagePosition,
@@ -82,7 +82,7 @@ public class ReviewController implements ReviewApi {
     }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<ReviewResponseDTO> updateReview(@PathVariable Long id,
                                                           @RequestBody ReviewRequestDTO review) {
         return ResponseEntity
@@ -91,7 +91,7 @@ public class ReviewController implements ReviewApi {
     }
 
     @PostMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<ReviewResponseDTO> addReview(@RequestBody ReviewRequestDTO review) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -99,14 +99,14 @@ public class ReviewController implements ReviewApi {
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping(value = "/process/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<ReviewResponseDTO> process(@RequestParam ReviewStatus status,
                                                      @PathVariable Long id,
                                                      @RequestBody ReviewRequestDTO review) {

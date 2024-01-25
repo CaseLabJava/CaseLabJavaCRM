@@ -1,5 +1,6 @@
 package com.greenatom.clientselfservice.contoller;
 
+import com.greenatom.clientselfservice.domain.dto.claim.ClaimCreationDTO;
 import com.greenatom.clientselfservice.domain.dto.claim.ClaimRequestDTO;
 import com.greenatom.clientselfservice.domain.dto.claim.ClaimResponseDTO;
 import com.greenatom.clientselfservice.domain.mapper.ClaimMapper;
@@ -19,10 +20,10 @@ public class ClaimController {
     private final ClaimMapper claimMapper;
 
     @PostMapping
-        public ResponseEntity<ClaimResponseDTO> addClaim(@RequestBody ClaimRequestDTO claim) {
+        public ResponseEntity<ClaimCreationDTO> addClaim(@RequestBody ClaimCreationDTO claim) {
         Objects.requireNonNull(restTemplate.postForObject(getUrl(), claim,
                 ClaimRequestDTO.class));
-        return ResponseEntity.ok(claimMapper.toResponse(claim));
+        return ResponseEntity.ok(claim);
     }
     @GetMapping
     public List<ClaimResponseDTO> findByUser(

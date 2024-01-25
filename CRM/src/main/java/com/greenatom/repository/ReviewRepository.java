@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query("select r from Review r where r.orderItem.id = (select oi.id from " +
+    @Query("select r from Review r where r.orderItem.id in (select oi.id from " +
             "OrderItem oi where oi.product.id = ?1 )")
     List<Review> findByProduct(Long id);
 }

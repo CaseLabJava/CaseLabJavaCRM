@@ -24,14 +24,14 @@ public class ClaimController implements ClaimApi {
     private final ClaimService claimService;
 
     @GetMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPERVISOR', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<ClaimResponseDTO> getClaim(@PathVariable Long id) {
         return ResponseEntity.ok(claimService.findOne(id));
     }
 
 
     @GetMapping (produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<List<ClaimResponseDTO>> getClaimsResponse(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize) {
@@ -39,20 +39,20 @@ public class ClaimController implements ClaimApi {
    }
 
     @PatchMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<ClaimResponseDTO> updateClaim(@PathVariable Long id,
                                                         @RequestBody ClaimRequestDTO claim) {
         return ResponseEntity.ok(claimService.updateClaim(id, claim));
     }
 
     @PostMapping(produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public ResponseEntity<ClaimResponseDTO> addClaim(@RequestBody @Valid ClaimCreationDTO claim) {
         return ResponseEntity.ok(claimService.save(claim));
     }
 
     @DeleteMapping(value = "/{id}", produces = {"application/json"})
-    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_MANAGER', 'ROLE_SUPER_ADMIN', 'ROLE_CLIENT_INTERMEDIARY')")
     public void deleteClaim(@PathVariable Long id) {
         claimService.deleteClaim(id);
         ResponseEntity.noContent().build();

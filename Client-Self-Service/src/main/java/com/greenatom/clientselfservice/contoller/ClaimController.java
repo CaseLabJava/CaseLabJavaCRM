@@ -40,7 +40,7 @@ public class ClaimController {
     }
 
     private String getUrl() {
-        return "http://Crm-Service/api/claims";
+        return "http://Crm-Service/api/claim";
     }
 
 }
